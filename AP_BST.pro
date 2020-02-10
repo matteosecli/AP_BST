@@ -18,11 +18,16 @@ CONFIG -= no-pkg-config    # Enables pkg-config (disabled by default on MacOS)
 ###########################
 
 SOURCES += \
+    Node.cpp \
     main.cpp
 
-HEADERS += \
+HEADERS += \ \
+    Node.hpp
 
 DISTFILES += \
+    Doxyfile \
+    LICENSE \
+    README.md
 
 
 ###########################
