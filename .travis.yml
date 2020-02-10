@@ -1,4 +1,3 @@
-sudo: false
 language: cpp
 
 dist: xenial
@@ -17,8 +16,8 @@ env:
   - QMAKE_CC=gcc-6 QMAKE_CXX=g++-6 QMAKESPEC=linux-g++
   - QMAKE_CC=gcc-7 QMAKE_CXX=g++-7 QMAKESPEC=linux-g++
   - QMAKE_CC=gcc-8 QMAKE_CXX=g++-8 QMAKESPEC=linux-g++
-  - QMAKE_CC=clang-7.0 QMAKE_CXX=clang++-7.0 QMAKESPEC=linux-clang++
+  - QMAKE_CC=clang-7.0 QMAKE_CXX=clang++-7.0 QMAKESPEC=linux-clang-libc++
 
 script:
-  - qmake
+  - qmake -spec $QMAKESPEC QMAKE_CC=$QMAKE_CC QMAKE_CXX=$QMAKE_CXX QMAKE_LINK=$QMAKE_CXX
   - make
