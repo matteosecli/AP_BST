@@ -2,6 +2,7 @@
 #include <memory>
 #include <utility>
 #include "Node.hpp"
+#include "Iterator.hpp"
 
 
 //template <typename KT, typename VT, typename cmp = std::less<KT>>
@@ -45,47 +46,49 @@
 //}
 
 
-// template <typename node_t, typename T>
-// class _iterator{
-// 	node_t* current;
-//   public:
-//   	using value_type = T;
-//   	using reference = value_type&;
-//   	using pointer = value_type*
-//   	using iterator_category;
-//   	using difference_type=std::ptrdiff_t // two iterators are equal if they point to the same node
-//     reference operator*() const{
-//         return .....;
-//     }
-// }
-
-template <typename T>
-class Node2{
-  private:
-	T _data;
-	std::unique_ptr<Node2<T>> _left;
-	std::unique_ptr<Node2<T>> _right;
-	Node2<T>* _parent; // to navigate the tree
-	
-  public:
-	Node2() = delete;
-    Node2(T& data, Node2* parent) :
-	  _data{data}, _left{nullptr}, _right{nullptr}, _parent{parent} {}
-	Node2(T& data) : _data{data} {}
-};
-
 
 int main() {
 
-    std::cout << "Hello World!" << std::endl;
+    //std::cout << "Hello World!" << std::endl;
 
 	std::pair<int, int> testPair(3,4);
-	Node2<std::pair<int, int>>* c;
-	Node2<std::pair<int, int>> testNode{testPair, c};
-	Node2<std::pair<int, int>> testNode2(testPair);
-//    Node<std::pair<int,int>> testNode(testPair,nullptr,nullptr,nullptr);
-//    Node<std::pair<int,int>> testNode(testPair);
-//    Node<std::pair<int,int>> test2();
+    APbst::Node<std::pair<int, int>> c;
+    APbst::Node<std::pair<int, int>> testNode{testPair, &c};
+    APbst::Node<std::pair<int,int>> testNodeMatteo(testPair, nullptr);
+//    APbst::Node<std::pair<int,int>> testNodeMatteo3(testPair,nullptr,nullptr,nullptr);
+//    APbst::Node<std::pair<int,int>> test2();
+    testNode.printNode();
+    testNodeMatteo.printNode();
+
+
+    std::pair<int, int> rootPair(1,1);
+    std::pair<int, int> leftPair(0,0);
+    std::pair<int, int> rightPair(2,2);
+    APbst::Node<std::pair<int, int>> nodeRoot(rootPair, nullptr);
+    //APbst::Node<std::pair<int, int>> nodeLeft(leftPair, &nodeRoot);
+    //APbst::Node<std::pair<int, int>> nodeRight(rightPair,&nodeRoot);
+    //nodeRoot.left  = std::unique_ptr<APbst::Node<std::pair<int, int>>>(&nodeLeft);  // <- WRONG!!!
+    //nodeRoot.right = std::unique_ptr<APbst::Node<std::pair<int, int>>>(&nodeRight); // <- WRONG!!!
+    nodeRoot.left  = std::unique_ptr<APbst::Node<std::pair<int, int>>>(new APbst::Node<std::pair<int, int>>(leftPair, &nodeRoot));
+    nodeRoot.right = std::unique_ptr<APbst::Node<std::pair<int, int>>>(new APbst::Node<std::pair<int, int>>(rightPair, &nodeRoot));
+
+    nodeRoot.left->printNode();
+    nodeRoot.right->printNode();
+    nodeRoot .printNode();
+
+    std::cout << std::endl << "ITERATORS TESTS:" << std::endl;
+
+    APbst::__iterator<APbst::Node<std::pair<int, int>>,std::pair<int, int>> it(&nodeRoot);
+    std::cout << "[" << &(*it) << "]    ";
+    std::cout << "Key: " << (*(it++)).first << std::endl;
+    std::cout << "[" << &(*it) << "]    ";
+    std::cout << "Key: " << (*(it)).first << std::endl << std::endl;
+
+    APbst::__iterator<APbst::Node<std::pair<int, int>>,std::pair<int, int>> it2(&nodeRoot);
+    std::cout << "[" << &(*it) << "]    ";
+    std::cout << "Key: " << (++it2)->first << std::endl;
+    std::cout << "[" << &(*it) << "]    ";
+    std::cout << "Key: " << it2->first << std::endl << std::endl;
 
     return 0;
 }

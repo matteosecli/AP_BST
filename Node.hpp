@@ -5,19 +5,50 @@
 #include <memory>   /** @brief For std::unique_ptr */
 
 
-template <typename T>   // T must be an std::pair
-class Node {
-  private:
-    T data;             // Contains an std::pair<Key,Val>
-//    std::unique_ptr<Node<T>> left, right;
-//    Node<T>* parent;       // To navigate the tree (???)
-  public:
-    Node();
-//    Node(T&,
-//         std::unique_ptr<Node<T>>,
-//         std::unique_ptr<Node<T>>,
-//         Node<T>*);
-    Node(T&);
-};
+namespace APbst {
+
+    // Chiedere: l'utente può vedere Node? Sennò la mettiamo nel BST.
+    template <typename T>   // T must be an std::pair
+    struct Node {
+        T data;             // Contains an std::pair<const Key,Val>
+        std::unique_ptr<Node<T>> left;
+        std::unique_ptr<Node<T>> right;
+        Node<T>* parent;       // To navigate the tree (???)
+        Node() :
+            data{},
+            left{nullptr},
+            right{nullptr},
+            parent{nullptr} {}
+        Node(T& data,
+             std::unique_ptr<Node<T>>& left,
+             std::unique_ptr<Node<T>>& right,
+             Node<T>* parent) :
+                data{data},
+                left{left},
+                right{right},
+                parent{parent} {}
+        Node(T& data, Node<T>* parent) :
+            data{data},
+            left{nullptr},
+            right{nullptr},
+            parent{parent} {}
+        void printNode() {
+            std::cout << "[" << this << "]    ";
+            std::cout << "Key: " << data.first << ", Value: " << data.second << std::endl;
+            if (left) {
+                //std::cout << "[" << left << "]    ";
+                std::cout << "    Left  -> ";
+                left->printNode();
+            }
+            if (right) {
+                //std::cout << "[" << right << "]    ";
+                std::cout << "    Right -> ";
+                right->printNode();
+            }
+        }
+    };
+
+}
+
 
 #endif // NODE_HPP

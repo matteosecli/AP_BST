@@ -18,10 +18,10 @@ CONFIG -= no-pkg-config    # Enables pkg-config (disabled by default on MacOS)
 ###########################
 
 SOURCES += \
-    Node.cpp \
     main.cpp
 
-HEADERS += \ \
+HEADERS += \
+    Iterator.hpp \
     Node.hpp
 
 DISTFILES += \
