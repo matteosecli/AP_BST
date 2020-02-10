@@ -1,6 +1,8 @@
 #include <iostream>
+#include <memory>
+#include <utility>
 
-
+/*
 template <typename KT, typename VT, typename cmp = std::less<KT>>
 class bst{
 	cmp op; // operator of comparison
@@ -39,46 +41,45 @@ class bst{
 	std::ostream& operator<<(std::ostream& os, const bst& x);
 
 	void erase(const key_type& x);
-}
+}*/
 
 template <typename T>
-struct Node{
-	T value;
-	std::unique_ptr<Node> left, right;
-	Node* parent; // to navigate the three
-}
+class Node{
+  private:
+	T _data;
+	std::unique_ptr<Node<T>> _left;
+	std::unique_ptr<Node<T>> _right;
+	Node<T>* _parent; // to navigate the tree
 
-template <typename node_t>
-class iterator{
-	node_t* current;
   public:
-  	using value_type=typename node_t::value_type;
-  	using reference = value_type&;
-  	using pointer = value_type*
-  	using iterator_category;
-  	using difference_type=std::ptrdiff_t // two iterators are equal if they point to the same node
-    reference operator*() const{
-        return .....;
-    }
-}
+	Node() = delete;
+    Node(T& data, Node* parent) :
+	  _data{data}, _left{nullptr}, _right{nullptr}, _parent{parent} {}
+	Node(T& data) : _data{data} {}
+};
 
-template <typename node_t>
-class const_iterator{
-	node_t* current;
-  public:
-  	using value_type = const typename node_t::value_type;
-  	using reference = value_type&;
-  	using pointer = value_type*
-  	using iterator_category;
-  	using difference_type=std::ptrdiff_t // two iterators are equal if they point to the same node
-    reference operator*() const{
-        return .....;
-    }
-}
+//template <typename node_t, typename T>
+//class _iterator{
+//	node_t* current;
+//  public:
+//  	using value_type = T;
+//  	using reference = value_type&;
+//  	using pointer = value_type*
+//  	using iterator_category;
+//  	using difference_type=std::ptrdiff_t // two iterators are equal if they point tot he same node
+//    reference operator*() const{
+//        return .....;
+//    }
+//}
 
 int main() {
 
-    cout << "Hello World!" << endl;
+    std::cout << "Hello World!" << std::endl;
+
+	std::pair<int, int> testPair(3,4);
+	Node<std::pair<int, int>>* c;
+	Node<std::pair<int, int>> testNode{testPair, c};
+	Node<std::pair<int, int>> testNode2(testPair);
 
     return 0;
 }
