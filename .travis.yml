@@ -1,0 +1,57 @@
+language: cpp
+notifications:
+  email: false
+
+os: linux
+dist: xenial
+
+matrix:
+  include:
+    # QMake, GCC 6
+    - env: QMAKE_CC=gcc-6 QMAKE_CXX=g++-6 QMAKESPEC=linux-g++
+      compiler: gcc
+      addons: &gcc6
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - qt5-qmake
+            - g++-6
+    # QMake, GCC 7
+    - env: QMAKE_CC=gcc-7 QMAKE_CXX=g++-7 QMAKESPEC=linux-g++
+      compiler: gcc
+      addons: &gcc7
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - qt5-qmake
+            - g++-7
+    # QMake, GCC 8
+    - env: QMAKE_CC=gcc-8 QMAKE_CXX=g++-8 QMAKESPEC=linux-g++
+      compiler: gcc
+      addons: &gcc8
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - qt5-qmake
+            - g++-8
+    # QMake, Clang 7
+    - env: QMAKE_CC=clang QMAKE_CXX=clang++ QMAKESPEC=linux-clang-libc++
+      compiler: clang
+      addons: &clang7
+        apt:
+          sources:
+            - llvm-toolchain-xenial-7
+          packages:
+            - qt5-qmake
+  
+install:
+  - export CX=${QMAKE_CC}
+  - export CXX=${QMAKE_CXX}
+  - ${CXX} --version
+
+script:
+  - /usr/lib/x86_64-linux-gnu/qt5/bin/qmake -spec $QMAKESPEC QMAKE_CC=$QMAKE_CC QMAKE_CXX=$QMAKE_CXX QMAKE_LINK=$QMAKE_CXX
+  - make
