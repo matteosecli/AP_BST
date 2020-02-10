@@ -38,7 +38,7 @@ matrix:
             - qt5-qmake
             - g++-8
     # QMake, Clang 7
-    - env: QMAKE_CC=clang QMAKE_CXX=clang++ #QMAKESPEC=linux-clang-libc++
+    - env: QMAKE_CC=clang QMAKE_CXX=clang++ QMAKESPEC=linux-clang-libc++
       compiler: clang
       addons: &clang7
         apt:
@@ -53,5 +53,5 @@ install:
   - ${CXX} --version
 
 script:
-  - qmake -spec $QMAKESPEC QMAKE_CC=$QMAKE_CC QMAKE_CXX=$QMAKE_CXX QMAKE_LINK=$QMAKE_CXX
+  - /usr/lib/x86_64-linux-gnu/qt5/bin/qmake -spec $QMAKESPEC QMAKE_CC=$QMAKE_CC QMAKE_CXX=$QMAKE_CXX QMAKE_LINK=$QMAKE_CXX
   - make
