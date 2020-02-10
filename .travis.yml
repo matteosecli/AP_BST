@@ -9,6 +9,7 @@ matrix:
   include:
     # QMake, GCC 6
     - env: QMAKE_CC=gcc-6 QMAKE_CXX=g++-6 QMAKESPEC=linux-g++
+      compiler: gcc
       addons: &gcc6
         apt:
           sources:
@@ -18,6 +19,7 @@ matrix:
             - g++-6
     # QMake, GCC 7
     - env: QMAKE_CC=gcc-7 QMAKE_CXX=g++-7 QMAKESPEC=linux-g++
+      compiler: gcc
       addons: &gcc7
         apt:
           sources:
@@ -27,6 +29,7 @@ matrix:
             - g++-7
     # QMake, GCC 8
     - env: QMAKE_CC=gcc-8 QMAKE_CXX=g++-8 QMAKESPEC=linux-g++
+      compiler: gcc
       addons: &gcc8
         apt:
           sources:
@@ -35,10 +38,12 @@ matrix:
             - qt5-qmake
             - g++-8
     # QMake, Clang 7
-    - env: QMAKE_CC=clang QMAKE_CXX=clang++ #QMAKESPEC=linux-clang-libc++
+    - env: QMAKE_CC=clang-7 QMAKE_CXX=clang++-7 #QMAKESPEC=linux-clang-libc++
+      compiler: clang
       addons: &clang7
         apt:
           sources:
+            - llvm-toolchain-xenial-7
           packages:
             - qt5-qmake
   
