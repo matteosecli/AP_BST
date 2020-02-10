@@ -59,17 +59,32 @@
 //     }
 // }
 
+template <typename T>
+class Node2{
+  private:
+	T _data;
+	std::unique_ptr<Node2<T>> _left;
+	std::unique_ptr<Node2<T>> _right;
+	Node2<T>* _parent; // to navigate the tree
+	
+  public:
+	Node2() = delete;
+    Node2(T& data, Node2* parent) :
+	  _data{data}, _left{nullptr}, _right{nullptr}, _parent{parent} {}
+	Node2(T& data) : _data{data} {}
+};
+
 
 int main() {
 
     std::cout << "Hello World!" << std::endl;
 
 	std::pair<int, int> testPair(3,4);
-	Node<std::pair<int, int>>* c;
-	Node<std::pair<int, int>> testNode{testPair, c};
-	Node<std::pair<int, int>> testNode2(testPair);
+	Node2<std::pair<int, int>>* c;
+	Node2<std::pair<int, int>> testNode{testPair, c};
+	Node2<std::pair<int, int>> testNode2(testPair);
 //    Node<std::pair<int,int>> testNode(testPair,nullptr,nullptr,nullptr);
-    Node<std::pair<int,int>> testNode(testPair);
+//    Node<std::pair<int,int>> testNode(testPair);
 //    Node<std::pair<int,int>> test2();
 
     return 0;
