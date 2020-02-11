@@ -1,0 +1,83 @@
+\hypertarget{class_a_putils_1_1____iterator}{}\section{A\+Putils\+:\+:\+\_\+\+\_\+iterator$<$ nodeT, T $>$ Class Template Reference}
+\label{class_a_putils_1_1____iterator}\index{A\+Putils\+::\+\_\+\+\_\+iterator$<$ node\+T, T $>$@{A\+Putils\+::\+\_\+\+\_\+iterator$<$ node\+T, T $>$}}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_a_putils_1_1____iterator_a81ef6b09ff94c44ba7917ec760a91cb1}\label{class_a_putils_1_1____iterator_a81ef6b09ff94c44ba7917ec760a91cb1}} 
+using \hyperlink{class_a_putils_1_1____iterator_a81ef6b09ff94c44ba7917ec760a91cb1}{value\+\_\+type} = T
+\begin{DoxyCompactList}\small\item\em ??? \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_a_putils_1_1____iterator_a300d792bf91a5ed81878ff8420ad3970}\label{class_a_putils_1_1____iterator_a300d792bf91a5ed81878ff8420ad3970}} 
+using {\bfseries reference} = \hyperlink{class_a_putils_1_1____iterator_a81ef6b09ff94c44ba7917ec760a91cb1}{value\+\_\+type} \&
+\item 
+\mbox{\Hypertarget{class_a_putils_1_1____iterator_a15486c09209b0360be0a9f08b654fc77}\label{class_a_putils_1_1____iterator_a15486c09209b0360be0a9f08b654fc77}} 
+using {\bfseries pointer} = \hyperlink{class_a_putils_1_1____iterator_a81ef6b09ff94c44ba7917ec760a91cb1}{value\+\_\+type} $\ast$
+\item 
+\mbox{\Hypertarget{class_a_putils_1_1____iterator_af5015512657586650d9a0f18dcdfbdf3}\label{class_a_putils_1_1____iterator_af5015512657586650d9a0f18dcdfbdf3}} 
+using {\bfseries iterator\+\_\+category} = std\+::forward\+\_\+iterator\+\_\+tag
+\item 
+\mbox{\Hypertarget{class_a_putils_1_1____iterator_abbea03f051f2134f7e6e66d4da2db392}\label{class_a_putils_1_1____iterator_abbea03f051f2134f7e6e66d4da2db392}} 
+using {\bfseries difference\+\_\+type} = std\+::ptrdiff\+\_\+t
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_a_putils_1_1____iterator_a80b798b8b6922e66337873c614c32aeb}{\+\_\+\+\_\+iterator} (nodeT $\ast$n) noexcept
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+reference \hyperlink{class_a_putils_1_1____iterator_a938d91cde92652266ae812ce9334b603}{operator$\ast$} () const noexcept
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_a_putils_1_1____iterator_a500d853bed90e2ad2db45c785558902c}\label{class_a_putils_1_1____iterator_a500d853bed90e2ad2db45c785558902c}} 
+pointer {\bfseries operator-\/$>$} () const noexcept
+\item 
+\mbox{\Hypertarget{class_a_putils_1_1____iterator_a4ef645ac13ab5ce5081462a4de4757e3}\label{class_a_putils_1_1____iterator_a4ef645ac13ab5ce5081462a4de4757e3}} 
+\hyperlink{class_a_putils_1_1____iterator}{\+\_\+\+\_\+iterator} \& {\bfseries operator++} () noexcept
+\item 
+\mbox{\Hypertarget{class_a_putils_1_1____iterator_aa20ee3ddb367bf371bf2bfb40de5e5f2}\label{class_a_putils_1_1____iterator_aa20ee3ddb367bf371bf2bfb40de5e5f2}} 
+\hyperlink{class_a_putils_1_1____iterator}{\+\_\+\+\_\+iterator} {\bfseries operator++} (int) noexcept
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_a_putils_1_1____iterator_a2e5014cb825532053115734598e16318}\label{class_a_putils_1_1____iterator_a2e5014cb825532053115734598e16318}} 
+bool \hyperlink{class_a_putils_1_1____iterator_a2e5014cb825532053115734598e16318}{operator==} (const \hyperlink{class_a_putils_1_1____iterator}{\+\_\+\+\_\+iterator} \&a, const \hyperlink{class_a_putils_1_1____iterator}{\+\_\+\+\_\+iterator} \&b)
+\begin{DoxyCompactList}\small\item\em Two iterators are equal if they point to the same node. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_a_putils_1_1____iterator_add0144e7693bde5e4b509b5fd8dc5c96}\label{class_a_putils_1_1____iterator_add0144e7693bde5e4b509b5fd8dc5c96}} 
+bool {\bfseries operator!=} (const \hyperlink{class_a_putils_1_1____iterator}{\+\_\+\+\_\+iterator} \&a, const \hyperlink{class_a_putils_1_1____iterator}{\+\_\+\+\_\+iterator} \&b)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_a_putils_1_1____iterator_a80b798b8b6922e66337873c614c32aeb}\label{class_a_putils_1_1____iterator_a80b798b8b6922e66337873c614c32aeb}} 
+\index{A\+Putils\+::\+\_\+\+\_\+iterator@{A\+Putils\+::\+\_\+\+\_\+iterator}!\+\_\+\+\_\+iterator@{\+\_\+\+\_\+iterator}}
+\index{\+\_\+\+\_\+iterator@{\+\_\+\+\_\+iterator}!A\+Putils\+::\+\_\+\+\_\+iterator@{A\+Putils\+::\+\_\+\+\_\+iterator}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+iterator()}{\_\_iterator()}}
+{\footnotesize\ttfamily template$<$typename nodeT , typename T $>$ \\
+\hyperlink{class_a_putils_1_1____iterator}{A\+Putils\+::\+\_\+\+\_\+iterator}$<$ nodeT, T $>$\+::\hyperlink{class_a_putils_1_1____iterator}{\+\_\+\+\_\+iterator} (\begin{DoxyParamCaption}\item[{nodeT $\ast$}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & a {\ttfamily \hyperlink{struct_a_putils_1_1_node}{Node}}.\\
+\hline
+\end{DoxyParams}
+To instantiate an {\ttfamily \hyperlink{class_a_putils_1_1____iterator}{\+\_\+\+\_\+iterator}}. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_a_putils_1_1____iterator_a938d91cde92652266ae812ce9334b603}\label{class_a_putils_1_1____iterator_a938d91cde92652266ae812ce9334b603}} 
+\index{A\+Putils\+::\+\_\+\+\_\+iterator@{A\+Putils\+::\+\_\+\+\_\+iterator}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!A\+Putils\+::\+\_\+\+\_\+iterator@{A\+Putils\+::\+\_\+\+\_\+iterator}}
+\subsubsection{\texorpdfstring{operator$\ast$()}{operator*()}}
+{\footnotesize\ttfamily template$<$typename nodeT , typename T $>$ \\
+reference \hyperlink{class_a_putils_1_1____iterator}{A\+Putils\+::\+\_\+\+\_\+iterator}$<$ nodeT, T $>$\+::operator$\ast$ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Constructor. 
+
+To instantiate an {\ttfamily \hyperlink{class_a_putils_1_1____iterator}{\+\_\+\+\_\+iterator}}. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Iterator.\+hpp\end{DoxyCompactItemize}

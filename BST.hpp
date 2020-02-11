@@ -7,6 +7,12 @@
 #include "Node.hpp"
 #include "Iterator.hpp"
 
+
+/** 
+ * @brief Principal namespace
+ * 
+ * Namespace of the library bst
+ */
 namespace APbst {
 
     template <typename KT, typename VT, typename cmp = std::less<KT>>

@@ -94,14 +94,14 @@ int main() {
 
     std::cout << "INSERT TESTS" << std::endl;
 
-    APbst::bst<int, int> tree{};
-    tree.insert(rootPair);
-    tree.insert(leftPair);
-    tree.insert(rightPair);
-    tree.insert(new std::pair<int, int>(3,3));
-    tree.insert(new std::pair<int, int>(5,5));
-    tree.insert(new std::pair<int, int>(6,6));
-    tree.insert(new std::pair<int, int>(8,8));
+    // APbst::bst<int, int> tree{};
+    // tree.insert(rootPair);
+    // tree.insert(leftPair);
+    // tree.insert(rightPair);
+    // tree.insert(new std::pair<int, int>(3,3));
+    // tree.insert(new std::pair<int, int>(5,5));
+    // tree.insert(new std::pair<int, int>(6,6));
+    // tree.insert(new std::pair<int, int>(8,8));
 
 
 

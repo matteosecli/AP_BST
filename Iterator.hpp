@@ -3,22 +3,33 @@
 
 #include <iterator>  /* For std::forward_iterator_tag */
 
+
 namespace APutils {
 
     template <typename nodeT, typename T>
     class __iterator {
+        /** @brief ??? */
         nodeT* currentNode;
       public:
         /* Standard members of the class Iterator. You could also derive them directly from the class std::iterator, 
-         * but since c++17 is deprecated so our is the right way. */
+         * but since c++17 is deprecated our is the right way. */
         using value_type = T;       // T can be either pair or const pair
         using reference = value_type&;
         using pointer = value_type*;
         using iterator_category = std::forward_iterator_tag;
         using difference_type = std::ptrdiff_t;
 
+        /** @brief Constructor.
+         *  @param n a `Node`.
+         *  
+         *  To instantiate an `__iterator`.
+         */
         explicit __iterator(nodeT* n) noexcept : currentNode{n} {}
 
+        /** @brief Constructor.
+         *  
+         *  To instantiate an `__iterator`.
+         */
         reference operator*() const noexcept { return currentNode->data; }
         pointer operator->() const noexcept { return &(*(*this)); }
 
