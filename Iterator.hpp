@@ -1,19 +1,21 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 
-#include <iterator>
+#include <iterator>  /* For std::forward_iterator_tag */
 
 namespace APutils {
 
     template <typename nodeT, typename T>
-    class __iterator{
+    class __iterator {
         nodeT* currentNode;
       public:
+        /* Standard members of the class Iterator. You could also derive them directly from the class std::iterator, 
+         * but since c++17 is deprecated so our is the right way. */
         using value_type = T;       // T can be either pair or const pair
         using reference = value_type&;
         using pointer = value_type*;
         using iterator_category = std::forward_iterator_tag;
-        using difference_type = std::ptrdiff_t; // Two iterators are equal if they point to the same node
+        using difference_type = std::ptrdiff_t;
 
         explicit __iterator(nodeT* n) noexcept : currentNode{n} {}
 
@@ -60,6 +62,7 @@ namespace APutils {
             return tmpIterator;
         }
 
+        /** @brief Two iterators are equal if they point to the same node */
         friend inline bool operator==(const __iterator& a, const __iterator& b) { return a.currentNode == b.currentNode; }
 
         friend inline bool operator!=(const __iterator& a, const __iterator& b) { return !(a == b); }

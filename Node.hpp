@@ -1,10 +1,15 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
-#include <utility>  /** @brief For std::pair */
-#include <memory>   /** @brief For std::unique_ptr */
+#include <utility>  /* For std::pair */
+#include <memory>   /* For std::unique_ptr */
 
 
+/** 
+ * @brief Another namespace
+ * 
+ * Namespace to hide Node and Iterator from the user
+ */
 namespace APutils {
 
     // Chiedere: l'utente può vedere Node? Sennò la mettiamo nel BST.

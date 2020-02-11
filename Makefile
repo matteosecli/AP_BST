@@ -1,9 +1,9 @@
 EXE = AP_BST.x
 CXX = c++
-CXXFLAGS = -I include -g -O3 -std=c++14 -Wall -Wextra -fPIC
-SRC = main.cpp src/bst.cpp src/Node.cpp
+CXXFLAGS = -g -O3 -std=c++14 -Wall -Wextra -fPIC
+SRC = main.cpp
 OBJ = $(SRC:.cpp=.o)
-INC = include/bst.hpp  include/Node.hpp
+INC = BST.hpp Iterator.hpp Node.hpp
 DIST = README.md \
 	   Makefile \
        LICENSE
@@ -20,7 +20,7 @@ all: $(EXE)
 .PHONY: all
 
 clean:
-	rm -rf $(OBJ) $(EXE) src/*~ include/*~ *~ html latex
+	rm -rf $(OBJ) $(EXE) *~ doc
 
 .PHONY: clean
 
@@ -30,15 +30,12 @@ clean:
 $(EXE): $(OBJ)
 	$(CXX) $^ -o $(EXE)
 
-doc: Doxygen/doxy.in
+doc: Doxyfile
 	doxygen $^
 
 .PHONY: doc
 
-main.o: include/bst.hpp include/Node.hpp
-
-src/bst.o: include/bst.hpp
-src/Node.o: include/bst.hpp include/Node.hpp
+main.o: main.cpp
 
 format: $(SRC) $(INC)
 	@clang-format -i $^ -verbose || echo "Please install clang-format to run this commands"
