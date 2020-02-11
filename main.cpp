@@ -52,11 +52,11 @@ int main() {
     //std::cout << "Hello World!" << std::endl;
 
 	std::pair<int, int> testPair(3,4);
-    APbst::Node<std::pair<int, int>> c;
-    APbst::Node<std::pair<int, int>> testNode{testPair, &c};
-    APbst::Node<std::pair<int,int>> testNodeMatteo(testPair, nullptr);
-//    APbst::Node<std::pair<int,int>> testNodeMatteo3(testPair,nullptr,nullptr,nullptr);
-//    APbst::Node<std::pair<int,int>> test2();
+    APutils::Node<std::pair<int, int>> c;
+    APutils::Node<std::pair<int, int>> testNode{testPair, &c};
+    APutils::Node<std::pair<int,int>> testNodeMatteo(testPair, nullptr);
+//    APutils::Node<std::pair<int,int>> testNodeMatteo3(testPair,nullptr,nullptr,nullptr);
+//    APutils::Node<std::pair<int,int>> test2();
     testNode.printNode();
     testNodeMatteo.printNode();
 
@@ -64,13 +64,13 @@ int main() {
     std::pair<int, int> rootPair(1,1);
     std::pair<int, int> leftPair(0,0);
     std::pair<int, int> rightPair(2,2);
-    APbst::Node<std::pair<int, int>> nodeRoot(rootPair, nullptr);
-    //APbst::Node<std::pair<int, int>> nodeLeft(leftPair, &nodeRoot);
-    //APbst::Node<std::pair<int, int>> nodeRight(rightPair,&nodeRoot);
-    //nodeRoot.left  = std::unique_ptr<APbst::Node<std::pair<int, int>>>(&nodeLeft);  // <- WRONG!!!
-    //nodeRoot.right = std::unique_ptr<APbst::Node<std::pair<int, int>>>(&nodeRight); // <- WRONG!!!
-    nodeRoot.left  = std::unique_ptr<APbst::Node<std::pair<int, int>>>(new APbst::Node<std::pair<int, int>>(leftPair, &nodeRoot));
-    nodeRoot.right = std::unique_ptr<APbst::Node<std::pair<int, int>>>(new APbst::Node<std::pair<int, int>>(rightPair, &nodeRoot));
+    APutils::Node<std::pair<int, int>> nodeRoot(rootPair, nullptr);
+    //APutils::Node<std::pair<int, int>> nodeLeft(leftPair, &nodeRoot);
+    //APutils::Node<std::pair<int, int>> nodeRight(rightPair,&nodeRoot);
+    //nodeRoot.left  = std::unique_ptr<APutils::Node<std::pair<int, int>>>(&nodeLeft);  // <- WRONG!!!
+    //nodeRoot.right = std::unique_ptr<APutils::Node<std::pair<int, int>>>(&nodeRight); // <- WRONG!!!
+    nodeRoot.left  = std::unique_ptr<APutils::Node<std::pair<int, int>>>(new APutils::Node<std::pair<int, int>>(leftPair, &nodeRoot));
+    nodeRoot.right = std::unique_ptr<APutils::Node<std::pair<int, int>>>(new APutils::Node<std::pair<int, int>>(rightPair, &nodeRoot));
 
     nodeRoot.left->printNode();
     nodeRoot.right->printNode();
@@ -78,13 +78,13 @@ int main() {
 
     std::cout << std::endl << "ITERATORS TESTS:" << std::endl;
 
-    APbst::__iterator<APbst::Node<std::pair<int, int>>,std::pair<int, int>> it(&nodeRoot);
+    APutils::__iterator<APutils::Node<std::pair<int, int>>,std::pair<int, int>> it(&nodeRoot);
     std::cout << "[" << &(*it) << "]    ";
     std::cout << "Key: " << (*(it++)).first << std::endl;
     std::cout << "[" << &(*it) << "]    ";
     std::cout << "Key: " << (*(it)).first << std::endl << std::endl;
 
-    APbst::__iterator<APbst::Node<std::pair<int, int>>,std::pair<int, int>> it2(&nodeRoot);
+    APutils::__iterator<APutils::Node<std::pair<int, int>>,std::pair<int, int>> it2(&nodeRoot);
     std::cout << "[" << &(*it) << "]    ";
     std::cout << "Key: " << (++it2)->first << std::endl;
     std::cout << "[" << &(*it) << "]    ";

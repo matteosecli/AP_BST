@@ -5,7 +5,7 @@
 #include <memory>   /** @brief For std::unique_ptr */
 
 
-namespace APbst {
+namespace APutils {
 
     // Chiedere: l'utente può vedere Node? Sennò la mettiamo nel BST.
     template <typename T>   // T must be an std::pair

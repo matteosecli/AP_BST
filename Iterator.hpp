@@ -3,7 +3,7 @@
 
 #include <iterator>
 
-namespace APbst {
+namespace APutils {
 
     template <typename nodeT, typename T>
     class __iterator{
@@ -49,6 +49,12 @@ namespace APbst {
         } // end ++it
 
         __iterator operator++(int) noexcept {  // Iterator it++ (post-increment)
+            /* The following line calls our 1-element constructor by giving an
+             * argument of type nodeT*. An almost equivalent statement would be
+             *     __iterator tmpIterator{*this};
+             * that instead calls the copy constructor, since the argument is of
+             * type *(__iterator&) == __iterator. Is one better than the other? =)
+             */
             __iterator tmpIterator{currentNode};
             ++(*this);
             return tmpIterator;
