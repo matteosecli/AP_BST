@@ -11,6 +11,7 @@ CONFIG += console          # Console application (Windows)
 CONFIG -= app_bundle       # Console application (MacOS); do not make ".app"
 CONFIG += c++14 strict_c++ # Enables C++14 standard with no compiler extensions
 CONFIG -= no-pkg-config    # Enables pkg-config (disabled by default on MacOS)
+CONFIG += warn_on          # Enables -Wall and -W (old jargon for -Wextra)
 
 
 ###########################
@@ -48,6 +49,7 @@ DISTFILES += \
 # ====
 # The DEBUG flag is used in qmake's DEBUG configuration, otherwise it's not.
 # ====
+QMAKE_CXXFLAGS_WARN_ON *= -Wextra -Wpedantic
 QMAKE_CXXFLAGS_DEBUG *= -DDEBUG
 QMAKE_CXXFLAGS_RELEASE -= -DDEBUG
 
