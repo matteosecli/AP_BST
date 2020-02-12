@@ -17,7 +17,8 @@ namespace APbst {
 
     template <typename KT, typename VT, typename cmp = std::less<KT>>
     class bst{
-        cmp op; // operator of comparison
+        /** @brief Operator of comparison. */
+        cmp op;
         std::unique_ptr<APutils::Node<std::pair<const KT, VT>>> root;
     public:
         bst() : op{}, root{nullptr} {}
@@ -30,22 +31,22 @@ namespace APbst {
 
         std::pair<iterator, bool> insert(const pair_type& x) {
             auto tmp = root.get();
-            while(tmp) {
-                if(op(x.first,tmp->data.first)) {
-                    if(tmp->left) {
+            while (tmp) {
+                if (op(x.first,tmp->data.first)) {
+                    if (tmp->left) {
                         tmp = tmp->left.get();
                     } else {
                         tmp->left.reset(new node_type{x, tmp});
                         return std::make_pair<iterator, bool>(iterator{tmp->left.get()}, true);
                     }
-                } else if(op(tmp->data.first, x.first)) {
+                } else if (op(tmp->data.first, x.first)) {
                     if (tmp->right) {
                         tmp = tmp->right.get();
                     } else {
                         tmp->right.reset(new node_type{x, tmp});
                         return std::make_pair<iterator, bool>(iterator{tmp->right.get()}, true);
                     }
-                } else{
+                } else {
                     return std::make_pair<iterator, bool>(iterator{tmp}, false);
                 }
             }
@@ -55,22 +56,22 @@ namespace APbst {
         
         std::pair<iterator, bool> insert(pair_type&& x) {
             auto tmp = root.get();
-            while(tmp) {
-                if(op(x.first,tmp->data.first)) {
-                    if(tmp->left) {
+            while (tmp) {
+                if (op(x.first,tmp->data.first)) {
+                    if (tmp->left) {
                         tmp = tmp->left.get();
                     } else {
                         tmp->left.reset(new node_type{std::move(x), tmp});
                         return std::make_pair<iterator, bool>(iterator{tmp->left.get()}, true);
                     }
-                } else if(op(tmp->data.first, x.first)) {
+                } else if (op(tmp->data.first, x.first)) {
                     if (tmp->right) {
                         tmp = tmp->right.get();
                     } else {
                         tmp->right.reset(new node_type{std::move(x), tmp});
                         return std::make_pair<iterator, bool>(iterator{tmp->right.get()}, true);
                     }
-                } else{
+                } else {
                     return std::make_pair<iterator, bool>(iterator{tmp}, false);
                 }
             }
@@ -85,7 +86,7 @@ namespace APbst {
 
         iterator begin() noexcept {
             /* If root is nullptr we return a nullptr iterator */
-            if(!root) return end();
+            if (!root) return end();
             /* I descend in the tree as long as I have a left child */
             auto tmp = root.get();
             while (tmp->left) {
@@ -96,7 +97,7 @@ namespace APbst {
 
         // const_iterator begin() const noexcept {
         //     /* If root is nullptr we return a nullptr const_iterator */
-        //     if(!root) return end();
+        //     if (!root) return end();
         //     /* I descend in the tree as long as I have a left child */
         //     auto tmp = root.get();
         //     while (tmp->left) {

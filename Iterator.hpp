@@ -20,15 +20,15 @@ namespace APutils {
         using difference_type = std::ptrdiff_t;
 
         /** @brief Constructor.
-         *  @param n a `Node`.
+         *  @param n a @ref Node.
          *  
-         *  To instantiate an `__iterator`.
+         *  To instantiate an @ref __iterator.
          */
         explicit __iterator(nodeT* n) noexcept : currentNode{n} {}
 
         /** @brief Constructor.
          *  
-         *  To instantiate an `__iterator`.
+         *  To instantiate an @ref __iterator.
          */
         reference operator*() const noexcept { return currentNode->data; }
         pointer operator->() const noexcept { return &(*(*this)); }

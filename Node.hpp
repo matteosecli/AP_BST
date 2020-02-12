@@ -15,25 +15,25 @@ namespace APutils {
     /** @brief Class that implements a node of a tree.
      *
      *  General class that can be used in any tree, for example it could be used in the class bt that implements a 
-     *  Binary Tree (our class `bst` should in fact inherit from bt).
+     *  Binary Tree (our class @ref bst should in fact inherit from bt).
      */
     template <typename T>   // T must be an std::pair
     struct Node {
-        /** @brief Data stored in this `Node`.
+        /** @brief Data stored in this @ref Node.
          *
-         *  Contains an std::pair<const Key,Val>, where Key is the key of this Node and Val is the value stored in this Node.
+         *  Contains an std::pair<const Key,Val>, where Key is the key of this Node and Val is the value stored in this @ref Node.
          */
         T data;
-        /** @brief Left child of this Node. */
+        /** @brief Left child of this @ref Node. */
         std::unique_ptr<Node<T>> left;
-        /** @brief Right child of this Node. */
+        /** @brief Right child of this @ref Node. */
         std::unique_ptr<Node<T>> right;
-        /** @brief Parent of this Node. */
+        /** @brief Parent of this @ref Node. */
         Node<T>* parent;
 
         /** @brief Void constructor.
          *  
-         *  Used only to create a void root when an object `bst` is instantiated.
+         *  Used only to create a void root when an object @ref bst is instantiated.
          */
         Node() :
             data{},
@@ -42,10 +42,10 @@ namespace APutils {
             parent{nullptr} {}
 
         /** @brief Data constructor.
-         *  @param data the values to be store in the `Node`.
-         *  @param parent the `Node` parent of this `Node`.
+         *  @param data the values to be store in the @ref Node.
+         *  @param parent the @ref Node parent of this @ref Node.
          *  
-         *  To create a `Node` with given `data` and `parent`, and `left` and `right` initializated to `nullptr`.
+         *  To create a @ref Node with given @ref data and @ref parent, and @ref left and @ref right initializated to `nullptr`.
          */
         Node(T& data, Node<T>* parent) :
             data{data},
@@ -54,12 +54,12 @@ namespace APutils {
             parent{parent} {}
         
         /** @brief Full constructor.
-         *  @param data the values to be store in the `Node`.
-         *  @param left the right child parent of this `Node`.
-         *  @param right the right child parent of this `Node`.
-         *  @param parent the `Node` parent of this `Node`.
+         *  @param data the values to be store in the @ref Node.
+         *  @param left the right child parent of this @ref Node.
+         *  @param right the right child parent of this @ref Node.
+         *  @param parent the @ref Node parent of this @ref Node.
          *  
-         *  To create the `Node` with all his members filled.
+         *  To create the @ref Node with all his members filled.
          */
         Node(T& data,
              std::unique_ptr<Node<T>>& left,
@@ -70,9 +70,9 @@ namespace APutils {
                 right{right},
                 parent{parent} {}
 
-        /** @brief Debug function to print a `Node`.
+        /** @brief Debug function to print a @ref Node.
          *  
-         *  Prints the content of the `Node`: the `data`, the `left` child and the `right` child.
+         *  Prints the content of the @ref Node: the @ref data, the @ref left child and the @ref right child.
          */
         void printNode() {
             std::cout << "[" << this << "]    ";
