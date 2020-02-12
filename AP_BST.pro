@@ -22,6 +22,7 @@ SOURCES += \
     main.cpp
 
 HEADERS += \
+    BST.hpp \
     Iterator.hpp \
     Node.hpp
 

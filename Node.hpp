@@ -41,34 +41,46 @@ namespace APutils {
             right{nullptr},
             parent{nullptr} {}
 
-        /** @brief Data constructor.
+        /** @brief Data copy constructor.
          *  @param data the values to be store in the @ref Node.
          *  @param parent the @ref Node parent of this @ref Node.
          *  
          *  To create a @ref Node with given @ref data and @ref parent, and @ref left and @ref right initializated to `nullptr`.
          */
-        Node(T& data, Node<T>* parent) :
+        Node(const T& data, Node<T>* parent) :
             data{data},
             left{nullptr},
             right{nullptr},
             parent{parent} {}
-        
-        /** @brief Full constructor.
+
+        /** @brief Data move constructor.
          *  @param data the values to be store in the @ref Node.
-         *  @param left the right child parent of this @ref Node.
-         *  @param right the right child parent of this @ref Node.
          *  @param parent the @ref Node parent of this @ref Node.
-         *  
-         *  To create the @ref Node with all his members filled.
+         *
+         *  To create a @ref Node with given @ref data and @ref parent, and @ref left and @ref right initializated to `nullptr`.
          */
-        Node(T& data,
-             std::unique_ptr<Node<T>>& left,
-             std::unique_ptr<Node<T>>& right,
-             Node<T>* parent) :
-                data{data},
-                left{left},
-                right{right},
-                parent{parent} {}
+        Node(T&& data, Node<T>* parent) :
+            data{std::move(data)},
+            left{nullptr},
+            right{nullptr},
+            parent{parent} {}
+        
+//        /** @brief Full constructor.
+//         *  @param data the values to be store in the @ref Node.
+//         *  @param left the right child parent of this @ref Node.
+//         *  @param right the right child parent of this @ref Node.
+//         *  @param parent the @ref Node parent of this @ref Node.
+//         *
+//         *  To create the @ref Node with all his members filled.
+//         */
+//        Node(T& data,
+//             std::unique_ptr<Node<T>>& left,
+//             std::unique_ptr<Node<T>>& right,
+//             Node<T>* parent) :
+//                data{data},
+//                left{left},
+//                right{right},
+//                parent{parent} {}
 
         /** @brief Debug function to print a @ref Node.
          *  

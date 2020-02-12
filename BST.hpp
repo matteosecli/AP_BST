@@ -25,11 +25,13 @@ namespace APbst {
         bst(cmp x) : op{x}, root{nullptr} {}
 
         using pair_type = std::pair<const KT, VT>;
+        using pair_type_nc = std::pair<KT, VT>;
         using node_type = APutils::Node<pair_type>;
         using iterator = APutils::__iterator<node_type, pair_type>;
         using const_iterator = APutils::__iterator<node_type, const pair_type>;
 
         std::pair<iterator, bool> insert(const pair_type& x) {
+            std::cout << "CALL: COPY_INSERT: APbst::bst::insert(const pair_type& x)" << std::endl;
             auto tmp = root.get();
             while (tmp) {
                 if (op(x.first,tmp->data.first)) {
@@ -55,6 +57,7 @@ namespace APbst {
         }
         
         std::pair<iterator, bool> insert(pair_type&& x) {
+            std::cout << "CALL: MOVE_INSERT: APbst::bst::insert(pair_type&& x)" << std::endl;
             auto tmp = root.get();
             while (tmp) {
                 if (op(x.first,tmp->data.first)) {
@@ -77,6 +80,26 @@ namespace APbst {
             }
             root.reset(new node_type{std::move(x), nullptr});
             return std::make_pair<iterator, bool>(iterator{tmp}, true);
+        }
+
+        /**
+         * @brief insert
+         * @param x @ref insert(const pair_type& x)
+         * @see insert(const pair_type& x)
+         * @return
+         *
+         * This function redirects to @ref insert(const pair_type& x).
+         * It's provided in order to address use cases in which the user uses e.g.
+         * `std::pair<int, int>` instead of `std::pair<const int, int>`.
+         */
+        std::pair<iterator, bool> insert(const pair_type_nc& x) {
+            std::cout << "CALL: COPY_INSERT_NC: APbst::bst::insert(const pair_type_nc& x)" << std::endl;
+            return insert((const pair_type)x);
+        }
+
+        std::pair<iterator, bool> insert(pair_type_nc&& x) {
+            std::cout << "CALL: MOVE_INSERT_NC: APbst::bst::insert(pair_type_nc&& x)" << std::endl;
+            return insert((pair_type)x);
         }
 
         //template<class... Types>

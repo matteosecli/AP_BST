@@ -63,8 +63,8 @@ int main() {
 
 
     std::pair<int, int> rootPair(1,1);
-    std::pair<int, int> leftPair(0,0);
-    std::pair<int, int> rightPair(2,2);
+    std::pair<const int, int> leftPair(0,0);
+    std::pair<const int, int> rightPair(2,2);
     APutils::Node<std::pair<int, int>> nodeRoot(rootPair, nullptr);
     //APutils::Node<std::pair<int, int>> nodeLeft(leftPair, &nodeRoot);
     //APutils::Node<std::pair<int, int>> nodeRight(rightPair,&nodeRoot);
@@ -94,15 +94,41 @@ int main() {
 
     std::cout << "INSERT TESTS" << std::endl;
 
-    // APbst::bst<int, int> tree{};
-    // tree.insert(rootPair);
-    // tree.insert(leftPair);
-    // tree.insert(rightPair);
-    // tree.insert(new std::pair<int, int>(3,3));
-    // tree.insert(new std::pair<int, int>(5,5));
-    // tree.insert(new std::pair<int, int>(6,6));
-    // tree.insert(new std::pair<int, int>(8,8));
+    APbst::bst<int, int> tree{};
+    tree.insert(rootPair);
+    tree.insert(leftPair);
+    tree.insert(rightPair);
+    tree.insert(std::pair<int, int>(3,3));
+    auto ins5 = tree.insert(std::pair<int, int>(5,5));
+    std::cout << "Insert 5: " << (ins5.second ? "OK" : "FAILED") << std::endl;
+    tree.insert(std::pair<const int, int>(6,6));
+    auto ins8 = tree.insert(std::pair<const int, int>(8,8));
+    std::cout << "Insert 8: " << (ins8.second ? "OK" : "FAILED") << std::endl;
+    auto ins8_2 = tree.insert(std::pair<const int, int>(8,8));
+    std::cout << "Insert 8: " << (ins8_2.second ? "OK" : "FAILED") << std::endl;
 
+
+    std::cout << std::endl << "ITERATION TESTS" << std::endl;
+    for (auto it = tree.begin(); it != tree.end(); ++it) {
+        std::cout << "[" << &(*it) << "]    ";
+        std::cout << "Key: " << it->first << std::endl;
+    }
+    std::cout << std::endl;
+    /* C++-14 loop.
+     * Use the following:
+     *   - 'const auto& it' to observe the elements by const reference.
+     *   - 'auto it'        to observe the elements by copying them (if copy is cheap).
+     *   - 'auto& it'       to modify the elements in place by non-const reference.
+     *   - 'auto&& it'      to modify the elements by proxy iterators, which are not
+     *                      implemented in our case, so it works the same way as
+     *                      'auto& it'.
+     * Since 'it' is not a pointer in any of the above cases, there's no need to
+     * dereference `it` (it's directly of type T of Node<T>).
+     */
+    for (const auto& it : tree) {
+        std::cout << "[" << &(it) << "]    ";
+        std::cout << "Key: " << it.first << std::endl;
+    }
 
 
 
