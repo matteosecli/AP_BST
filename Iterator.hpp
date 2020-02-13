@@ -8,7 +8,7 @@ namespace APutils {
 
     template <typename nodeT, typename T>
     class __iterator {
-        /** @brief ??? */
+        /** @brief @ref Node pointed by the iterator. */
         nodeT* currentNode;
       public:
         /* Standard members of the class Iterator. You could also derive them directly from the class std::iterator, 
@@ -28,10 +28,10 @@ namespace APutils {
         explicit __iterator(nodeT* n) noexcept : currentNode{n} {}
 
         /**
-         * @brief Operator.
+         * @brief Operator of re-cast.
          * @param n a @ref Node.
          *  
-         * For the const cast.
+         * For the cast at const_iterator.
          */
         operator __iterator<nodeT, const T>() { return __iterator<nodeT, const T>{currentNode}; }
 
@@ -43,7 +43,10 @@ namespace APutils {
         reference operator*() const noexcept { return currentNode->data; }
         pointer operator->() const noexcept { return &(*(*this)); }
 
-        __iterator& operator++() noexcept {  // Iterator ++it (pre-increment)
+        /**
+         * @brief Pre-increment function (iterator ++it).
+         */
+        __iterator& operator++() noexcept {
             /* If we are a nullptr, we return ourselves.
              */
             if (!currentNode) { // equivalent to if (currentNode == nullptr)
@@ -71,7 +74,10 @@ namespace APutils {
             return *this;
         } // end ++it
 
-        __iterator operator++(int) noexcept {  // Iterator it++ (post-increment)
+        /**
+         * @brief Post-increment function (iterator it++).
+         */
+        __iterator operator++(int) noexcept {
             /* The following line calls our 1-element constructor by giving an
              * argument of type nodeT*. An almost equivalent statement would be
              *     __iterator tmpIterator{*this};
@@ -83,9 +89,16 @@ namespace APutils {
             return tmpIterator;
         }
 
-        /** @brief Two iterators are equal if they point to the same node */
+        /**
+         * @brief Comparison operator for equality.
+         *
+         * Two iterators are equal if they point to the same node.
+         */
         friend inline bool operator==(const __iterator& a, const __iterator& b) { return a.currentNode == b.currentNode; }
 
+        /**
+         * @brief Comparison operator for inequality.
+         */
         friend inline bool operator!=(const __iterator& a, const __iterator& b) { return !(a == b); }
     };
 

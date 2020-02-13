@@ -39,11 +39,11 @@ namespace APbst {
 
         using key_type = KT;
         using mapped_type = VT;
-        using pair_type = std::pair<const KT, VT>;
-        using pair_type_nc = std::pair<KT, VT>;
-        using node_type = APutils::Node<pair_type>;
-        using iterator = APutils::__iterator<node_type, pair_type>;
-        using const_iterator = APutils::__iterator<node_type, const pair_type>;
+        using pair_type = typename std::pair<const KT, VT>;
+        using pair_type_nc = typename std::pair<KT, VT>;
+        using node_type = typename APutils::Node<pair_type>;
+        using iterator = typename APutils::__iterator<node_type,  pair_type>;
+        using const_iterator = typename APutils::__iterator<node_type, const pair_type>;
 
         //std::pair<iterator, bool> insert(const pair_type_nc& x) {
         std::pair<iterator, bool> insert(const pair_type& x) {
@@ -99,6 +99,11 @@ namespace APbst {
             root.reset(new node_type{std::move(x), nullptr});
             return std::make_pair<iterator, bool>(iterator{tmp}, true);
         }
+
+        // template <typename Args>
+        // std::pair<iterator, bool> insert(Args&& args) {
+        //     return __insert(std::forward<Args>(args));
+        // }
 
         /**
          * @brief insert
@@ -266,7 +271,9 @@ namespace APbst {
             return os;
         }
 
-        //void erase(const key_type& x);
+        void erase(const key_type& x) {
+            
+        }
     };
 
 }
