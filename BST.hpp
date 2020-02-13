@@ -322,21 +322,30 @@ namespace APbst {
 
             if (!__nodeToDelete) return;
 
-            if ((!__nodeToDelete->left) && (!__nodeToDelete->right)) {  // If node has no children
-                auto __nodeParent = __nodeToDelete->parent;
+            auto __nodeParent = __nodeToDelete->parent;
+
+            if ((!__nodeToDelete->left) && (!__nodeToDelete->right)) {  // If node has no children                
                 if (__nodeParent->left.get() == __nodeToDelete) {
                     __nodeParent->left.reset();
                 } else {
                     __nodeParent->right.reset();
                 }
-                //              } else if (tmp->left.get() != tmp->right.get()) {  // If node has one children
-                //                  if (tmp->left.get()) {
-                //                      tmp = new node_type{(tmp->left.get())->data, tmp->parent};
-                //                      tmp->left.reset();
-                //                  } else {
-                //                      tmp = new node_type{(tmp->right.get())->data, tmp->parent};
-                //                      tmp->right.reset();
-                //                  }
+            } else if (__nodeToDelete->left != __nodeToDelete->right) {  // If node has one children
+                if (__nodeToDelete->left) {
+                    if (__nodeParent->left.get() == __nodeToDelete) {
+                        __nodeParent->left.reset(new node_type{(__nodeToDelete->left.get())->data, __nodeToDelete->parent});
+                    } else {
+                        __nodeParent->right.reset(new node_type{(__nodeToDelete->left.get())->data, __nodeToDelete->parent});
+                    }
+                    __nodeToDelete->left.reset();
+                } else {
+                    if (__nodeParent->left.get() == __nodeToDelete) {
+                        __nodeParent->left.reset(new node_type{(__nodeToDelete->right.get())->data, __nodeToDelete->parent});
+                    } else {
+                        __nodeParent->right.reset(new node_type{(__nodeToDelete->right.get())->data, __nodeToDelete->parent});
+                    }
+                    __nodeToDelete->left.reset();
+                }
             } else {  // If node has two children
                 // Shit happens
             }

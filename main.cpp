@@ -187,9 +187,9 @@ int main() {
     treeAP.erase(4);
     std::cout << "After erasing 4 (is leaf): " << std::endl;
     std::cout << treeAP << std::endl;
-//    treeAP.erase(14);
-//    std::cout << "After erasing 14 (has only left child): " << std::endl;
-//    std::cout << treeAP << std::endl;
+    treeAP.erase(14);
+    std::cout << "After erasing 14 (has only left child): " << std::endl;
+    std::cout << treeAP << std::endl;
 //    treeAP.erase(3);
 //    std::cout << "After erasing 3 (has two children, and the right one has another child): " << std::endl;
 //    std::cout << treeAP << std::endl;
