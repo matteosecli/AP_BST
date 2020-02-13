@@ -110,10 +110,10 @@ namespace APutils {
          * The function is declared to be `friend` in order to make it able to
          * access our private member (@ref currentNode).
          */
-//        template<typename KT, typename VT, typename cmp>
-//        friend class APbst::bst;
         template<typename KT, typename VT, typename cmp>
-        friend void APbst::bst<KT,VT,cmp>::erase(const KT&);
+        friend class APbst::bst;
+//        template<typename KT, typename VT, typename cmp>
+//        friend void APbst::bst<KT,VT,cmp>::erase(const KT&);
     };
 
 }
