@@ -60,11 +60,13 @@ int main() {
 //    APutils::Node<std::pair<int,int>> test2();
     testNode.printNode();
     testNodeMatteo.printNode();
+    //APutils::Node<std::pair<int, int>> testNode2{};
+    //testNode2 = testNodeMatteo;  // already NOT ALLOWED by the unique_ptr
 
 
     std::pair<int, int> rootPair(1,1);
     std::pair<const int, int> leftPair(0,0);
-    std::pair<const int, int> rightPair(2,2);
+    const std::pair<const int, int> rightPair(2,2);
     APutils::Node<std::pair<int, int>> nodeRoot(rootPair, nullptr);
     //APutils::Node<std::pair<int, int>> nodeLeft(leftPair, &nodeRoot);
     //APutils::Node<std::pair<int, int>> nodeRight(rightPair,&nodeRoot);
@@ -75,45 +77,81 @@ int main() {
 
     nodeRoot.left->printNode();
     nodeRoot.right->printNode();
-    nodeRoot .printNode();
+    nodeRoot.printNode();
+
 
     std::cout << std::endl << "ITERATORS TESTS:" << std::endl;
 
     APutils::__iterator<APutils::Node<std::pair<int, int>>,std::pair<int, int>> it(&nodeRoot);
+    
     std::cout << "[" << &(*it) << "]    ";
     std::cout << "Key: " << (*(it++)).first << std::endl;
+    
     std::cout << "[" << &(*it) << "]    ";
     std::cout << "Key: " << (*(it)).first << std::endl << std::endl;
 
     APutils::__iterator<APutils::Node<std::pair<int, int>>,std::pair<int, int>> it2(&nodeRoot);
+    
     std::cout << "[" << &(*it) << "]    ";
     std::cout << "Key: " << (++it2)->first << std::endl;
+    
     std::cout << "[" << &(*it) << "]    ";
-    std::cout << "Key: " << it2->first << std::endl << std::endl;
+    std::cout << "Key: " << it2->first << std::endl;
 
 
-    std::cout << "INSERT TESTS" << std::endl;
+    std::cout << std::endl << "INSERT TESTS" << std::endl;
 
     APbst::bst<int, int> tree{};
-    tree.insert(rootPair);
-    tree.insert(leftPair);
-    tree.insert(rightPair);
-    tree.insert(std::pair<int, int>(3,3));
+    
+    auto insroot = tree.insert(rootPair);
+    std::cout << "Insert root: " << (insroot.second ? "OK" : "FAILED") << std::endl;
+    
+    auto insleft = tree.insert(leftPair);
+    std::cout << "Insert left: " << (insleft.second ? "OK" : "FAILED") << std::endl;
+    
+    auto insright = tree.insert(rightPair);
+    std::cout << "Insert right: " << (insright.second ? "OK" : "FAILED") << std::endl;
+    
+    auto ins3 = tree.insert(std::pair<int, int>(3,3));
+    std::cout << "Insert 3: " << (ins3.second ? "OK" : "FAILED") << std::endl;
+    
     auto ins5 = tree.insert(std::pair<int, int>(5,5));
     std::cout << "Insert 5: " << (ins5.second ? "OK" : "FAILED") << std::endl;
-    tree.insert(std::pair<const int, int>(6,6));
+    
+    auto ins6 = tree.insert(std::pair<const int, int>(6,6));
+    std::cout << "Insert 6: " << (ins6.second ? "OK" : "FAILED") << std::endl;
+    
     auto ins8 = tree.insert(std::pair<const int, int>(8,8));
     std::cout << "Insert 8: " << (ins8.second ? "OK" : "FAILED") << std::endl;
+    
     auto ins8_2 = tree.insert(std::pair<const int, int>(8,8));
     std::cout << "Insert 8: " << (ins8_2.second ? "OK" : "FAILED") << std::endl;
+    
+    auto ins4 = tree.insert({4, 4});
+    std::cout << "Insert 4: " << (ins4.second ? "OK" : "FAILED") << std::endl;
+
+
+    std::cout << std::endl << "EMPLACE TESTS" << std::endl;
+
+    tree.emplace(7, 7);
 
 
     std::cout << std::endl << "ITERATION TESTS" << std::endl;
+
     for (auto it = tree.begin(); it != tree.end(); ++it) {
         std::cout << "[" << &(*it) << "]    ";
         std::cout << "Key: " << it->first << std::endl;
     }
+
     std::cout << std::endl;
+
+    for (APbst::bst<int,int>::const_iterator it = tree.begin(); it != tree.end(); ++it) {
+        std::cout << "[" << &(*it) << "]    ";
+        std::cout << "Key: " << it->first << std::endl;
+    }
+
+    std::cout << std::endl;
+    
     /* C++-14 loop.
      * Use the following:
      *   - 'const auto& it' to observe the elements by const reference.
@@ -129,6 +167,55 @@ int main() {
         std::cout << "[" << &(it) << "]    ";
         std::cout << "Key: " << it.first << std::endl;
     }
+
+    std::cout << std::endl << "[] TEST" << std::endl;
+
+    // move:
+    tree[1] = 11;  // update an existing value: calls the MOVE_INSERT since it creates a new pair using (1, 11) with the pair move constructor
+    tree[10] = 10;  // insert a new value
+    tree[9] = 9;  // insert a new value
+    
+    //copy:
+    const int i = 2;
+    tree[i] = 22;  // update an existing value: calls the MOVE_INSERT since it creates a new pair using (i, 22) with the pair copy constructor
+    const int j = 12;
+    tree[j] = 12;  // insert a new value
+    
+    tree[4] = tree[5];
+
+
+    std::cout << std::endl << "PRINT TEST" << std::endl;
+
+    std::cout << tree << std::endl;
+
+
+    std::cout << std::endl << "FIND TEST" << std::endl;
+
+    APbst::bst<int,int>::const_iterator it_1 = tree.find(5);
+    //it_1->second = 78;  // NOT allowed
+    std::cout << ((it_1 == tree.end()) ? "Key NOT found" : "Key found") << std::endl;
+
+    auto it_2 = tree.find(6);
+    it_2->second = 78;  // ALLOWED
+    std::cout << ((it_2 == tree.end()) ? "Key NOT found" : "Key found") << std::endl;
+
+    auto it_3 = tree.find(55);
+    std::cout << ((it_3 == tree.end()) ? "Key NOT found" : "Key found") << std::endl;
+
+    tree.find(5)->second = 78;
+    std::cout << tree[5] << std::endl;
+
+
+    std::cout << std::endl << "CLEAR TEST" << std::endl;
+
+    tree.clear();
+
+    for (const auto& it : tree) {
+        std::cout << "[" << &(it) << "]    ";
+        std::cout << "Key: " << it.first << std::endl;
+    }
+    std::cout << "Finished printing" << std::endl;
+
 
 
 

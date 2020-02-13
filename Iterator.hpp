@@ -19,16 +19,26 @@ namespace APutils {
         using iterator_category = std::forward_iterator_tag;
         using difference_type = std::ptrdiff_t;
 
-        /** @brief Constructor.
-         *  @param n a @ref Node.
+        /**
+         * @brief Constructor.
+         * @param n a @ref Node.
          *  
-         *  To instantiate an @ref __iterator.
+         * To instantiate an @ref __iterator.
          */
         explicit __iterator(nodeT* n) noexcept : currentNode{n} {}
 
-        /** @brief Constructor.
+        /**
+         * @brief Operator.
+         * @param n a @ref Node.
          *  
-         *  To instantiate an @ref __iterator.
+         * For the const cast.
+         */
+        operator __iterator<nodeT, const T>() { return __iterator<nodeT, const T>{currentNode}; }
+
+        /**
+         * @brief Operator of de-reference.
+         *  
+         * To de-refrence an @ref __iterator.
          */
         reference operator*() const noexcept { return currentNode->data; }
         pointer operator->() const noexcept { return &(*(*this)); }
