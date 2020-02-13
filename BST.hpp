@@ -271,9 +271,77 @@ namespace APbst {
             return os;
         }
 
-        void erase(const key_type& x) {
-            
+//        void erase(const key_type& x) noexcept {
+//            auto tmp = root.get();
+//            while (tmp) {
+//                if (op(x,tmp->data.first)) {
+//                    tmp = tmp->left.get();
+//                } else if (op(tmp->data.first, x)) {
+//                    tmp = tmp->right.get();
+//                } else {  // We've finally found the node we want to delete
+//                    if ((!tmp->left.get()) && (!tmp->right.get())) {  // If node has no children
+//                        tmp = nullptr;
+//                    } else if (tmp->left.get() != tmp->right.get()) {  // If node has one children
+//                        if (tmp->left.get()) {
+//                            tmp = new node_type{(tmp->left.get())->data, tmp->parent};
+////                            tmp->parent->
+//                            tmp->left.reset();
+//                        } else {
+//                            tmp = new node_type{(tmp->right.get())->data, tmp->parent};
+//                            tmp->right.reset();
+//                        }
+//                    } else {  // If node has two children
+//                        /* We find the successor 'S' (which, for sure, has NO left child)
+//                         * and copy the successor 'S' in place of the deleted node 'D'.
+//                         * If the successor 'S' has a right child 'R', we copy 'R'
+//                         * in place of 'S' and remove 'R'.
+//                         */
+//                        // Find the successor 'S'
+//                        auto tmpS = tmp->right;
+//                        while (tmpS.get()->left) {
+//                            tmpS = tmpS.get()->left;
+//                        }
+//                        // Successor found; copy data to 'D'.
+//                        tmp->data = tmpS.get()->data;
+//                        // Check if it has right child
+//                        if (tmpS.get()->right) {  // If yes, we have to copy right child data into it before deleting.
+//                            tmpS.get()->data = (tmpS.get()->right.get())->data;
+//                            tmpS.get()->right.reset();
+//                        } else {  // If no children, we can just remove it.
+//                            tmpS.reset();
+//                        }
+//                    }
+//                }
+//            }
+//            // The tree is empty or the key doesn't exist, so I return.
+//            return;
+//        }
+
+        void erase(const key_type& x) noexcept {
+            auto __nodeToDelete = find(x).currentNode;
+
+            if (!__nodeToDelete) return;
+
+            if ((!__nodeToDelete->left) && (!__nodeToDelete->right)) {  // If node has no children
+                auto __nodeParent = __nodeToDelete->parent;
+                if (__nodeParent->left.get() == __nodeToDelete) {
+                    __nodeParent->left.reset();
+                } else {
+                    __nodeParent->right.reset();
+                }
+                //              } else if (tmp->left.get() != tmp->right.get()) {  // If node has one children
+                //                  if (tmp->left.get()) {
+                //                      tmp = new node_type{(tmp->left.get())->data, tmp->parent};
+                //                      tmp->left.reset();
+                //                  } else {
+                //                      tmp = new node_type{(tmp->right.get())->data, tmp->parent};
+                //                      tmp->right.reset();
+                //                  }
+            } else {  // If node has two children
+                // Shit happens
+            }
         }
+
     };
 
 }

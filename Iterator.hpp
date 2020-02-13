@@ -4,6 +4,11 @@
 #include <iterator>  /* For std::forward_iterator_tag */
 
 
+namespace APbst {
+    template<typename KT, typename VT, typename cmp>
+    class bst;
+}
+
 namespace APutils {
 
     template <typename nodeT, typename T>
@@ -11,7 +16,7 @@ namespace APutils {
         /** @brief @ref Node pointed by the iterator. */
         nodeT* currentNode;
       public:
-        /* Standard members of the class Iterator. You could also derive them directly from the class std::iterator, 
+        /* Standard members of the class Iterator. You could also derive them directly from the class std::iterator,
          * but since c++17 is deprecated our is the right way. */
         using value_type = T;       // T can be either pair or const pair
         using reference = value_type&;
@@ -22,7 +27,7 @@ namespace APutils {
         /**
          * @brief Constructor.
          * @param n a @ref Node.
-         *  
+         *
          * To instantiate an @ref __iterator.
          */
         explicit __iterator(nodeT* n) noexcept : currentNode{n} {}
@@ -30,14 +35,14 @@ namespace APutils {
         /**
          * @brief Operator of re-cast.
          * @param n a @ref Node.
-         *  
+         *
          * For the cast at const_iterator.
          */
         operator __iterator<nodeT, const T>() { return __iterator<nodeT, const T>{currentNode}; }
 
         /**
          * @brief Operator of de-reference.
-         *  
+         *
          * To de-refrence an @ref __iterator.
          */
         reference operator*() const noexcept { return currentNode->data; }
@@ -100,6 +105,15 @@ namespace APutils {
          * @brief Comparison operator for inequality.
          */
         friend inline bool operator!=(const __iterator& a, const __iterator& b) { return !(a == b); }
+
+        /**
+         * The function is declared to be `friend` in order to make it able to
+         * access our private member (@ref currentNode).
+         */
+//        template<typename KT, typename VT, typename cmp>
+//        friend class APbst::bst;
+        template<typename KT, typename VT, typename cmp>
+        friend void APbst::bst<KT,VT,cmp>::erase(const KT&);
     };
 
 }

@@ -170,6 +170,31 @@ int main() {
     // std::cout << ((it_const_1 == const_tree.end()) ? "Key NOT found" : "Key found") << std::endl;
 
 
+    std::cout << std::endl << "ERASE TEST" << std::endl;
+
+    APbst::bst<int, int> treeAP{};
+    treeAP.emplace(8,8);
+    treeAP.emplace(3,3);
+    treeAP.emplace(10,10);
+    treeAP.emplace(1,1);
+    treeAP.emplace(6,6);
+    treeAP.emplace(4,4);
+    treeAP.emplace(7,7);
+    treeAP.emplace(14,14);
+    treeAP.emplace(13,13);
+    std::cout << "Before erasing: " << std::endl;
+    std::cout << treeAP << std::endl;
+    treeAP.erase(4);
+    std::cout << "After erasing 4 (is leaf): " << std::endl;
+    std::cout << treeAP << std::endl;
+//    treeAP.erase(14);
+//    std::cout << "After erasing 14 (has only left child): " << std::endl;
+//    std::cout << treeAP << std::endl;
+//    treeAP.erase(3);
+//    std::cout << "After erasing 3 (has two children, and the right one has another child): " << std::endl;
+//    std::cout << treeAP << std::endl;
+
+
     std::cout << std::endl << "CLEAR TEST" << std::endl;
 
     tree.clear();
