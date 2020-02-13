@@ -187,12 +187,25 @@ int main() {
     treeAP.erase(4);
     std::cout << "After erasing 4 (is leaf): " << std::endl;
     std::cout << treeAP << std::endl;
-    treeAP.erase(14);
-    std::cout << "After erasing 14 (has only left child): " << std::endl;
+    treeAP.erase(10);
+    std::cout << "After erasing 10 (has 14 as right child, which has 13 as left child): " << std::endl;
     std::cout << treeAP << std::endl;
-//    treeAP.erase(3);
-//    std::cout << "After erasing 3 (has two children, and the right one has another child): " << std::endl;
-//    std::cout << treeAP << std::endl;
+
+
+    APbst::bst<int, int> treeAP2{};
+    treeAP2.emplace(8,8);
+    treeAP2.emplace(3,3);
+    treeAP2.emplace(10,10);
+    treeAP2.emplace(1,1);
+    treeAP2.emplace(6,6);
+    treeAP2.emplace(4,4);
+    treeAP2.emplace(7,7);
+    treeAP2.emplace(14,14);
+    treeAP2.emplace(13,13);
+    treeAP2.emplace(5,5);
+    treeAP2.erase(3);
+    std::cout << "After erasing 3 (has a full subtree): " << std::endl;
+    std::cout << treeAP2 << std::endl;
 
 
     std::cout << std::endl << "CLEAR TEST" << std::endl;

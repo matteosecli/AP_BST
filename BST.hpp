@@ -271,84 +271,81 @@ namespace APbst {
             return os;
         }
 
-//        void erase(const key_type& x) noexcept {
-//            auto tmp = root.get();
-//            while (tmp) {
-//                if (op(x,tmp->data.first)) {
-//                    tmp = tmp->left.get();
-//                } else if (op(tmp->data.first, x)) {
-//                    tmp = tmp->right.get();
-//                } else {  // We've finally found the node we want to delete
-//                    if ((!tmp->left.get()) && (!tmp->right.get())) {  // If node has no children
-//                        tmp = nullptr;
-//                    } else if (tmp->left.get() != tmp->right.get()) {  // If node has one children
-//                        if (tmp->left.get()) {
-//                            tmp = new node_type{(tmp->left.get())->data, tmp->parent};
-////                            tmp->parent->
-//                            tmp->left.reset();
-//                        } else {
-//                            tmp = new node_type{(tmp->right.get())->data, tmp->parent};
-//                            tmp->right.reset();
-//                        }
-//                    } else {  // If node has two children
-//                        /* We find the successor 'S' (which, for sure, has NO left child)
-//                         * and copy the successor 'S' in place of the deleted node 'D'.
-//                         * If the successor 'S' has a right child 'R', we copy 'R'
-//                         * in place of 'S' and remove 'R'.
-//                         */
-//                        // Find the successor 'S'
-//                        auto tmpS = tmp->right;
-//                        while (tmpS.get()->left) {
-//                            tmpS = tmpS.get()->left;
-//                        }
-//                        // Successor found; copy data to 'D'.
-//                        tmp->data = tmpS.get()->data;
-//                        // Check if it has right child
-//                        if (tmpS.get()->right) {  // If yes, we have to copy right child data into it before deleting.
-//                            tmpS.get()->data = (tmpS.get()->right.get())->data;
-//                            tmpS.get()->right.reset();
-//                        } else {  // If no children, we can just remove it.
-//                            tmpS.reset();
-//                        }
-//                    }
-//                }
-//            }
-//            // The tree is empty or the key doesn't exist, so I return.
-//            return;
-//        }
-
+        /**
+         * @brief erase
+         * @param x
+         */
         void erase(const key_type& x) noexcept {
-            auto __nodeToDelete = find(x).currentNode;
+            auto __nodeToDeleteIt = find(x);
+
+            auto __nodeToDelete = __nodeToDeleteIt.currentNode;
 
             if (!__nodeToDelete) return;
 
             auto __nodeParent = __nodeToDelete->parent;
 
-            if ((!__nodeToDelete->left) && (!__nodeToDelete->right)) {  // If node has no children                
-                if (__nodeParent->left.get() == __nodeToDelete) {
+            if ((!__nodeToDelete->left) && (!__nodeToDelete->right)) {  // If node has no children
+            std::cout << "001" << std::endl;
+                if (__nodeParent->left.get() == __nodeToDelete) {       // If node is left child of parent
                     __nodeParent->left.reset();
-                } else {
+                } else {                                                // If node is right child of parent
                     __nodeParent->right.reset();
                 }
-            } else if (__nodeToDelete->left != __nodeToDelete->right) {  // If node has one children
-                if (__nodeToDelete->left) {
-                    if (__nodeParent->left.get() == __nodeToDelete) {
-                        __nodeParent->left.reset(new node_type{(__nodeToDelete->left.get())->data, __nodeToDelete->parent});
-                    } else {
-                        __nodeParent->right.reset(new node_type{(__nodeToDelete->left.get())->data, __nodeToDelete->parent});
+            } else if ( !(!__nodeToDelete->left) != !(!__nodeToDelete->right) ) {  // If node has one child
+            std::cout << "002" << std::endl;
+                if (__nodeToDelete->left) {                              // If the child is the left one
+                    __nodeToDelete->left.get()->parent = __nodeParent;
+                    if (__nodeParent->left.get() == __nodeToDelete) {    // If node is left child of parent
+                        __nodeParent->left.reset(__nodeToDelete->left.release());
+                    } else {                                             // If node is right child of parent
+                        __nodeParent->right.reset(__nodeToDelete->left.release());
                     }
-                    __nodeToDelete->left.reset();
-                } else {
-                    if (__nodeParent->left.get() == __nodeToDelete) {
-                        __nodeParent->left.reset(new node_type{(__nodeToDelete->right.get())->data, __nodeToDelete->parent});
-                    } else {
-                        __nodeParent->right.reset(new node_type{(__nodeToDelete->right.get())->data, __nodeToDelete->parent});
+                } else {                                                 // If the child is the right one
+                    __nodeToDelete->right.get()->parent = __nodeParent;
+                    if (__nodeParent->left.get() == __nodeToDelete) {    // If node is left child of parent
+                        __nodeParent->left.reset(__nodeToDelete->right.release());
+                    } else {                                             // If node is right child of parent
+                        __nodeParent->right.reset(__nodeToDelete->right.release());
                     }
-                    __nodeToDelete->left.reset();
                 }
-            } else {  // If node has two children
-                // Shit happens
+            } else {                                                     // If node has two children
+                /* We find the successor 'S' (which, for sure, has NO left child)
+                 * and copy the successor 'S' in place of the deleted node 'D'.
+                 * If the successor 'S' has a right child 'R', we copy 'R'
+                 * in place of 'S' and remove 'R'.
+                 */
+                auto __nodeSuccessor = (++__nodeToDeleteIt).currentNode; // Find in-order successor
+
+                /* Create a new node with the data of 'S' and that points, to
+                 * the left and to the right, to the left/right children of 'D',
+                 * and that has __nodeParent as its parent.
+                 */
+                node_type dummyNode(__nodeSuccessor->data,__nodeParent);
+std::cout << __nodeParent     << std::endl;
+std::cout << dummyNode.parent << std::endl;
+std::cout << (__nodeToDelete->left .get()) << std::endl;
+std::cout << (__nodeToDelete->right.get()) << std::endl;
+                dummyNode.left .reset(__nodeToDelete->left .release());
+                dummyNode.right.reset(__nodeToDelete->right.release());
+                dummyNode.left .get()->parent = &dummyNode;
+                dummyNode.right.get()->parent = &dummyNode;
+std::cout << (dummyNode.left .get()) << std::endl;
+std::cout << (dummyNode.right.get()) << std::endl;
+/* IT SEEMS TO WORK UP TO THIS POINT */
+                /* Let __nodeParent to point to dummyNode as well. */
+                if (__nodeParent->left.get() == __nodeToDelete) {
+                    __nodeParent->left .reset(&dummyNode);
+                } else {
+                    __nodeParent->right.reset(&dummyNode);
+                }
+                /* Extra case: 'S' has 'R'. */
+                if (!__nodeSuccessor->right) {
+                    __nodeSuccessor->right->parent = __nodeSuccessor->parent;
+                    __nodeSuccessor->parent->left.reset(__nodeSuccessor->right.release());
+                }
             }
+            // The tree is empty or the key doesn't exist, so I return.
+            return;
         }
 
     };
