@@ -197,7 +197,7 @@ int main() {
     treeAP2.emplace(3,3);
     treeAP2.emplace(10,10);
     treeAP2.emplace(1,1);
-    treeAP2.emplace(6,6);
+    //treeAP2.emplace(6,6);
     treeAP2.emplace(4,4);
     treeAP2.emplace(7,7);
     treeAP2.emplace(14,14);
@@ -206,6 +206,22 @@ int main() {
     treeAP2.erase(3);
     std::cout << "After erasing 3 (has a full subtree): " << std::endl;
     std::cout << treeAP2 << std::endl;
+
+    APbst::bst<int, int> treeAP3{};
+    treeAP3.emplace(8,8);
+    treeAP3.emplace(3,3);
+    treeAP3.emplace(10,10);
+    treeAP3.emplace(1,1);
+    treeAP3.emplace(6,6);
+    treeAP3.emplace(4,4);
+    treeAP3.emplace(7,7);
+    treeAP3.emplace(14,14);
+    treeAP3.emplace(13,13);
+    treeAP3.emplace(5,5);
+    treeAP3.emplace(9,9);
+    treeAP3.erase(8);
+    std::cout << "After erasing 8 (the root): " << std::endl;
+    std::cout << treeAP3 << std::endl;
 
 
     std::cout << std::endl << "CLEAR TEST" << std::endl;

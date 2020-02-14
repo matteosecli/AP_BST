@@ -286,19 +286,68 @@ namespace APbst {
 
             auto __nodeToDelete = __nodeToDeleteIt.currentNode;
 
+            /* If I am deleting a nullptr. */
             if (!__nodeToDelete) return;
 
+            /* If I'm deleting the root. */
+            if (__nodeToDelete == root.get()) {
+                if ((!__nodeToDelete->left) && (!__nodeToDelete->right)) {             // If node has no children
+                    root.reset();
+                } else if ( !(!__nodeToDelete->left) != !(!__nodeToDelete->right) ) {  // If node has one child
+                    if (__nodeToDelete->left) {                                        // If the child is the left one
+                        root.reset(__nodeToDelete->left.release());
+                        __nodeToDelete->left->parent = nullptr;
+                    } else {                                                           // If the child is the right one
+                        root.reset(__nodeToDelete->right.release());
+                        __nodeToDelete->right->parent = nullptr;
+                    }
+                } else {                                                               // If node has two children
+                    /* We find the successor 'S' (which, for sure, has NO left child)
+                     * and copy the successor 'S' in place of the deleted node 'D'.
+                     * If the successor 'S' has a right child 'R', we copy 'R'
+                     * in place of 'S' and remove 'R'.
+                     */
+                    auto __nodeSuccessor = (++__nodeToDeleteIt).currentNode;           // Find in-order successor
+                    /* Create a new node with the data of 'S' and that points, to
+                     * the left and to the right, to the left/right children of 'D',
+                     * and that has nullptr as its parent.
+                     */
+                    auto dummyNode = std::make_unique<node_type>(__nodeSuccessor->data, nullptr);
+                    dummyNode.get()->left .reset(__nodeToDelete->left .release());
+                    dummyNode.get()->left .get()->parent = dummyNode.get();
+
+                    /* If successor 'S' is right child of 'D', special case */
+                    if (__nodeToDelete->right.get() == __nodeSuccessor) {
+                        dummyNode.get()->right.reset(__nodeSuccessor->right.release());
+                        dummyNode.get()->right.get()->parent = dummyNode.get();
+                    } else {
+                        dummyNode.get()->right.reset(__nodeToDelete->right.release());
+                        dummyNode.get()->right.get()->parent = dummyNode.get();
+                        if (__nodeSuccessor->right) {
+                            /* Extra case: 'S' has 'R'. */
+                            __nodeSuccessor->right->parent = __nodeSuccessor->parent;
+                            __nodeSuccessor->parent->left.reset(__nodeSuccessor->right.release());
+                        } else {
+                            __nodeSuccessor->parent->left.reset();
+                        }
+                    }
+
+                    root.reset(dummyNode.release());
+                }
+
+                return;
+            }
+
+            /* If I'm deleting any other node, that has in this case a parent. */
             auto __nodeParent = __nodeToDelete->parent;
 
             if ((!__nodeToDelete->left) && (!__nodeToDelete->right)) {  // If node has no children
-            std::cout << "001" << std::endl;
                 if (__nodeParent->left.get() == __nodeToDelete) {       // If node is left child of parent
                     __nodeParent->left.reset();
                 } else {                                                // If node is right child of parent
                     __nodeParent->right.reset();
                 }
             } else if ( !(!__nodeToDelete->left) != !(!__nodeToDelete->right) ) {  // If node has one child
-            std::cout << "002" << std::endl;
                 if (__nodeToDelete->left) {                              // If the child is the left one
                     __nodeToDelete->left.get()->parent = __nodeParent;
                     if (__nodeParent->left.get() == __nodeToDelete) {    // If node is left child of parent
@@ -321,49 +370,42 @@ namespace APbst {
                  * in place of 'S' and remove 'R'.
                  */
                 auto __nodeSuccessor = (++__nodeToDeleteIt).currentNode; // Find in-order successor
-                __nodeSuccessor->printNode();
 
                 /* Create a new node with the data of 'S' and that points, to
                  * the left and to the right, to the left/right children of 'D',
                  * and that has __nodeParent as its parent.
                  */
-                //node_type dummyNode(__nodeSuccessor->data,__nodeParent);
-                auto dummyNode = std::make_unique<node_type>(__nodeSuccessor->data,__nodeParent);
-std::cout << "DUMMY  ADD:    " << dummyNode.get() << std::endl;
-std::cout << "DUMMY DATA:    " << dummyNode.get()->data.first << ": " << dummyNode.get()->data.second << std::endl;
-std::cout << "ROOT   ADD:    " << root.get() << std::endl;
-std::cout << "PARENT ADD:    " << __nodeParent     << std::endl;
-std::cout << "DUMPAR ADD:    " << dummyNode.get()->parent << std::endl;
-std::cout << "DEL_L  ADD:    " << (__nodeToDelete->left .get()) << std::endl;
-std::cout << "DEL_R  ADD:    " << (__nodeToDelete->right.get()) << std::endl;
+                auto dummyNode = std::make_unique<node_type>(__nodeSuccessor->data, __nodeParent);
                 dummyNode.get()->left .reset(__nodeToDelete->left .release());
-                dummyNode.get()->right.reset(__nodeToDelete->right.release());
                 dummyNode.get()->left .get()->parent = dummyNode.get();
-                dummyNode.get()->right.get()->parent = dummyNode.get();
-std::cout << "DUM_L  ADD:    " << (dummyNode.get()->left .get()) << std::endl;
-std::cout << "DUM_R  ADD:    " << (dummyNode.get()->right.get()) << std::endl;
-                /* Let __nodeParent to point to dummyNode as well. */
-std::cout << "PAR_L  ADD:    " << (__nodeParent->left .get()) << std::endl;
-std::cout << "PAR_R  ADD:    " << (__nodeParent->right.get()) << std::endl;
-std::cout << "DELETE ADD:    " << __nodeToDelete << std::endl;
-                if (__nodeParent->left.get() == __nodeToDelete) {
-                    __nodeParent->left .reset(dummyNode.release());
-                } else {
-                    __nodeParent->right.reset(dummyNode.release());
-                }
-std::cout << "PAR_L  ADD:    " << (__nodeParent->left .get()) << std::endl;
-std::cout << "PAR_R  ADD:    " << (__nodeParent->right.get()) << std::endl;
-std::cout << "DUMMY  ADD:    " << dummyNode.get() << std::endl;
-/* IT SEEMS TO WORK UP TO THIS POINT */
-                /* Extra case: 'S' has 'R'. */
-                if (__nodeSuccessor->right) {
-                    __nodeSuccessor->right->parent = __nodeSuccessor->parent;
-                    __nodeSuccessor->parent->left.reset(__nodeSuccessor->right.release());
-                } else {
-                    __nodeSuccessor->parent->left.reset();
-                }
 
-                //__nodeToDelete = std::move(dummyNode);
+                /* If successor 'S' is right child of 'D', special case */
+                if (__nodeToDelete->right.get() == __nodeSuccessor) {
+                    dummyNode.get()->right.reset(__nodeSuccessor->right.release());
+                    dummyNode.get()->right.get()->parent = dummyNode.get();
+                    /* Let __nodeParent to point to dummyNode as well. */
+                    if (__nodeParent->left.get() == __nodeToDelete) {
+                        __nodeParent->left .reset(dummyNode.release());
+                    } else {
+                        __nodeParent->right.reset(dummyNode.release());
+                    }
+                } else {
+                    dummyNode.get()->right.reset(__nodeToDelete->right.release());
+                    dummyNode.get()->right.get()->parent = dummyNode.get();
+                    /* Let __nodeParent to point to dummyNode as well. */
+                    if (__nodeParent->left.get() == __nodeToDelete) {
+                        __nodeParent->left .reset(dummyNode.release());
+                    } else {
+                        __nodeParent->right.reset(dummyNode.release());
+                    }
+                    if (__nodeSuccessor->right) {
+                        /* Extra case: 'S' has 'R'. */
+                        __nodeSuccessor->right->parent = __nodeSuccessor->parent;
+                        __nodeSuccessor->parent->left.reset(__nodeSuccessor->right.release());
+                    } else {
+                        __nodeSuccessor->parent->left.reset();
+                    }
+                }
 
             }
             // The tree is empty or the key doesn't exist, so I return.
