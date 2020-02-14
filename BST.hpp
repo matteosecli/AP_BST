@@ -41,7 +41,7 @@ namespace APbst {
         using mapped_type = VT;
         using pair_type = typename std::pair<const KT, VT>;
         using pair_type_nc = typename std::pair<KT, VT>;
-        using node_type = APutils::Node<pair_type>;
+        using node_type = typename APutils::Node<pair_type>;
         using iterator = typename APutils::__iterator<node_type,  pair_type>;
         using const_iterator = typename APutils::__iterator<node_type, const pair_type>;
 
@@ -313,7 +313,8 @@ namespace APbst {
                      * the left and to the right, to the left/right children of 'D',
                      * and that has nullptr as its parent.
                      */
-                    auto dummyNode = std::make_unique<node_type>(__nodeSuccessor->data, nullptr);
+                    //auto dummyNode = std::make_unique<node_type>(__nodeSuccessor->data, nullptr);
+                    auto dummyNode = std::unique_ptr<node_type>(new node_type(__nodeSuccessor->data, nullptr));
                     dummyNode.get()->left .reset(__nodeToDelete->left .release());
                     dummyNode.get()->left .get()->parent = dummyNode.get();
 
@@ -376,7 +377,8 @@ namespace APbst {
                  * the left and to the right, to the left/right children of 'D',
                  * and that has __nodeParent as its parent.
                  */
-                auto dummyNode = std::make_unique<node_type>(__nodeSuccessor->data, __nodeParent);
+                //auto dummyNode = std::make_unique<node_type>(__nodeSuccessor->data, __nodeParent);
+                auto dummyNode = std::unique_ptr<node_type>(new node_type(__nodeSuccessor->data, __nodeParent));
                 dummyNode.get()->left .reset(__nodeToDelete->left .release());
                 dummyNode.get()->left .get()->parent = dummyNode.get();
 
