@@ -147,6 +147,7 @@ namespace APbst {
          * It returns the smaller @ref Node according to @ref op; which, likely, is not the root node.
          */
         iterator begin() noexcept {
+            std::cout << "NONCONST_BEGIN" << std::endl;
             /* If root is nullptr we return a nullptr iterator */
             if (!root) return end();
             /* I descend in the tree as long as I have a left child */
@@ -162,13 +163,17 @@ namespace APbst {
          * @see begin().
          */
         const_iterator begin() const noexcept {
+            std::cout << "CONST_BEGIN" << std::endl;
             /* If root is nullptr we return a nullptr const_iterator */
             if (!root) return end();
             /* I descend in the tree as long as I have a left child */
             auto tmp = root.get();
+            tmp->printNode();
             while (tmp->left) {
                 tmp = tmp->left.get();
+                tmp->printNode();
             }
+            tmp->printNode();
             return const_iterator{tmp};
         }
         // const_iterator begin() const noexcept {
@@ -261,12 +266,13 @@ namespace APbst {
 
         /** @brief To print the tree in an easy way. */
         friend std::ostream& operator<<(std::ostream& os, const bst& x) {
-            for (const auto& it : x) {
-               os << "[Key: " << std::setw(4) << it.first << ", Value: " << std::setw(4) << it.second << "]" << std::endl;
+//            for (const auto& it : x) {
+//               os << "[Key: " << std::setw(4) << it.first << ", Value: " << std::setw(4) << it.second << "]" << std::endl;
+//            }
+            for (auto it = x.cbegin(); it != x.cend(); ++it) {
+                os << "[" << it.currentNode << "]    "
+                   << "[Key: " << std::setw(4) << it->first << ", Value: " << std::setw(4) << it->second << "]" << std::endl;
             }
-            // for (auto it = x.cbegin(); it != x.cend(); ++it) {
-            //     os << "[Key: " << std::setw(4) << it->first << ", Value: " << std::setw(4) << it->second << "]" << std::endl;
-            // }
 
             return os;
         }
@@ -315,34 +321,50 @@ namespace APbst {
                  * in place of 'S' and remove 'R'.
                  */
                 auto __nodeSuccessor = (++__nodeToDeleteIt).currentNode; // Find in-order successor
+                __nodeSuccessor->printNode();
 
                 /* Create a new node with the data of 'S' and that points, to
                  * the left and to the right, to the left/right children of 'D',
                  * and that has __nodeParent as its parent.
                  */
-                node_type dummyNode(__nodeSuccessor->data,__nodeParent);
-std::cout << __nodeParent     << std::endl;
-std::cout << dummyNode.parent << std::endl;
-std::cout << (__nodeToDelete->left .get()) << std::endl;
-std::cout << (__nodeToDelete->right.get()) << std::endl;
-                dummyNode.left .reset(__nodeToDelete->left .release());
-                dummyNode.right.reset(__nodeToDelete->right.release());
-                dummyNode.left .get()->parent = &dummyNode;
-                dummyNode.right.get()->parent = &dummyNode;
-std::cout << (dummyNode.left .get()) << std::endl;
-std::cout << (dummyNode.right.get()) << std::endl;
-/* IT SEEMS TO WORK UP TO THIS POINT */
+                //node_type dummyNode(__nodeSuccessor->data,__nodeParent);
+                auto dummyNode = std::make_unique<node_type>(__nodeSuccessor->data,__nodeParent);
+std::cout << "DUMMY  ADD:    " << dummyNode.get() << std::endl;
+std::cout << "DUMMY DATA:    " << dummyNode.get()->data.first << ": " << dummyNode.get()->data.second << std::endl;
+std::cout << "ROOT   ADD:    " << root.get() << std::endl;
+std::cout << "PARENT ADD:    " << __nodeParent     << std::endl;
+std::cout << "DUMPAR ADD:    " << dummyNode.get()->parent << std::endl;
+std::cout << "DEL_L  ADD:    " << (__nodeToDelete->left .get()) << std::endl;
+std::cout << "DEL_R  ADD:    " << (__nodeToDelete->right.get()) << std::endl;
+                dummyNode.get()->left .reset(__nodeToDelete->left .release());
+                dummyNode.get()->right.reset(__nodeToDelete->right.release());
+                dummyNode.get()->left .get()->parent = dummyNode.get();
+                dummyNode.get()->right.get()->parent = dummyNode.get();
+std::cout << "DUM_L  ADD:    " << (dummyNode.get()->left .get()) << std::endl;
+std::cout << "DUM_R  ADD:    " << (dummyNode.get()->right.get()) << std::endl;
                 /* Let __nodeParent to point to dummyNode as well. */
+std::cout << "PAR_L  ADD:    " << (__nodeParent->left .get()) << std::endl;
+std::cout << "PAR_R  ADD:    " << (__nodeParent->right.get()) << std::endl;
+std::cout << "DELETE ADD:    " << __nodeToDelete << std::endl;
                 if (__nodeParent->left.get() == __nodeToDelete) {
-                    __nodeParent->left .reset(&dummyNode);
+                    __nodeParent->left .reset(dummyNode.release());
                 } else {
-                    __nodeParent->right.reset(&dummyNode);
+                    __nodeParent->right.reset(dummyNode.release());
                 }
+std::cout << "PAR_L  ADD:    " << (__nodeParent->left .get()) << std::endl;
+std::cout << "PAR_R  ADD:    " << (__nodeParent->right.get()) << std::endl;
+std::cout << "DUMMY  ADD:    " << dummyNode.get() << std::endl;
+/* IT SEEMS TO WORK UP TO THIS POINT */
                 /* Extra case: 'S' has 'R'. */
-                if (!__nodeSuccessor->right) {
+                if (__nodeSuccessor->right) {
                     __nodeSuccessor->right->parent = __nodeSuccessor->parent;
                     __nodeSuccessor->parent->left.reset(__nodeSuccessor->right.release());
+                } else {
+                    __nodeSuccessor->parent->left.reset();
                 }
+
+                //__nodeToDelete = std::move(dummyNode);
+
             }
             // The tree is empty or the key doesn't exist, so I return.
             return;

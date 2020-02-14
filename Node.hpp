@@ -97,12 +97,14 @@ namespace APutils {
             std::cout << "[" << this << "]    ";
             std::cout << "Key: " << data.first << ", Value: " << data.second << std::endl;
             if (left) {
-                std::cout << "    Left  -> ";
-                left->printNode();
+                std::cout << "    Left  -> "
+                          << "[" << left.get() << "]    "
+                          << "Key: " << left .get()->data.first << ", Value: " << left .get()->data.second << std::endl;
             }
             if (right) {
-                std::cout << "    Right -> ";
-                right->printNode();
+                std::cout << "    Right -> "
+                          << "[" << right.get() << "]    "
+                          << "Key: " << right.get()->data.first << ", Value: " << right.get()->data.second << std::endl;
             }
         }
     };
