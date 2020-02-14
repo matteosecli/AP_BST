@@ -93,18 +93,23 @@ namespace APutils {
          *  
          * Prints the content of the @ref Node: the @ref data, the @ref left child and the @ref right child.
          */
-        void printNode() {
-            std::cout << "[" << this << "]    ";
-            std::cout << "Key: " << data.first << ", Value: " << data.second << std::endl;
-            if (left) {
-                std::cout << "    Left  -> "
-                          << "[" << left.get() << "]    "
-                          << "Key: " << left .get()->data.first << ", Value: " << left .get()->data.second << std::endl;
-            }
-            if (right) {
-                std::cout << "    Right -> "
-                          << "[" << right.get() << "]    "
-                          << "Key: " << right.get()->data.first << ", Value: " << right.get()->data.second << std::endl;
+        void printNode(std::ostream& os = std::cout, const bool& printChildren = true) {
+            os << "[" << this << "]    ";
+            os << "Key: " << std::setw(4) << data.first
+               << ", Value: " << std::setw(4) << data.second << std::endl;
+            if (printChildren) {
+                if (left) {
+                    os << "    Left  -> "
+                       << "[" << left.get() << "]    "
+                       << "Key: " << std::setw(4) << left .get()->data.first
+                       << ", Value: " << std::setw(4) << left .get()->data.second << std::endl;
+                }
+                if (right) {
+                    os << "    Right -> "
+                       << "[" << right.get() << "]    "
+                       << "Key: " << std::setw(4) << right.get()->data.first
+                       << ", Value: " << std::setw(4) << right.get()->data.second << std::endl;
+                }
             }
         }
     };

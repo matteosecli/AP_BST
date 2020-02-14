@@ -114,6 +114,10 @@ namespace APutils {
         friend class APbst::bst;
 //        template<typename KT, typename VT, typename cmp>
 //        friend void APbst::bst<KT,VT,cmp>::erase(const KT&);
+
+        void printNode(std::ostream& os = std::cout, const bool& printChildren = false) {
+            currentNode->printNode(os, printChildren);
+        }
     };
 
 }

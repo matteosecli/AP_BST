@@ -270,8 +270,9 @@ namespace APbst {
 //               os << "[Key: " << std::setw(4) << it.first << ", Value: " << std::setw(4) << it.second << "]" << std::endl;
 //            }
             for (auto it = x.cbegin(); it != x.cend(); ++it) {
-                os << "[" << it.currentNode << "]    "
-                   << "[Key: " << std::setw(4) << it->first << ", Value: " << std::setw(4) << it->second << "]" << std::endl;
+//                os << "[" << it.currentNode << "]    "
+//                   << "[Key: " << std::setw(4) << it->first << ", Value: " << std::setw(4) << it->second << "]" << std::endl;
+                it.printNode(os,true);
             }
 
             return os;
