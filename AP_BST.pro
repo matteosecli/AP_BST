@@ -51,8 +51,8 @@ DISTFILES += \
 # The DEBUG flag is used in qmake's DEBUG configuration, otherwise it's not.
 # ====
 QMAKE_CXXFLAGS_WARN_ON *= -Wextra -Wpedantic
-QMAKE_CXXFLAGS_DEBUG *= -DDEBUG
-QMAKE_CXXFLAGS_RELEASE -= -DDEBUG
+QMAKE_CXXFLAGS_DEBUG *= -D__DEBUG_AP_BST
+QMAKE_CXXFLAGS_RELEASE -= -D__DEBUG_AP_BST
 
 # Optimization flags
 # ====

@@ -224,6 +224,17 @@ int main() {
     std::cout << treeAP3 << std::endl;
 
 
+    std::cout << std::endl << "MATCHING TEST" << std::endl;
+
+    std::stringstream ssAP3{};
+    treeAP3.printRawTree(ssAP3);
+    std::stringstream ssAP3_exp{};
+    ssAP3_exp << "1 : 1\n3 : 3\n4 : 4\n5 : 5\n6 : 6\n7 : 7\n9 : 9\n10 : 10\n13 : 13\n14 : 14\n";
+//    std::cout << ssAP3.str() << std::endl;
+//    std::cout << ssAP3_exp.str() << std::endl;
+    std::cout << ( (ssAP3.str() == ssAP3_exp.str()) ? "MATCH OK" : "MATCH FAIL") << std::endl;
+
+
     std::cout << std::endl << "CLEAR TEST" << std::endl;
 
     tree.clear();

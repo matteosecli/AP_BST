@@ -2,11 +2,16 @@
 #define BST_HPP
 
 #include <iostream>
+#include <sstream>
 #include <iomanip>
 #include <memory>
 #include <utility>
 #include "Node.hpp"
 #include "Iterator.hpp"
+
+//#ifndef DEBUG
+//#define DEBUG false    /**< @brief Whether we are in DEBUG mode or not; DEBUG mode prints much more info (which, though, slows the program down). */
+//#endif
 
 
 /** 
@@ -47,7 +52,9 @@ namespace APbst {
 
         //std::pair<iterator, bool> insert(const pair_type_nc& x) {
         std::pair<iterator, bool> insert(const pair_type& x) {
+            #ifdef __DEBUG_AP_BST
             std::cout << "CALL: COPY_INSERT: APbst::bst::insert(const pair_type& x)" << std::endl;
+            #endif
             auto tmp = root.get();
             while (tmp) {
                 if (op(x.first,tmp->data.first)) {
@@ -75,7 +82,9 @@ namespace APbst {
         
         //std::pair<iterator, bool> insert(pair_type_nc&& x) {
         std::pair<iterator, bool> insert(pair_type&& x) {
+            #ifdef __DEBUG_AP_BST
             std::cout << "CALL: MOVE_INSERT: APbst::bst::insert(pair_type&& x)" << std::endl;
+            #endif
             auto tmp = root.get();
             while (tmp) {
                 if (op(x.first,tmp->data.first)) {
@@ -147,7 +156,9 @@ namespace APbst {
          * It returns the smaller @ref Node according to @ref op; which, likely, is not the root node.
          */
         iterator begin() noexcept {
-            std::cout << "NONCONST_BEGIN" << std::endl;
+            #ifdef __DEBUG_AP_BST
+            std::cout << "CALL: NONCONST_BEGIN" << std::endl;
+            #endif
             /* If root is nullptr we return a nullptr iterator */
             if (!root) return end();
             /* I descend in the tree as long as I have a left child */
@@ -163,17 +174,16 @@ namespace APbst {
          * @see begin().
          */
         const_iterator begin() const noexcept {
-            std::cout << "CONST_BEGIN" << std::endl;
+            #ifdef __DEBUG_AP_BST
+            std::cout << "CALL: CONST_BEGIN" << std::endl;
+            #endif
             /* If root is nullptr we return a nullptr const_iterator */
             if (!root) return end();
             /* I descend in the tree as long as I have a left child */
             auto tmp = root.get();
-            tmp->printNode();
             while (tmp->left) {
                 tmp = tmp->left.get();
-                tmp->printNode();
             }
-            tmp->printNode();
             return const_iterator{tmp};
         }
         // const_iterator begin() const noexcept {
@@ -186,12 +196,16 @@ namespace APbst {
 
         /* I return one after the last element, so a nullptr*/
         iterator end() noexcept {
-            std::cout << "NONCONST_END" << std::endl;
+            #ifdef __DEBUG_AP_BST
+            std::cout << "CALL: NONCONST_END" << std::endl;
+            #endif
             return iterator{nullptr};
         }
 
         const_iterator end() const noexcept {
-            std::cout << "CONST_END" << std::endl;
+            #ifdef __DEBUG_AP_BST
+            std::cout << "CALL: CONST_END" << std::endl;
+            #endif
             return const_iterator{nullptr};
         }
 
@@ -206,7 +220,9 @@ namespace APbst {
          * Finds a given key. If the key is present, returns an iterator to the proper node, @ref end() otherwise.
          */
         iterator find(const key_type& x) {
+            #ifdef __DEBUG_AP_BST
             std::cout << "CALL: NONCONST_FIND" << std::endl;
+            #endif
             auto tmp = root.get();
             while (tmp) {
                 if (op(x,tmp->data.first)) {
@@ -228,7 +244,9 @@ namespace APbst {
          * Finds a given key. If the key is present, returns an iterator to the proper node, @ref end() otherwise.
          */
         const_iterator find(const key_type& x) const {
+            #ifdef __DEBUG_AP_BST
             std::cout << "CALL: CONST_FIND" << std::endl;
+            #endif
             return (const_iterator) find(x);
             // auto tmp = root.get();
             // while (tmp) {
@@ -251,7 +269,9 @@ namespace APbst {
          *  performing an insertion if such key does not already exist.
          */
         mapped_type& operator[](const key_type& x) {  // copy semantic
-            std::cout << "COPY_[]" << std::endl;
+            #ifdef __DEBUG_AP_BST
+            std::cout << "CALL: COPY_[]" << std::endl;
+            #endif
             return insert(pair_type{x, mapped_type()}).first->second;
         }
         
@@ -260,7 +280,9 @@ namespace APbst {
          *  performing an insertion if such key does not already exist.
          */
         mapped_type& operator[](key_type&& x) {  // move semantic
-            std::cout << "MOVE_[]" << std::endl;
+            #ifdef __DEBUG_AP_BST
+            std::cout << "CALL: MOVE_[]" << std::endl;
+            #endif
             return insert(pair_type{std::move(x), mapped_type()}).first->second;
         }
 
@@ -276,6 +298,14 @@ namespace APbst {
             }
 
             return os;
+        }
+
+        /** @brief To print the tree in an easy way. */
+        void printRawTree(std::stringstream& ss) {
+            for (const auto& it : *this) {
+               ss << it.first << " : " << it.second << std::endl;
+            }
+            return;
         }
 
         /**
