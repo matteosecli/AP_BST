@@ -57,6 +57,6 @@ install:
   - ${CXX} --version
 
 script:
-  - /usr/lib/x86_64-linux-gnu/qt5/bin/qmake -spec $QMAKESPEC QMAKE_CC=$QMAKE_CC QMAKE_CXX=$QMAKE_CXX QMAKE_LINK=$QMAKE_CXX
+  - /usr/lib/x86_64-linux-gnu/qt5/bin/qmake -spec $QMAKESPEC CONFIG+=debug QMAKE_CC=$QMAKE_CC QMAKE_CXX=$QMAKE_CXX QMAKE_LINK=$QMAKE_CXX
   - make
-  - valgrind --error-exitcode=42 ./AP_BST #--leak-check=full 
+  - valgrind --error-exitcode=42 --leak-check=full ./AP_BST
