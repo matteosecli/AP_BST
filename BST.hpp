@@ -41,7 +41,7 @@ namespace APbst {
         using mapped_type = VT;
         using pair_type = typename std::pair<const KT, VT>;
         using pair_type_nc = typename std::pair<KT, VT>;
-        using node_type = typename APutils::Node<pair_type>;
+        using node_type = APutils::Node<pair_type>;
         using iterator = typename APutils::__iterator<node_type,  pair_type>;
         using const_iterator = typename APutils::__iterator<node_type, const pair_type>;
 
