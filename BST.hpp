@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <memory>
 #include <utility>
+#include <vector>
 #include "Node.hpp"
 #include "Iterator.hpp"
 
@@ -26,21 +27,34 @@ namespace APbst {
         /** @brief Operator of comparison. */
         cmp op;
         std::unique_ptr<APutils::Node<std::pair<const KT, VT>>> root;
+
+
+        void __balance(std::vector<std::pair<const KT, VT>>& v, long long int a, long long int b) {
+            if (b < a) {
+                return;
+            }
+            long long int mid{(b + a)/2};
+            std::cout << "Inserting " << v[mid].first << " in palce " << mid << std::endl;
+            this->emplace(v[mid]);
+            __balance(v, a, mid-1);
+            __balance(v, mid+1, b);
+            return;
+        }
+
+        void __copy(const bst& t, std::unique_ptr<APutils::Node<std::pair<const KT, VT>>>& a) {
+            this->emplace(a.get()->data);
+            if (a.get()->left) {
+                __copy(t, a.get()->left);
+            }
+            if (a.get()->right) {
+                __copy(t, a.get()->right);
+            }
+            return;
+        }
+
     public:
         bst() : op{}, root{nullptr} {}
         bst(cmp x) : op{x}, root{nullptr} {}
-
-        /**
-         * @brief Copy assignment for @ref bst.
-         *
-         * It performs a deep-copy of the tree.
-         */
-        bst& operator=(const bst& t) {}
-
-        /**
-         * @brief Move assignment for @ref bst.
-         */
-        bst& operator=(bst&& t) noexcept = default;
 
         using key_type = KT;
         using mapped_type = VT;
@@ -49,6 +63,28 @@ namespace APbst {
         using node_type = typename APutils::Node<pair_type>;
         using iterator = typename APutils::__iterator<node_type,  pair_type>;
         using const_iterator = typename APutils::__iterator<node_type, const pair_type>;
+
+        /**
+         * @brief Copy assignment for @ref bst.
+         *
+         * It performs a deep-copy of the tree.
+         */
+        bst& operator=(const bst& t) {
+            this->clear();
+            this->emplace(t.root.get()->data);
+            if (t.root.get()->left) {
+                __copy(t, t.root.get()->left);
+            }
+            if (t.root.get()->right) {
+                __copy(t, t.root.get()->right);
+            }
+            return *this;
+        }
+
+        /**
+         * @brief Move assignment for @ref bst.
+         */
+        bst& operator=(bst&& t) noexcept = default;
 
         //std::pair<iterator, bool> insert(const pair_type_nc& x) {
         std::pair<iterator, bool> insert(const pair_type& x) {
@@ -134,8 +170,13 @@ namespace APbst {
         //     return insert((pair_type)x);
         // }
 
-        // variadic templates
-        template<class... Types>
+        /**
+         * @brief Inserts an element constructed in-place.
+         *
+         * Inserts a new element into the container constructed in-place with the given args if there is no element with the
+         * key in the container.
+         */
+        template<class... Types>  // variadic templates
         std::pair<iterator,bool> emplace(Types&&... args) {
             return insert(pair_type{std::forward<Types>(args)...});
         }
@@ -262,7 +303,24 @@ namespace APbst {
             // return end();
         }
 
-        //void balance();
+        /**
+         * @brief Balances the tree.
+         */
+        void balance() {
+            std::vector<pair_type> v{};
+            std::cout << "Vector:" << std::endl;
+            for (const auto& it : *this) {
+                v.push_back(it);
+                std::cout << " " << it.first << std::endl;
+            }
+            this->clear();
+            long long int mid{v.size()/2};
+            std::cout << "Inserting " << v[mid].first << " in palce " << mid << std::endl;
+            this->emplace(v[mid]);
+            __balance(v, 0, mid-1);
+            __balance(v, mid+1, v.size()-1);
+            return;
+        }
 
         /**
          * @brief Returns a reference to the value that is mapped to a key equivalent to `x`,
@@ -294,7 +352,7 @@ namespace APbst {
             for (auto it = x.cbegin(); it != x.cend(); ++it) {
 //                os << "[" << it.currentNode << "]    "
 //                   << "[Key: " << std::setw(4) << it->first << ", Value: " << std::setw(4) << it->second << "]" << std::endl;
-                it.printNode(os,true);
+                it.printNode(os, true);
             }
 
             return os;

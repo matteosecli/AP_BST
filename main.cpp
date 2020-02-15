@@ -235,6 +235,18 @@ int main() {
     std::cout << ( (ssAP3.str() == ssAP3_exp.str()) ? "MATCH OK" : "MATCH FAIL") << std::endl;
 
 
+    std::cout << std::endl << "BALANCE TEST" << std::endl;
+
+    treeAP3.balance();
+    std::cout << treeAP3 << std::endl;
+
+
+    std::cout << std::endl << "COPY TEST" << std::endl;
+    APbst::bst<int, int> treeAP4{};
+    treeAP4 = treeAP3;
+    std::cout << treeAP4 << std::endl;
+
+
     std::cout << std::endl << "CLEAR TEST" << std::endl;
 
     tree.clear();
