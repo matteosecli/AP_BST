@@ -69,24 +69,6 @@ namespace APutils {
             left{nullptr},
             right{nullptr},
             parent{parent} {}
-        
-//        /**
-//         * @brief Full constructor.
-//         * @param data the values to be store in the @ref Node.
-//         * @param left the right child parent of this @ref Node.
-//         * @param right the right child parent of this @ref Node.
-//         * @param parent the @ref Node parent of this @ref Node.
-//         *
-//         * To create the @ref Node with all his members filled.
-//         */
-//        Node(T& data,
-//             std::unique_ptr<Node<T>>& left,
-//             std::unique_ptr<Node<T>>& right,
-//             Node<T>* parent) :
-//                data{data},
-//                left{left},
-//                right{right},
-//                parent{parent} {}
 
         /**
          * @brief Debug function to print a @ref Node.

@@ -22,13 +22,22 @@
  */
 namespace APbst {
 
+    /**
+     * @brief Class that implements a Binary Search Tree.
+     */
     template <typename KT, typename VT, typename cmp = std::less<KT>>
     class bst{
         /** @brief Operator of comparison. */
         cmp op;
+        /** @brief The root of the tree. */
         std::unique_ptr<APutils::Node<std::pair<const KT, VT>>> root;
 
-
+        /**
+         * @brief Support function for the function @ref balance().
+         * @param v The vector.
+         * @param a The starting point of the vector.
+         * @param b The ending point of the vector.
+         */
         void __balance(std::vector<std::pair<const KT, VT>>& v, long long int a, long long int b) {
             if (b < a) {
                 return;
@@ -41,6 +50,10 @@ namespace APbst {
             return;
         }
 
+        /**
+         * @brief Support function for the copy semantic.
+         * @param t The tree to be copied.
+         */
         void __copy(const bst& t, std::unique_ptr<APutils::Node<std::pair<const KT, VT>>>& a) {
             this->emplace(a.get()->data);
             if (a.get()->left) {
@@ -52,10 +65,7 @@ namespace APbst {
             return;
         }
 
-    public:
-        bst() : op{}, root{nullptr} {}
-        bst(cmp x) : op{x}, root{nullptr} {}
-
+      public:
         using key_type = KT;
         using mapped_type = VT;
         using pair_type = typename std::pair<const KT, VT>;
@@ -65,7 +75,19 @@ namespace APbst {
         using const_iterator = typename APutils::__iterator<node_type, const pair_type>;
 
         /**
+         * @brief Empty constructor.
+         */
+        bst() : op{}, root{nullptr} {}
+
+        /**
+         * @brief Constructor setting the comparison operation.
+         * @param x The comparison operator.
+         */
+        bst(cmp x) : op{x}, root{nullptr} {}
+
+        /**
          * @brief Copy assignment for @ref bst.
+         * @param t The tree to be copied.
          *
          * It performs a deep-copy of the tree.
          */
@@ -83,9 +105,17 @@ namespace APbst {
 
         /**
          * @brief Move assignment for @ref bst.
+         * @param t The tree to be moved.
          */
         bst& operator=(bst&& t) noexcept = default;
 
+        /**
+         * @brief Inserts a @ref Node by copying it in the tree, if not already present.
+         * @param x The values of the `Key` and the `Value` to be put in the @ref Node.
+         *
+         * Used to insert a new @ref Node. The function returns a `pair` of an @ref __iterator (pointing to the @ref Node) and a `bool`.
+         * The `bool` is `true` if a new @ref Node has been allocated, `false` otherwise (i.e., the `Key` was already present in the tree). 
+         */
         //std::pair<iterator, bool> insert(const pair_type_nc& x) {
         std::pair<iterator, bool> insert(const pair_type& x) {
             #ifdef __DEBUG_AP_BST
@@ -115,7 +145,14 @@ namespace APbst {
             root.reset(new node_type{x, nullptr});
             return std::make_pair<iterator, bool>(iterator{tmp}, true);
         }
-        
+
+        /**
+         * @brief Inserts a @ref Node by moving it in the tree, if not already present.
+         * @param x The values of the `Key` and the `Value` to be put in the @ref Node.
+         *
+         * Used to insert a new node. The function returns a `pair` of an @ref __iterator (pointing to the @ref Node) and a `bool`.
+         * The `bool` is `true` if a new @ref Node has been allocated, `false` otherwise (i.e., the `Key` was already present in the tree). 
+         */
         //std::pair<iterator, bool> insert(pair_type_nc&& x) {
         std::pair<iterator, bool> insert(pair_type&& x) {
             #ifdef __DEBUG_AP_BST
@@ -150,16 +187,16 @@ namespace APbst {
         //     return __insert(std::forward<Args>(args));
         // }
 
-        /**
-         * @brief insert
-         * @param x @ref insert(const pair_type& x)
-         * @see insert(const pair_type& x)
-         * @return
-         *
-         * This function redirects to @ref insert(const pair_type& x).
-         * It's provided in order to address use cases in which the user uses e.g.
-         * `std::pair<int, int>` instead of `std::pair<const int, int>`.
-         */
+        // /**
+        //  * @brief insert
+        //  * @param x @ref insert(const pair_type& x)
+        //  * @see insert(const pair_type& x)
+        //  * @return
+        //  *
+        //  * This function redirects to @ref insert(const pair_type& x).
+        //  * It's provided in order to address use cases in which the user uses e.g.
+        //  * `std::pair<int, int>` instead of `std::pair<const int, int>`.
+        //  */
         // std::pair<iterator, bool> insert(const pair_type_nc& x) {
         //     std::cout << "CALL: COPY_INSERT_NC: APbst::bst::insert(const pair_type_nc& x)" << std::endl;
         //     return insert((const pair_type)x);
@@ -173,8 +210,8 @@ namespace APbst {
         /**
          * @brief Inserts an element constructed in-place.
          *
-         * Inserts a new element into the container constructed in-place with the given args if there is no element with the
-         * key in the container.
+         * Inserts a new element into the tree constructed in-place with the given args if there is no element with the
+         * `Key` in the tree.
          */
         template<class... Types>  // variadic templates
         std::pair<iterator,bool> emplace(Types&&... args) {
@@ -192,7 +229,7 @@ namespace APbst {
         }
 
         /**
-         * @brief Return an iterator to the left-most node.
+         * @brief Returns an iterator to the left-most node.
          *
          * It returns the smaller @ref Node according to @ref op; which, likely, is not the root node.
          */
@@ -231,11 +268,17 @@ namespace APbst {
         //     return const_cast<pair_type*> (this)->begin();
         // }
 
+        /**
+         * @brief `const` version of @ref begin(), to be used when a const_iterator is needed.
+         * @see begin().
+         */
         const_iterator cbegin() const noexcept {
             return begin();
         }
 
-        /* I return one after the last element, so a nullptr*/
+        /**
+         * @brief Returns an iterator to one-past the last element (so a nullptr).
+         */
         iterator end() noexcept {
             #ifdef __DEBUG_AP_BST
             std::cout << "CALL: NONCONST_END" << std::endl;
@@ -243,6 +286,10 @@ namespace APbst {
             return iterator{nullptr};
         }
 
+        /**
+         * @brief `const` version of @ref end().
+         * @see end().
+         */
         const_iterator end() const noexcept {
             #ifdef __DEBUG_AP_BST
             std::cout << "CALL: CONST_END" << std::endl;
@@ -250,6 +297,10 @@ namespace APbst {
             return const_iterator{nullptr};
         }
 
+        /**
+         * @brief `const` version of @ref end(), to be used when a const_iterator is needed.
+         * @see end().
+         */
         const_iterator cend() const noexcept {
             return end();
         }
@@ -258,7 +309,7 @@ namespace APbst {
          * @brief Finds a node and possibly change its value.
          * @param x The value to be found.
          *
-         * Finds a given key. If the key is present, returns an iterator to the proper node, @ref end() otherwise.
+         * Finds a given `Key`. If the `Key` is present, returns an @ref __iterator to the proper @ref Node, @ref end() otherwise.
          */
         iterator find(const key_type& x) {
             #ifdef __DEBUG_AP_BST
@@ -279,10 +330,10 @@ namespace APbst {
         }
 
         /**
-         * @brief Finds if a nstd::cout << "CALL: NONCONST_FIND" << std::endl;ode just exists.
+         * @brief Finds if a node just exists.
          * @param x The value to be found.
          *
-         * Finds a given key. If the key is present, returns an iterator to the proper node, @ref end() otherwise.
+         * Finds a given `Key`. If the `Key` is present, returns an @ref __iterator to the proper @ref Node, @ref end() otherwise.
          */
         const_iterator find(const key_type& x) const {
             #ifdef __DEBUG_AP_BST
@@ -323,18 +374,24 @@ namespace APbst {
         }
 
         /**
-         * @brief Returns a reference to the value that is mapped to a key equivalent to `x`,
+         * @brief Subscripting operator performing a copy.
+         * @param x The `Key` to which access.
+         *
+         * Returns a reference to the value that is mapped to a `Key` equivalent to `x`,
          *  performing an insertion if such key does not already exist.
          */
         mapped_type& operator[](const key_type& x) {  // copy semantic
-            #ifdef __DEBUG_AP_BST
+            #ifdef __DEBUG_AP_BST* @param x The `Key` to which access.
             std::cout << "CALL: COPY_[]" << std::endl;
             #endif
             return insert(pair_type{x, mapped_type()}).first->second;
         }
         
         /**
-         * @brief Returns a reference to the value that is mapped to a key equivalent to `x`,
+         * @brief Subscripting operator performing a move.
+         * @param x The `Key` to which access.
+         * 
+         * Returns a reference to the value that is mapped to a `Key` equivalent to `x`,
          *  performing an insertion if such key does not already exist.
          */
         mapped_type& operator[](key_type&& x) {  // move semantic
@@ -344,7 +401,11 @@ namespace APbst {
             return insert(pair_type{std::move(x), mapped_type()}).first->second;
         }
 
-        /** @brief To print the tree in an easy way. */
+        /**
+         * @brief Put-to operator the prints the tree.
+         * @param os The stream on which the print has to be made.
+         * @param x The tree to be printed.
+         */
         friend std::ostream& operator<<(std::ostream& os, const bst& x) {
 //            for (const auto& it : x) {
 //               os << "[Key: " << std::setw(4) << it.first << ", Value: " << std::setw(4) << it.second << "]" << std::endl;
@@ -358,7 +419,10 @@ namespace APbst {
             return os;
         }
 
-        /** @brief To print the tree in an easy way. */
+        /**
+         * @brief Prints the tree in an easy way.
+         * @param ss The string stream.
+         */
         void printRawTree(std::stringstream& ss) {
             for (const auto& it : *this) {
                ss << it.first << " : " << it.second << std::endl;
@@ -367,8 +431,8 @@ namespace APbst {
         }
 
         /**
-         * @brief erase
-         * @param x
+         * @brief Removes the element (if one exists) with the `Key` equivalent to @ref x.
+         * @param x The `Key` to be removed.
          */
         void erase(const key_type& x) noexcept {
             auto __nodeToDeleteIt = find(x);
