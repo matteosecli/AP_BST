@@ -381,7 +381,7 @@ namespace APbst {
          *  performing an insertion if such key does not already exist.
          */
         mapped_type& operator[](const key_type& x) {  // copy semantic
-            #ifdef __DEBUG_AP_BST* @param x The `Key` to which access.
+            #ifdef __DEBUG_AP_BST
             std::cout << "CALL: COPY_[]" << std::endl;
             #endif
             return insert(pair_type{x, mapped_type()}).first->second;
