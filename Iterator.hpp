@@ -117,13 +117,22 @@ namespace APutils {
 //        template<typename KT, typename VT, typename cmp>
 //        friend void APbst::bst<KT,VT,cmp>::erase(const KT&);
 
-        /**
+        /*
          * @brief To print a @ref Node from the tree.
          * @param os The stream used to print, the default is `std::cout`.
-         * @param printChildren If the children are to be printed or not, default is `false`. 
+         * @param printChildren If the children are to be printed or not, default is `false`.
          */
-        void printNode(std::ostream& os = std::cout, const bool& printChildren = false) {
-            currentNode->printNode(os, printChildren);
+//        void printNode(std::ostream& os = std::cout, const bool& printChildren = false) {
+//            currentNode->printNode(os, printChildren);
+//        }
+        /**
+         * @brief To print a @ref Node from the tree.
+         *
+         * Forwards to @ref Node.printNode.
+         */
+        template<class... Types>
+        void printNode(Types&&... args) {
+            return currentNode->printNode(std::forward<Types>(args)...);
         }
     };
 

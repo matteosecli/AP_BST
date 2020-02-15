@@ -144,10 +144,15 @@ if ($$USEOMP) {
 # Create a target named 'doc' in the Makefile via the qmake target 'dox'
 !defined(DOC_USE_MATHJAX, var) DOC_USE_MATHJAX = YES
 dox.target = doc
-dox.commands = DOXYGEN_INPUT=$${PWD} DOXYGEN_USE_MATHJAX=$${DOC_USE_MATHJAX} doxygen $${PWD}/Doxyfile#; \
+dox.commands = DOXYGEN_INPUT=$${PWD}/ DOXYGEN_USE_MATHJAX=$${DOC_USE_MATHJAX} doxygen $${PWD}/Doxyfile#; \
     #test -d doxydoc/html/images || mkdir doxydoc/html/images; \
     #cp documentation/images/* doxydoc/html/images
 dox.depends =
 
 # Add the 'dox' qmake target
 QMAKE_EXTRA_UNIX_TARGETS += dox
+
+# Similarly, remove ./doc/_build on 'make distclean'
+doxclean.commands = rm -v -r $${PWD}/doc/_build
+distclean.depends = doxclean
+QMAKE_EXTRA_TARGETS += distclean doxclean

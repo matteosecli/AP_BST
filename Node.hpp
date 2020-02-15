@@ -75,7 +75,7 @@ namespace APutils {
          *  
          * Prints the content of the @ref Node: the @ref data, the @ref left child and the @ref right child.
          */
-        void printNode(std::ostream& os = std::cout, const bool& printChildren = true) {
+        void printNode(std::ostream& os, const bool& printChildren) {
             os << "[" << this << "]    ";
             os << "Key: " << std::setw(4) << data.first
                << ", Value: " << std::setw(4) << data.second << std::endl;
@@ -93,6 +93,9 @@ namespace APutils {
                        << ", Value: " << std::setw(4) << right.get()->data.second << std::endl;
                 }
             }
+        }
+        void printNode() {
+            printNode(std::cout, true);
         }
     };
 

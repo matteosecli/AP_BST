@@ -5,7 +5,7 @@ SRC = main.cpp
 OBJ = $(SRC:.cpp=.o)
 INC = BST.hpp Iterator.hpp Node.hpp
 DIST = README.md \
-	   Makefile \
+       Makefile \
        LICENSE
 
 # eliminate default suffixes
@@ -20,7 +20,7 @@ all: $(EXE)
 .PHONY: all
 
 clean:
-	rm -rf $(OBJ) $(EXE) *~ doc
+	rm -rf $(OBJ) $(EXE) *~ doc/_build
 
 .PHONY: clean
 
