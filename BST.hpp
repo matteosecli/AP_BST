@@ -11,7 +11,7 @@
 #include "Iterator.hpp"
 
 //#ifndef DEBUG
-//#define DEBUG false    /** @brief Whether we are in DEBUG mode or not; DEBUG mode prints much more info (which, though, slows the program down). */
+//#define DEBUG false    /**< @brief Whether we are in DEBUG mode or not; DEBUG mode prints much more info (which, though, slows the program down). */
 //#endif
 
 
@@ -77,13 +77,32 @@ namespace APbst {
         /**
          * @brief Empty constructor.
          */
-        bst() : op{}, root{nullptr} {}
+        bst() noexcept : op{}, root{nullptr} {}
 
         /**
          * @brief Constructor setting the comparison operation.
          * @param x The comparison operator.
          */
-        bst(cmp x) : op{x}, root{nullptr} {}
+        bst(cmp x) noexcept : op{x}, root{nullptr} {}
+
+        /**
+         * @brief Copy constructor.
+         * @param t The tree to be copied.
+         */
+        bst(const bst& t) : op{t.op}, root{std::unique_ptr<node_type>(new node_type(t.root.get()->data, nullptr))} {
+            if (t.root.get()->left) {
+                __copy(t, t.root.get()->left);
+            }
+            if (t.root.get()->right) {
+                __copy(t, t.root.get()->right);
+            }
+        }
+
+        /**
+         * @brief Move constructor.
+         * @param t The tree to be moved.
+         */
+        bst(bst&& t) noexcept = default;
 
         /**
          * @brief Copy assignment for @ref bst.

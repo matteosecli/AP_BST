@@ -38,7 +38,7 @@ namespace APutils {
          *  
          * Used only to create a void root when an object @ref bst is instantiated.
          */
-        Node() :
+        Node() noexcept :
             data{},
             left{nullptr},
             right{nullptr},
@@ -51,7 +51,7 @@ namespace APutils {
          *  
          * To create a @ref Node with given @ref data and @ref parent, and @ref left and @ref right initializated to `nullptr`.
          */
-        Node(const T& data, Node<T>* parent) :
+        Node(const T& data, Node<T>* parent) noexcept :
             data{data},
             left{nullptr},
             right{nullptr},
@@ -64,7 +64,7 @@ namespace APutils {
          *
          * To create a @ref Node with given @ref data and @ref parent, and @ref left and @ref right initializated to `nullptr`.
          */
-        Node(T&& data, Node<T>* parent) :
+        Node(T&& data, Node<T>* parent) noexcept :
             data{std::move(data)},
             left{nullptr},
             right{nullptr},

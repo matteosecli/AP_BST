@@ -246,6 +246,9 @@ int main() {
     treeAP4 = treeAP3;
     std::cout << treeAP4 << std::endl;
 
+    APbst::bst<int, int> treeAP5{treeAP3};
+    std::cout << treeAP5 << std::endl;
+
 
     std::cout << std::endl << "CLEAR TEST" << std::endl;
 
