@@ -11,7 +11,7 @@
 #include "Iterator.hpp"
 
 //#ifndef DEBUG
-//#define DEBUG false    /**< @brief Whether we are in DEBUG mode or not; DEBUG mode prints much more info (which, though, slows the program down). */
+//#define DEBUG false    /** @brief Whether we are in DEBUG mode or not; DEBUG mode prints much more info (which, though, slows the program down). */
 //#endif
 
 
@@ -365,7 +365,7 @@ namespace APbst {
                 std::cout << " " << it.first << std::endl;
             }
             this->clear();
-            long long int mid{v.size()/2};
+            long long int mid{(static_cast<long long int> (v.size()))/2};
             std::cout << "Inserting " << v[mid].first << " in palce " << mid << std::endl;
             this->emplace(v[mid]);
             __balance(v, 0, mid-1);
@@ -381,7 +381,7 @@ namespace APbst {
          *  performing an insertion if such key does not already exist.
          */
         mapped_type& operator[](const key_type& x) {  // copy semantic
-            #ifdef __DEBUG_AP_BST* @param x The `Key` to which access.
+            #ifdef __DEBUG_AP_BST
             std::cout << "CALL: COPY_[]" << std::endl;
             #endif
             return insert(pair_type{x, mapped_type()}).first->second;
