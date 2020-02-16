@@ -1,6 +1,19 @@
 #include <iostream>
 #include <memory>
 #include <utility>
+
+/* In order to print a vector via 'cout << v' */
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
+    os << "[";
+    for (auto it = v.cbegin(); it != v.cend(); ++it) {
+        os << *it;
+        if (it != v.cend() - 1) os << ", ";
+    }
+    os << "]";
+    return os;
+}
+
 #include "BST.hpp"
 #include "Iterator.hpp"
 #include "Node.hpp"
@@ -9,7 +22,7 @@ int main() {
 
     //std::cout << "Hello World!" << std::endl;
 
-	std::pair<int, int> testPair(3,4);
+    std::pair<int, int> testPair(3,4);
     APutils::Node<std::pair<int, int>> c;
     APutils::Node<std::pair<int, int>> testNode{testPair, &c};
     APutils::Node<std::pair<int,int>> testNodeMatteo(testPair, nullptr);
@@ -259,6 +272,17 @@ int main() {
         std::cout << "Key: " << it.first << std::endl;
     }
     std::cout << "Finished printing" << std::endl;
+
+
+
+    std::cout << std::endl << "PLAYER STATS BST TEST" << std::endl;
+    APbst::bst<std::string, std::vector<double>> playerStats{};
+    //playerStats.insert(std::pair<const std::string,std::vector<double>>("Bruce Lee",std::vector<double>{170,70,47}));
+    //playerStats.insert({"Bruce Lee",std::vector<double>{170,70,47}});
+    playerStats.emplace("Bruce Lee",std::vector<double>{170,70,47});
+    playerStats.emplace("Michael Jackson",std::vector<double>{210,90,50});
+    playerStats.emplace("Arnold Schwarznegger",std::vector<double>{190,80,60});
+    std::cout << playerStats << std::endl;
 
 
 

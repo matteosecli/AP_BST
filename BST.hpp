@@ -421,9 +421,27 @@ namespace APbst {
         }
 
         /**
-         * @brief Put-to operator the prints the tree.
+         * @brief Put-to operator that prints the tree.
          * @param os The stream on which the print has to be made.
          * @param x The tree to be printed.
+         *
+         * This function assumes that the `Key` and the `Value` have a corresponding
+         * overloaded put-to operator; if this is not the case, it is a user's task
+         * to implement it **before** including @ref BST.hpp.
+         *
+         * E.g., in order to print a `std::vector` `Value`, one could write
+         *
+         *     template <typename T>
+         *     std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
+         *         os << "[";
+         *         for (auto it = v.cbegin(); it != v.cend(); ++it) {
+         *             os << *it;
+         *             if (it != v.cend() - 1) os << ", ";
+         *         }
+         *         os << "]";
+         *         return os;
+         *     }
+         *
          */
         friend std::ostream& operator<<(std::ostream& os, const bst& x) {
 //            for (const auto& it : x) {

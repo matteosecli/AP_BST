@@ -1,8 +1,11 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
-#include <utility>  /* For std::pair */
+#include <iostream> /* To use std::cout & co. */
+#include <iomanip>  /* For std::setw() */
 #include <memory>   /* For std::unique_ptr */
+#include <utility>  /* For std::pair */
+
 
 
 /** 

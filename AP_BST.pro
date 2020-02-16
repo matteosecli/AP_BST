@@ -2,7 +2,7 @@
 #  GENERAL CONFIGURATION  #
 ###########################
 
-TEMPLATE = app             # Makefile for an application
+TEMPLATE = subdirs         # Makefile for nested projects
 CONFIG -= qt               # Non-Qt project
 CONFIG += cmdline          # Command-line application; SHOULD (but it doesn't)
                            # imply CONFIG += console on Windows and
@@ -156,3 +156,6 @@ QMAKE_EXTRA_UNIX_TARGETS += dox
 doxclean.commands = rm -v -r $${PWD}/doc/_build
 distclean.depends = doxclean
 QMAKE_EXTRA_TARGETS += distclean doxclean
+
+SUBDIRS += \
+    test
