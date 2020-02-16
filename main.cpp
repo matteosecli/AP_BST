@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <utility>
+#include <vector>
 
 /* In order to print a vector via 'cout << v' */
 template <typename T>
@@ -20,34 +21,47 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
 
 int main() {
 
-    //std::cout << "Hello World!" << std::endl;
+    std::cout << "NODE CREATION TEST" << std::endl << std::endl;
 
-    std::pair<int, int> testPair(3,4);
+    std::cout << "Create empty Node with default constructor via `Node c`" << std::endl;
     APutils::Node<std::pair<int, int>> c;
-    APutils::Node<std::pair<int, int>> testNode{testPair, &c};
-    APutils::Node<std::pair<int,int>> testNodeMatteo(testPair, nullptr);
-//    APutils::Node<std::pair<int,int>> testNodeMatteo3(testPair,nullptr,nullptr,nullptr);
-//    APutils::Node<std::pair<int,int>> test2();
+    std::cout << "Create empty Node with default constructor via `Node c{}`" << std::endl;
+    APutils::Node<std::pair<int,int>> c2{};
+    
+    std::cout << "Create Node with `int` Data" << std::endl;
+    std::pair<int, int> testPair(3, 4);
+    APutils::Node<std::pair<int,int>> testNode(testPair, nullptr);
     testNode.printNode();
-    testNodeMatteo.printNode();
-    //APutils::Node<std::pair<int, int>> testNode2{};
-    //testNode2 = testNodeMatteo;  // already NOT ALLOWED by the unique_ptr
 
+    std::cout << "Create Node with `string : int` Data" << std::endl;
+    std::pair<std::string, int> testPair2("Angela", 24);
+    APutils::Node<std::pair<std::string,int>> testNode2(testPair2, nullptr);
+    testNode2.printNode();
+    
+    std::cout << "Link Nodes:\nCreate Node with Data and Parent" << std::endl;
+    APutils::Node<std::pair<int, int>> testNode3{testPair, &c};
+    testNode3.printNode();
 
+    //testNode2 = testNode;  // already NOT ALLOWED by the unique_ptr
+
+    std::cout << "Create Node with Data, Parent and Children" << std::endl;
     std::pair<int, int> rootPair(1,1);
     std::pair<const int, int> leftPair(0,0);
     const std::pair<const int, int> rightPair(2,2);
     APutils::Node<std::pair<int, int>> nodeRoot(rootPair, nullptr);
-    //APutils::Node<std::pair<int, int>> nodeLeft(leftPair, &nodeRoot);
-    //APutils::Node<std::pair<int, int>> nodeRight(rightPair,&nodeRoot);
+//    APutils::Node<std::pair<int, int>> nodeLeft(leftPair, &nodeRoot);
+//    APutils::Node<std::pair<int, int>> nodeRight(rightPair,&nodeRoot);
     //nodeRoot.left  = std::unique_ptr<APutils::Node<std::pair<int, int>>>(&nodeLeft);  // <- WRONG!!!
     //nodeRoot.right = std::unique_ptr<APutils::Node<std::pair<int, int>>>(&nodeRight); // <- WRONG!!!
+//    nodeRoot.left.reset(&nodeLeft);  // EROOR: double free!!!!!!!!!!!! WHY?!?!?!?!?!?!?!?!?
+//    nodeRoot.right.reset(&nodeRight);
+//    OR:
     nodeRoot.left  = std::unique_ptr<APutils::Node<std::pair<int, int>>>(new APutils::Node<std::pair<int, int>>(leftPair, &nodeRoot));
     nodeRoot.right = std::unique_ptr<APutils::Node<std::pair<int, int>>>(new APutils::Node<std::pair<int, int>>(rightPair, &nodeRoot));
 
+    nodeRoot.printNode();
     nodeRoot.left->printNode();
     nodeRoot.right->printNode();
-    nodeRoot.printNode();
 
 
     std::cout << std::endl << "ITERATORS TESTS:" << std::endl;
