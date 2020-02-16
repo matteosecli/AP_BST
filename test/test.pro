@@ -7,6 +7,9 @@ CONFIG += c++14
 
 TEMPLATE = app
 
+PROJECT_DIR = $$PWD/../
+INCLUDEPATH += $$PROJECT_DIR
+
 SOURCES +=  \
     000-CatchMain.cpp \
     010-NodeTest.cpp
