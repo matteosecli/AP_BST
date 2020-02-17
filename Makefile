@@ -1,6 +1,6 @@
 EXE  = AP_BST
 CXX  = c++
-CXXFLAGS = -g -O3 -std=c++14 -Wall -Wextra -fPIC -I ./src -I ../src
+CXXFLAGS = -g -O3 -std=c++14 -Wall -Wextra -fPIC -I ./src -I ../src $(EXTRA_CXXFLAGS)
 SRC  = main.cpp
 OBJ  = $(SRC:.cpp=.o)
 INC  = ./src
