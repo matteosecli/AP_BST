@@ -33,21 +33,39 @@ namespace APbst {
         std::unique_ptr<APutils::Node<std::pair<const KT, VT>>> root;
 
         /**
-         * @brief Support function for the function @ref balance().
-         * @param v The vector.
-         * @param a The starting point of the vector.
-         * @param b The ending point of the vector.
+         * @brief Support function for the function @ref begin().
+         *
+         * Done it in order to avoid duplicated code.
          */
-        void __balance(std::vector<std::pair<const KT, VT>>& v, long long int a, long long int b) {
-            if (b < a) {
-                return;
+        APutils::Node<std::pair<const KT, VT>>* __begin() const {
+            /* If root is nullptr we return a nullptr */
+            if (!root) return nullptr;
+            /* I descend in the tree as long as I have a left child */
+            auto tmp = root.get();
+            while (tmp->left) {
+                tmp = tmp->left.get();
             }
-            long long int mid{(b + a)/2};
-            std::cout << "Inserting " << v[mid].first << " in palce " << mid << std::endl;
-            this->emplace(v[mid]);
-            __balance(v, a, mid-1);
-            __balance(v, mid+1, b);
-            return;
+            return tmp;
+        }
+
+        /**
+         * @brief Support function for the function @ref find().
+         *
+         * Done it in order to avoid duplicated code.
+         */
+        APutils::Node<std::pair<const KT, VT>>* __find(const KT& x) const {
+            auto tmp = root.get();
+            while (tmp) {
+                if (op(x,tmp->data.first)) {
+                    tmp = tmp->left.get();
+                } else if (op(tmp->data.first, x)) {
+                    tmp = tmp->right.get();
+                } else {
+                    return tmp;
+                }
+            }
+            // The tree is empty or the key doesn't exist, so I return the end of the tree (a nullptr)
+            return nullptr;
         }
 
         /**
@@ -65,11 +83,28 @@ namespace APbst {
             return;
         }
 
+        /**
+         * @brief Support function for the function @ref balance().
+         * @param v The vector.
+         * @param a The starting point of the vector.
+         * @param b The ending point of the vector.
+         */
+        void __balance(std::vector<std::pair<const KT, VT>>& v, long long int a, long long int b) {
+            if (b < a) {
+                return;
+            }
+            long long int mid{(b + a)/2};
+            std::cout << "Inserting " << v[mid].first << " in palce " << mid << std::endl;
+            this->emplace(v[mid]);
+            __balance(v, a, mid-1);
+            __balance(v, mid+1, b);
+            return;
+        }
+
       public:
         using key_type = KT;
         using mapped_type = VT;
         using pair_type = typename std::pair<const KT, VT>;
-        using pair_type_nc = typename std::pair<KT, VT>;
         using node_type = typename APutils::Node<pair_type>;
         using iterator = typename APutils::__iterator<node_type,  pair_type>;
         using const_iterator = typename APutils::__iterator<node_type, const pair_type>;
@@ -132,10 +167,10 @@ namespace APbst {
          * @brief Inserts a @ref Node by copying it in the tree, if not already present.
          * @param x The values of the `Key` and the `Value` to be put in the @ref Node.
          *
-         * Used to insert a new @ref Node. The function returns a `pair` of an @ref __iterator (pointing to the @ref Node) and a `bool`.
-         * The `bool` is `true` if a new @ref Node has been allocated, `false` otherwise (i.e., the `Key` was already present in the tree). 
+         * Used to insert a new @ref Node. The function returns a `pair` of an @ref __iterator
+         * (pointing to the @ref Node) and a `bool`. The `bool` is `true` if a new @ref Node
+         * has been allocated, `false` otherwise (i.e., the `Key` was already present in the tree). 
          */
-        //std::pair<iterator, bool> insert(const pair_type_nc& x) {
         std::pair<iterator, bool> insert(const pair_type& x) {
             #ifdef __DEBUG_AP_BST
             std::cout << "CALL: COPY_INSERT: APbst::bst::insert(const pair_type& x)" << std::endl;
@@ -169,10 +204,10 @@ namespace APbst {
          * @brief Inserts a @ref Node by moving it in the tree, if not already present.
          * @param x The values of the `Key` and the `Value` to be put in the @ref Node.
          *
-         * Used to insert a new node. The function returns a `pair` of an @ref __iterator (pointing to the @ref Node) and a `bool`.
-         * The `bool` is `true` if a new @ref Node has been allocated, `false` otherwise (i.e., the `Key` was already present in the tree). 
+         * Used to insert a new @ref Node. The function returns a `pair` of an @ref __iterator
+         * (pointing to the @ref Node) and a `bool`. The `bool` is `true` if a new @ref Node
+         * has been allocated, `false` otherwise (i.e., the `Key` was already present in the tree). 
          */
-        //std::pair<iterator, bool> insert(pair_type_nc&& x) {
         std::pair<iterator, bool> insert(pair_type&& x) {
             #ifdef __DEBUG_AP_BST
             std::cout << "CALL: MOVE_INSERT: APbst::bst::insert(pair_type&& x)" << std::endl;
@@ -200,31 +235,6 @@ namespace APbst {
             root.reset(new node_type{std::move(x), nullptr});
             return std::make_pair<iterator, bool>(iterator{tmp}, true);
         }
-
-        // template <typename Args>
-        // std::pair<iterator, bool> insert(Args&& args) {
-        //     return __insert(std::forward<Args>(args));
-        // }
-
-        // /**
-        //  * @brief insert
-        //  * @param x @ref insert(const pair_type& x)
-        //  * @see insert(const pair_type& x)
-        //  * @return
-        //  *
-        //  * This function redirects to @ref insert(const pair_type& x).
-        //  * It's provided in order to address use cases in which the user uses e.g.
-        //  * `std::pair<int, int>` instead of `std::pair<const int, int>`.
-        //  */
-        // std::pair<iterator, bool> insert(const pair_type_nc& x) {
-        //     std::cout << "CALL: COPY_INSERT_NC: APbst::bst::insert(const pair_type_nc& x)" << std::endl;
-        //     return insert((const pair_type)x);
-        // }
-
-        // std::pair<iterator, bool> insert(pair_type_nc&& x) {
-        //     std::cout << "CALL: MOVE_INSERT_NC: APbst::bst::insert(pair_type_nc&& x)" << std::endl;
-        //     return insert((pair_type)x);
-        // }
 
         /**
          * @brief Inserts an element constructed in-place.
@@ -256,14 +266,7 @@ namespace APbst {
             #ifdef __DEBUG_AP_BST
             std::cout << "CALL: NONCONST_BEGIN" << std::endl;
             #endif
-            /* If root is nullptr we return a nullptr iterator */
-            if (!root) return end();
-            /* I descend in the tree as long as I have a left child */
-            auto tmp = root.get();
-            while (tmp->left) {
-                tmp = tmp->left.get();
-            }
-            return iterator{tmp};
+            return iterator{__begin()};
         }
 
         /**
@@ -274,25 +277,15 @@ namespace APbst {
             #ifdef __DEBUG_AP_BST
             std::cout << "CALL: CONST_BEGIN" << std::endl;
             #endif
-            /* If root is nullptr we return a nullptr const_iterator */
-            if (!root) return end();
-            /* I descend in the tree as long as I have a left child */
-            auto tmp = root.get();
-            while (tmp->left) {
-                tmp = tmp->left.get();
-            }
-            return const_iterator{tmp};
+            return const_iterator{__begin()};
         }
-        // const_iterator begin() const noexcept {
-        //     return const_cast<pair_type*> (this)->begin();
-        // }
 
         /**
          * @brief `const` version of @ref begin(), to be used when a const_iterator is needed.
          * @see begin().
          */
         const_iterator cbegin() const noexcept {
-            return begin();
+            return const_iterator{__begin()};
         }
 
         /**
@@ -321,7 +314,7 @@ namespace APbst {
          * @see end().
          */
         const_iterator cend() const noexcept {
-            return end();
+            return const_iterator{nullptr};
         }
 
         /**
@@ -334,18 +327,7 @@ namespace APbst {
             #ifdef __DEBUG_AP_BST
             std::cout << "CALL: NONCONST_FIND" << std::endl;
             #endif
-            auto tmp = root.get();
-            while (tmp) {
-                if (op(x,tmp->data.first)) {
-                    tmp = tmp->left.get();
-                } else if (op(tmp->data.first, x)) {
-                    tmp = tmp->right.get();
-                } else {
-                    return iterator{tmp};
-                }
-            }
-            // The tree is empty or the key doesn't exist, so I return the end of the tree (a nullptr)
-            return end();
+            return iterator{__find(x)};
         }
 
         /**
@@ -358,19 +340,7 @@ namespace APbst {
             #ifdef __DEBUG_AP_BST
             std::cout << "CALL: CONST_FIND" << std::endl;
             #endif
-            return (const_iterator) find(x);
-            // auto tmp = root.get();
-            // while (tmp) {
-            //     if (op(x,tmp->data.first)) {
-            //         tmp = tmp->left.get();
-            //     } else if (op(tmp->data.first, x)) {
-            //         tmp = tmp->right.get();
-            //     } else {
-            //         return const_iterator{tmp};
-            //     }
-            // }
-            // // The tree is empty or the key doesn't exist, so I return the end of the tree (a nullptr)
-            // return end();
+            return const_iterator{__find(x)};
         }
 
         /**

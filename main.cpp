@@ -68,6 +68,10 @@ int main() {
 
     APutils::__iterator<APutils::Node<std::pair<int, int>>,std::pair<int, int>> it(&nodeRoot);
     
+    std::cout << "Value: " << it->second << std::endl;
+    it->second = 66;   /* Changing the `Value` of a `Node` through an iterator */
+    std::cout << "Value: " << it->second << std::endl;
+
     std::cout << "[" << &(*it) << "]    ";
     std::cout << "Key: " << (*(it++)).first << std::endl;
     
