@@ -9,6 +9,7 @@ namespace APbst {
     class bst;
 }
 
+
 namespace APutils {
 
     /**
@@ -16,11 +17,16 @@ namespace APutils {
      */
     template <typename nodeT, typename T>
     class __iterator {
-        /** @brief @ref Node pointed by the iterator. */
+        /** @brief @ref Node referred to by the iterator. */
         nodeT* currentNode;
       public:
         /* Standard members of the class Iterator. You could also derive them directly from the class std::iterator,
          * but since c++17 is deprecated our is the right way. */
+        /**
+         * @brief Type of the data stored by @ref Node
+         *
+         * E.g. `std::<const Key, Value>` for APbst::bst.
+         */
         using value_type = T;       // T can be either pair or const pair
         using reference = value_type&;
         using pointer = value_type*;
@@ -29,9 +35,10 @@ namespace APutils {
 
         /**
          * @brief Constructor.
-         * @param n A @ref Node.
          *
-         * To instantiate an @ref __iterator.
+         * @param n Raw pointer to a @ref Node.
+         *
+         * Creates a new @ref __iterator that refers to @ref Node @ref n.
          */
         explicit __iterator(nodeT* n) noexcept : currentNode{n} {}
 
@@ -43,15 +50,28 @@ namespace APutils {
         //operator __iterator<nodeT, const T>() { return __iterator<nodeT, const T>{currentNode}; }
 
         /**
-         * @brief Operator of de-reference.
+         * @brief Dereference operator.
          *
-         * To de-refrence an @ref __iterator.
+         * Derefrences an @ref __iterator by returning the data stored by the
+         * @ref Node it refers to.
+         *
+         * __iterator::operator->
          */
         reference operator*() const noexcept { return currentNode->data; }
+        /**
+         * @brief Arrow operator.
+         *
+         * Class member access operator; it returns a pointer to the data
+         * stored by the @ref Node the @ref __iterator refers to.
+         *
+         * @see __iterator::operator*
+         */
         pointer operator->() const noexcept { return &(*(*this)); }
 
         /**
-         * @brief Pre-increment function (iterator ++it).
+         * @brief Pre-increment operator.
+         *
+         * @see __iterator::operator++(int)
          */
         __iterator& operator++() noexcept {
             /* If we are a nullptr, we return ourselves.
@@ -82,7 +102,9 @@ namespace APutils {
         } // end ++it
 
         /**
-         * @brief Post-increment function (iterator it++).
+         * @brief Post-increment operator.
+         *
+         * @see __iterator::operator++()
          */
         __iterator operator++(int) noexcept {
             /* The following line calls our 1-element constructor by giving an
@@ -97,36 +119,32 @@ namespace APutils {
         }
 
         /**
-         * @brief Comparison operator for equality.
+         * @brief Equality operator.
          *
-         * Two iterators are equal if they point to the same node.
+         * Two iterators are defined equal if they point to the same node.
+         *
+         * @see __iterator::operator!=
          */
         friend inline bool operator==(const __iterator& a, const __iterator& b) { return a.currentNode == b.currentNode; }
 
         /**
-         * @brief Comparison operator for inequality.
+         * @brief Inequality operator.
+         *
+         * The logical negation of @ref __iterator::operator==
+         *
+         * @see __iterator::operator==
          */
         friend inline bool operator!=(const __iterator& a, const __iterator& b) { return !(a == b); }
 
         /**
-         * The function is declared to be `friend` in order to make it able to
-         * access our private member (@ref currentNode).
+         * The class @ref APbst::bst is declared to be `friend` in order to make
+         * it able to access our private member (@ref currentNode).
          */
         template<typename KT, typename VT, typename cmp>
         friend class APbst::bst;
-//        template<typename KT, typename VT, typename cmp>
-//        friend void APbst::bst<KT,VT,cmp>::erase(const KT&);
 
-        /*
-         * @brief To print a @ref Node from the tree.
-         * @param os The stream used to print, the default is `std::cout`.
-         * @param printChildren If the children are to be printed or not, default is `false`.
-         */
-//        void printNode(std::ostream& os = std::cout, const bool& printChildren = false) {
-//            currentNode->printNode(os, printChildren);
-//        }
         /**
-         * @brief To print a @ref Node from the tree.
+         * @brief Prints a tree @ref Node.
          *
          * Forwards to @ref Node.printNode.
          */
