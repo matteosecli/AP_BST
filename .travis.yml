@@ -3,32 +3,32 @@ notifications:
   email: false
 
 os: linux
-dist: bionic
+dist: xenial
 
 matrix:
   include:
-#    # QMake, GCC 6
-#    - env: QMAKE_CC=gcc-6 QMAKE_CXX=g++-6 QMAKESPEC=linux-g++
-#      compiler: gcc
-#      addons: &gcc6
-#        apt:
-#          sources:
-#            - ubuntu-toolchain-r-test
-#          packages:
-#            - qt5-qmake
-#            - valgrind
-#            - g++-6
+    # QMake, GCC 6
+    - env: QMAKE_CC=gcc-6 QMAKE_CXX=g++-6 QMAKESPEC=linux-g++
+      compiler: gcc
+      addons: &gcc6
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - qt5-qmake
+            - valgrind
+            - g++-6
     # QMake, GCC 7
     - env: QMAKE_CC=gcc-7 QMAKE_CXX=g++-7 QMAKESPEC=linux-g++
       compiler: gcc
       addons: &gcc7
         apt:
           sources:
-#            - ubuntu-toolchain-r-test
+            - ubuntu-toolchain-r-test
           packages:
             - qt5-qmake
             - valgrind
-#            - g++-7
+            - g++-7
     # QMake, GCC 8
     - env: QMAKE_CC=gcc-8 QMAKE_CXX=g++-8 QMAKESPEC=linux-g++
       compiler: gcc
@@ -40,24 +40,13 @@ matrix:
             - qt5-qmake
             - valgrind
             - g++-8
-    # QMake, GCC 9
-    - env: QMAKE_CC=gcc-9 QMAKE_CXX=g++-9 QMAKESPEC=linux-g++
-      compiler: gcc
-      addons: &gcc9
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - qt5-qmake
-            - valgrind
-            - g++-9
     # QMake, Clang 7
     - env: QMAKE_CC=clang QMAKE_CXX=clang++ QMAKESPEC=linux-clang
       compiler: clang
       addons: &clang7
         apt:
           sources:
-#            - llvm-toolchain-xenial-7
+            - llvm-toolchain-xenial-7
           packages:
             - qt5-qmake
             - valgrind
@@ -67,7 +56,7 @@ matrix:
       addons: &clang8
         apt:
           sources:
-            - llvm-toolchain-bionic-8
+            - llvm-toolchain-xenial-8
           packages:
             - qt5-qmake
             - valgrind
@@ -78,9 +67,9 @@ matrix:
       addons: &clang9
         apt:
           sources:
-           - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-9 main'
+           - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main'
              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
-           - sourceline: 'deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-9 main'
+           - sourceline: 'deb-src http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main'
              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
           packages:
             - qt5-qmake
@@ -95,7 +84,7 @@ install:
 script:
   - /usr/lib/x86_64-linux-gnu/qt5/bin/qmake -spec $QMAKESPEC CONFIG+=debug QMAKE_CC=$QMAKE_CC QMAKE_CXX=$QMAKE_CXX QMAKE_LINK=$QMAKE_CXX
   - make
-  - valgrind --error-exitcode=42 --leak-check=full ./AP_BST
+  - if [[ $QMAKE_CC == gcc* ]]; then valgrind --error-exitcode=42 --leak-check=full --show-leak-kinds=all ./AP_BST; fi
   - cd test
   - /usr/lib/x86_64-linux-gnu/qt5/bin/qmake -spec $QMAKESPEC QMAKE_CC=$QMAKE_CC QMAKE_CXX=$QMAKE_CXX QMAKE_LINK=$QMAKE_CXX
   - make
