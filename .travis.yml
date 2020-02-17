@@ -84,7 +84,7 @@ install:
 script:
   - /usr/lib/x86_64-linux-gnu/qt5/bin/qmake -spec $QMAKESPEC CONFIG+=debug QMAKE_CC=$QMAKE_CC QMAKE_CXX=$QMAKE_CXX QMAKE_LINK=$QMAKE_CXX
   - make
-  - valgrind --gen-suppressions=all --suppressions=.valgrind.supp --error-exitcode=42 --leak-check=full --show-leak-kinds=all ./AP_BST
+  - valgrind --gen-suppressions=all --suppressions=.valgrind.supp --error-exitcode=42 --leak-check=full --show-leak-kinds=definite,possible --errors-for-leak-kinds=definite,possible ./AP_BST
   - cd test
   - /usr/lib/x86_64-linux-gnu/qt5/bin/qmake -spec $QMAKESPEC QMAKE_CC=$QMAKE_CC QMAKE_CXX=$QMAKE_CXX QMAKE_LINK=$QMAKE_CXX
   - make
