@@ -2,16 +2,17 @@
 #  GENERAL CONFIGURATION  #
 ###########################
 
-TEMPLATE = app             # Makefile for nested projects
-CONFIG -= qt               # Non-Qt project
-CONFIG += cmdline          # Command-line application; SHOULD (but it doesn't)
-                           # imply CONFIG += console on Windows and
-                           # CONFIG -= app_bundle on MacOS
-CONFIG += console          # Console application (Windows)
-CONFIG -= app_bundle       # Console application (MacOS); do not make ".app"
-CONFIG += c++14 strict_c++ # Enables C++14 standard with no compiler extensions
-CONFIG -= no-pkg-config    # Enables pkg-config (disabled by default on MacOS)
-CONFIG += warn_on          # Enables -Wall and -W (old jargon for -Wextra)
+TEMPLATE = app               # Makefile for nested projects
+CONFIG -= qt                 # Non-Qt project
+CONFIG += cmdline            # Command-line application; SHOULD (but it doesn't)
+                             # imply CONFIG += console on Windows and
+                             # CONFIG -= app_bundle on MacOS
+CONFIG += console            # Console application (Windows)
+CONFIG -= app_bundle         # Console application (MacOS); do not make ".app"
+CONFIG += c++14 strict_c++   # Enables C++14 standard with no compiler extensions
+CONFIG -= no-pkg-config      # Enables pkg-config (disabled by default on MacOS)
+CONFIG += warn_on            # Enables -Wall and -W (old jargon for -Wextra)
+CONFIG += depend_includepath # Add INCLUDEPATH to the include path
 
 
 ###########################
@@ -22,14 +23,16 @@ SOURCES += \
     main.cpp
 
 HEADERS += \
-    BST.hpp \
-    Iterator.hpp \
-    Node.hpp
+    src/BST.hpp \
+    src/Iterator.hpp \
+    src/Node.hpp
 
 DISTFILES += \
     Doxyfile \
     LICENSE \
     README.md
+
+INCLUDEPATH += src/
 
 
 ###########################
@@ -144,7 +147,8 @@ if ($$USEOMP) {
 # Create a target named 'doc' in the Makefile via the qmake target 'dox'
 !defined(DOC_USE_MATHJAX, var) DOC_USE_MATHJAX = YES
 dox.target = doc
-dox.commands = DOXYGEN_INPUT=$${PWD}/ DOXYGEN_USE_MATHJAX=$${DOC_USE_MATHJAX} doxygen $${PWD}/Doxyfile#; \
+dox.commands = test -d $${OUT_PWD}/doc/_build || mkdir -p $${OUT_PWD}/doc/_build; \
+    DOXYGEN_INPUT=$${PWD}/ DOXYGEN_OUTPUT=$${OUT_PWD}/ DOXYGEN_USE_MATHJAX=$${DOC_USE_MATHJAX} doxygen $${PWD}/Doxyfile#; \
     #test -d doxydoc/html/images || mkdir doxydoc/html/images; \
     #cp documentation/images/* doxydoc/html/images
 dox.depends =
@@ -153,7 +157,7 @@ dox.depends =
 QMAKE_EXTRA_UNIX_TARGETS += dox
 
 # Similarly, remove ./doc/_build on 'make distclean'
-doxclean.commands = rm -v -r $${PWD}/doc/_build
+doxclean.commands = rm -v -r $${OUT_PWD}/doc/_build
 distclean.depends = doxclean
 QMAKE_EXTRA_TARGETS += distclean doxclean
 

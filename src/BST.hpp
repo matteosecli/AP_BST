@@ -88,26 +88,44 @@
 
 
 /** 
- * @brief Principal namespace
+ * @brief Namespace for the Binary Search Tree
  * 
- * Namespace of the library bst
+ * This namespace hosts the class @ref bst and possibly, in the future, related
+ * objects and functions.
  */
 namespace APbst {
 
     /**
      * @brief Class that implements a Binary Search Tree.
+     *
+     * This class takes two compulsory template parameters, `KT` and `VT`,
+     * and an optional one (`cmp`). The compulsory ones are, respectively,
+     * the `Key` type and the `Value` type of the Nodes of the tree, while
+     * `cmp` is the "less than" operator for the particular `KT` in use.
+     *
+     * Example:
+     *
+     *     APbst::bst<std::string,int> personAge{};
+     *
+     * As this is an exam project, some internal members are documented as well.
+     *
+     * @see op
      */
     template <typename KT, typename VT, typename cmp = std::less<KT>>
     class bst{
-        /** @brief Operator of comparison. */
+        /** @brief Operator of comparison ("less than") for the `Key` type. */
         cmp op;
-        /** @brief The root of the tree. */
+        /** @brief The root Node of the tree. */
         std::unique_ptr<APutils::Node<std::pair<const KT, VT>>> root;
 
         /**
-         * @brief Support function for the function @ref begin().
+         * @brief Internal helper function for @ref begin().
          *
-         * Done it in order to avoid duplicated code.
+         * This function finds the leftmost Node of the tree and it returns a
+         * raw pointer to the leftmost Node itself.
+         *
+         * @see begin()
+         * @see cbegin()
          */
         APutils::Node<std::pair<const KT, VT>>* __begin() const {
             /* If root is nullptr we return a nullptr */
@@ -121,9 +139,12 @@ namespace APbst {
         }
 
         /**
-         * @brief Support function for the function @ref find().
+         * @brief Internal helper function for @ref find().
          *
-         * Done it in order to avoid duplicated code.
+         * This function finds the Node with key @ref x and it returns a
+         * raw pointer to the found Node.
+         *
+         * @see find()
          */
         APutils::Node<std::pair<const KT, VT>>* __find(const KT& x) const {
             auto tmp = root.get();
@@ -141,8 +162,16 @@ namespace APbst {
         }
 
         /**
-         * @brief Support function for the copy semantic.
+         * @brief Internal helper function for the copy operations.
+         *
          * @param t The tree to be copied.
+         * @param a The Node to be copied.
+         *
+         * This function recursively copies a tree by performing a deep copy of
+         * all of its Nodes.
+         *
+         * @see bst()
+         * @see bst::operator=
          */
         void __copy(const bst& t, std::unique_ptr<APutils::Node<std::pair<const KT, VT>>>& a) {
             this->emplace(a.get()->data);
@@ -156,10 +185,17 @@ namespace APbst {
         }
 
         /**
-         * @brief Support function for the function @ref balance().
-         * @param v The vector.
-         * @param a The starting point of the vector.
-         * @param b The ending point of the vector.
+         * @brief Internal helper function for @ref balance().
+         *
+         * @param v A vector that contains all the tree pairs.
+         * @param a The index of the first vector element to insert in the tree.
+         * @param b The index of the last vector element to insert in the tree.
+         *
+         * This function emplaces all the Node pairs contained in @ref v in a
+         * balanced fashion, by starting with the middle element and then recursively
+         * calling itself.
+         *
+         * @see balance()
          */
         void __balance(std::vector<std::pair<const KT, VT>>& v, long long int a, long long int b) {
             if (b < a) {
@@ -174,27 +210,57 @@ namespace APbst {
         }
 
       public:
+        /**
+         * @brief The `Key` type of the tree.
+         */
         using key_type = KT;
+        /**
+         * @brief The `Value` type of the tree.
+         */
         using mapped_type = VT;
+        /**
+         * @brief The `Pair` type of the tree, i.e. `std::pair<const Key,Value>`.
+         */
         using pair_type = typename std::pair<const KT, VT>;
+        /**
+         * @brief The `Node` type of the tree, i.e. `Node<Pair>`.
+         */
         using node_type = typename APutils::Node<pair_type>;
+        /**
+         * @brief The non-const iterator type.
+         */
         using iterator = typename APutils::__iterator<node_type,  pair_type>;
+        /**
+         * @brief The const iterator type.
+         */
         using const_iterator = typename APutils::__iterator<node_type, const pair_type>;
 
         /**
          * @brief Empty constructor.
+         *
+         * It creates an empty tree with no Nodes and with the default "less than"
+         * operation.
          */
         bst() noexcept : op{}, root{nullptr} {}
 
         /**
-         * @brief Constructor setting the comparison operation.
-         * @param x The comparison operator.
+         * @brief Empty constructor with an explicit comparison ("less than") operation.
+         *
+         * @param x The comparison ("less than") operator.
+         *
+         * It creates an empty tree with no Nodes and with the specified "less than"
+         * operation.
          */
         bst(cmp x) noexcept : op{x}, root{nullptr} {}
 
         /**
          * @brief Copy constructor.
+         *
          * @param t The tree to be copied.
+         *
+         * It creates a new tree by performing a deep copy of the tree @ref t.
+         *
+         * @see bst::operator=
          */
         bst(const bst& t) : op{t.op}, root{std::unique_ptr<node_type>(new node_type(t.root.get()->data, nullptr))} {
             if (t.root.get()->left) {
@@ -207,15 +273,23 @@ namespace APbst {
 
         /**
          * @brief Move constructor.
+         *
          * @param t The tree to be moved.
+         *
+         * It creates a new tree by moving the tree @ref t.
+         *
+         * @see bst::operator=
          */
         bst(bst&& t) noexcept = default;
 
         /**
          * @brief Copy assignment for @ref bst.
+         *
          * @param t The tree to be copied.
          *
-         * It performs a deep-copy of the tree.
+         * It creates a new tree by performing a deep copy of the tree @ref t.
+         *
+         * @see bst()
          */
         bst& operator=(const bst& t) {
             this->clear();
@@ -231,17 +305,26 @@ namespace APbst {
 
         /**
          * @brief Move assignment for @ref bst.
+         *
          * @param t The tree to be moved.
+         *
+         * It creates a new tree by moving the tree @ref t.
+         *
+         * @see bst()
          */
         bst& operator=(bst&& t) noexcept = default;
 
         /**
-         * @brief Inserts a @ref Node by copying it in the tree, if not already present.
-         * @param x The values of the `Key` and the `Value` to be put in the @ref Node.
+         * @brief Inserts a @ref APutils::Node by copying it in the tree, if not already present.
          *
-         * Used to insert a new @ref Node. The function returns a `pair` of an @ref __iterator
-         * (pointing to the @ref Node) and a `bool`. The `bool` is `true` if a new @ref Node
-         * has been allocated, `false` otherwise (i.e., the `Key` was already present in the tree). 
+         * @param x The values of the `Key` and the `Value` to be put in the @ref APutils::Node.
+         *
+         * This function inserts a new @ref APutils::Node in the current tree, and it returns
+         *  a `pair` of an @ref __iterator (pointing to the @ref APutils::Node) and a `bool`.
+         * The `bool` is `true` if a new @ref APutils::Node has been allocated,
+         * `false` otherwise (i.e., the `Key` was already present in the tree).
+         *
+         * @see emplace()
          */
         std::pair<iterator, bool> insert(const pair_type& x) {
             #ifdef __DEBUG_AP_BST
@@ -273,12 +356,16 @@ namespace APbst {
         }
 
         /**
-         * @brief Inserts a @ref Node by moving it in the tree, if not already present.
-         * @param x The values of the `Key` and the `Value` to be put in the @ref Node.
+         * @brief Inserts a @ref APutils::Node by moving it in the tree, if not already present.
          *
-         * Used to insert a new @ref Node. The function returns a `pair` of an @ref __iterator
-         * (pointing to the @ref Node) and a `bool`. The `bool` is `true` if a new @ref Node
-         * has been allocated, `false` otherwise (i.e., the `Key` was already present in the tree). 
+         * @param x The values of the `Key` and the `Value` to be put in the @ref APutils::Node.
+         *
+         * This function inserts a new @ref APutils::Node in the current tree, and it returns
+         *  a `pair` of an @ref __iterator (pointing to the @ref APutils::Node) and a `bool`.
+         * The `bool` is `true` if a new @ref APutils::Node has been allocated,
+         * `false` otherwise (i.e., the `Key` was already present in the tree).
+         *
+         * @see emplace()
          */
         std::pair<iterator, bool> insert(pair_type&& x) {
             #ifdef __DEBUG_AP_BST
@@ -309,10 +396,17 @@ namespace APbst {
         }
 
         /**
-         * @brief Inserts an element constructed in-place.
+         * @brief Inserts a @ref APutils::Node constructed in-place.
          *
-         * Inserts a new element into the tree constructed in-place with the given args if there is no element with the
-         * `Key` in the tree.
+         * @param args The arguments for the `Pair` constructor.
+         *
+         * Inserts a new @ref APutils::Node into the tree by constructing it in-place.
+         *
+         * This function forwards the arguments @ref args to the constructor
+         * of `Pair`, and if the tree does not contain an element with the same
+         * `Key` it inserts the `Pair` itself.
+         *
+         * @see insert()
          */
         template<class... Types>  // variadic templates
         std::pair<iterator,bool> emplace(Types&&... args) {
@@ -323,16 +417,20 @@ namespace APbst {
          * @brief Clears the content of the tree.
          *
          * Since `reset()` resets @ref root to nullptr and then deletes the previously managed object,
-         * the distructor of @ref Node is called on each @ref Node of the tree.
+         * the distructor of @ref APutils::Node is called on each @ref APutils::Node of the tree.
          */
         void clear() noexcept {
             this->root.reset();
         }
 
         /**
-         * @brief Returns an iterator to the left-most node.
+         * @brief Returns an iterator to the left-most APutils::Node.
          *
-         * It returns the smaller @ref Node according to @ref op; which, likely, is not the root node.
+         * This function finds the leftmost Node of the tree and it returns an
+         * iterator to the leftmost Node itself.
+         *
+         * @see cbegin()
+         * @see end()
          */
         iterator begin() noexcept {
             #ifdef __DEBUG_AP_BST
@@ -342,8 +440,13 @@ namespace APbst {
         }
 
         /**
-         * @brief `const` version of @ref begin().
-         * @see begin().
+         * @brief Returns a const_iterator to the left-most APutils::Node.
+         *
+         * This function finds the leftmost Node of the tree and it returns a
+         * const_iterator to the leftmost Node itself.
+         *
+         * @see cbegin()
+         * @see end()
          */
         const_iterator begin() const noexcept {
             #ifdef __DEBUG_AP_BST
@@ -354,14 +457,20 @@ namespace APbst {
 
         /**
          * @brief `const` version of @ref begin(), to be used when a const_iterator is needed.
-         * @see begin().
+         *
+         * @see begin()
+         * @see cend()
          */
         const_iterator cbegin() const noexcept {
             return const_iterator{__begin()};
         }
 
         /**
-         * @brief Returns an iterator to one-past the last element (so a nullptr).
+         * @brief Returns an iterator to one-past the last element.
+         *
+         * It returns an interator to `nullptr`.
+         *
+         *
          */
         iterator end() noexcept {
             #ifdef __DEBUG_AP_BST
@@ -393,7 +502,7 @@ namespace APbst {
          * @brief Finds a node and possibly change its value.
          * @param x The value to be found.
          *
-         * Finds a given `Key`. If the `Key` is present, returns an @ref __iterator to the proper @ref Node, @ref end() otherwise.
+         * Finds a given `Key`. If the `Key` is present, returns an @ref __iterator to the proper @ref APutils::Node, @ref end() otherwise.
          */
         iterator find(const key_type& x) {
             #ifdef __DEBUG_AP_BST
@@ -406,7 +515,7 @@ namespace APbst {
          * @brief Finds if a node just exists.
          * @param x The value to be found.
          *
-         * Finds a given `Key`. If the `Key` is present, returns an @ref __iterator to the proper @ref Node, @ref end() otherwise.
+         * Finds a given `Key`. If the `Key` is present, returns an @ref __iterator to the proper @ref APutils::Node, @ref end() otherwise.
          */
         const_iterator find(const key_type& x) const {
             #ifdef __DEBUG_AP_BST
