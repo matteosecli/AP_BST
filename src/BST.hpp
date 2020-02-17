@@ -15,12 +15,12 @@
  * It is suggested to generate the `Makefile` via `qmake` by opening a terminal
  * in the source code folder and running
  *
- *     mkdir build
- *     cd build && qmake ..
+ *     mkdir build && cd build    # If you'd like to, not compulsory
+ *     qmake ..
  *     make
  *
  * In both cases, if everything goes as it should, you now have an executable
- * `AP_BST` in your folder. You can run it via
+ * `AP_BST` in your build folder `$BLD`. You can run it via
  *
  *     ./AP_BST
  *
@@ -39,15 +39,16 @@
  *
  *     make doc
  *
- * The documentation is built into the folder `$SRC/doc/_build/`, where `$SRC` is the folder that
- * contains the sources.
+ * The documentation is built into the folder `$BLD/doc/_build/`, where `$BLD` is
+ * your build folder.
  *
  * @subsection sec_runtests Build and running the unit tests
  * You can build the unit tests (written in Catch2) via
  *
  *     make test
  *
- * in the `$SRC` directory or via
+ * in the `$SRC` directory, where `$SRC` is the directory that contains `main.cpp`,
+ * or via
  *
  *     qmake && make
  *
@@ -424,7 +425,7 @@ namespace APbst {
         }
 
         /**
-         * @brief Returns an iterator to the left-most APutils::Node.
+         * @brief Returns an iterator to the left-most @ref APutils::Node.
          *
          * This function finds the leftmost Node of the tree and it returns an
          * iterator to the leftmost Node itself.
@@ -440,7 +441,7 @@ namespace APbst {
         }
 
         /**
-         * @brief Returns a const_iterator to the left-most APutils::Node.
+         * @brief Returns a const_iterator to the left-most @ref APutils::Node.
          *
          * This function finds the leftmost Node of the tree and it returns a
          * const_iterator to the leftmost Node itself.
@@ -456,7 +457,7 @@ namespace APbst {
         }
 
         /**
-         * @brief `const` version of @ref begin(), to be used when a const_iterator is needed.
+         * @brief The `const` version of @ref begin(), to be used when a const_iterator is needed.
          *
          * @see begin()
          * @see cend()
@@ -470,7 +471,8 @@ namespace APbst {
          *
          * It returns an interator to `nullptr`.
          *
-         *
+         * @see cend()
+         * @see begin()
          */
         iterator end() noexcept {
             #ifdef __DEBUG_AP_BST
@@ -480,8 +482,12 @@ namespace APbst {
         }
 
         /**
-         * @brief `const` version of @ref end().
-         * @see end().
+         * @brief Returns a const_iterator to one-past the last element.
+         *
+         * It returns a const_interator to `nullptr`.
+         *
+         * @see cend()
+         * @see begin()
          */
         const_iterator end() const noexcept {
             #ifdef __DEBUG_AP_BST
@@ -491,18 +497,22 @@ namespace APbst {
         }
 
         /**
-         * @brief `const` version of @ref end(), to be used when a const_iterator is needed.
-         * @see end().
+         * @brief The `const` version of @ref end(), to be used when a const_iterator is needed.
+         *
+         * @see end()
+         * @see cbegin()
          */
         const_iterator cend() const noexcept {
             return const_iterator{nullptr};
         }
 
         /**
-         * @brief Finds a node and possibly change its value.
-         * @param x The value to be found.
+         * @brief Finds a @ref APutils::Node and possibly change its value.
          *
-         * Finds a given `Key`. If the `Key` is present, returns an @ref __iterator to the proper @ref APutils::Node, @ref end() otherwise.
+         * @param x The `Key` to look for.
+         *
+         * Finds a given `Key`. If the `Key` is present, returns an
+         * @ref APutils::__iterator to the proper @ref APutils::Node, @ref end() otherwise.
          */
         iterator find(const key_type& x) {
             #ifdef __DEBUG_AP_BST
@@ -513,9 +523,11 @@ namespace APbst {
 
         /**
          * @brief Finds if a node just exists.
-         * @param x The value to be found.
          *
-         * Finds a given `Key`. If the `Key` is present, returns an @ref __iterator to the proper @ref APutils::Node, @ref end() otherwise.
+         * @param x The `Key` to look for.
+         *
+         * Finds a given `Key`. If the `Key` is present, returns an
+         * @ref APutils::__iterator to the proper @ref APutils::Node, @ref end() otherwise.
          */
         const_iterator find(const key_type& x) const {
             #ifdef __DEBUG_AP_BST
@@ -526,6 +538,9 @@ namespace APbst {
 
         /**
          * @brief Balances the tree.
+         *
+         * Reshuffles the nodes in the tree by trying to minimize its
+         * [depth](https://en.wikipedia.org/wiki/Binary_tree).
          */
         void balance() {
             std::vector<pair_type> v{};
@@ -545,10 +560,11 @@ namespace APbst {
 
         /**
          * @brief Subscripting operator performing a copy.
-         * @param x The `Key` to which access.
          *
-         * Returns a reference to the value that is mapped to a `Key` equivalent to `x`,
-         *  performing an insertion if such key does not already exist.
+         * @param x The `Key` to look for.
+         *
+         * Returns a reference to the value corresponding to the `Key` @ref x,
+         * performing an insertion if such `Key` does not already exist.
          */
         mapped_type& operator[](const key_type& x) {  // copy semantic
             #ifdef __DEBUG_AP_BST
@@ -559,10 +575,11 @@ namespace APbst {
         
         /**
          * @brief Subscripting operator performing a move.
-         * @param x The `Key` to which access.
+         *
+         * @param x The `Key` to look for.
          * 
-         * Returns a reference to the value that is mapped to a `Key` equivalent to `x`,
-         *  performing an insertion if such key does not already exist.
+         * Returns a reference to the value corresponding to the `Key` @ref x,
+         * performing an insertion if such `Key` does not already exist.
          */
         mapped_type& operator[](key_type&& x) {  // move semantic
             #ifdef __DEBUG_AP_BST
@@ -573,6 +590,7 @@ namespace APbst {
 
         /**
          * @brief Put-to operator that prints the tree.
+         *
          * @param os The stream on which the print has to be made.
          * @param x The tree to be printed.
          *
@@ -596,22 +614,34 @@ namespace APbst {
          *
          */
         friend std::ostream& operator<<(std::ostream& os, const bst& x) {
-//            for (const auto& it : x) {
-//               os << "[Key: " << std::setw(4) << it.first << ", Value: " << std::setw(4) << it.second << "]" << std::endl;
-//            }
+            //for (const auto& it : x) {
+            //   os << "[Key: " << std::setw(4) << it.first << ", Value: " << std::setw(4) << it.second << "]" << std::endl;
+            //}
             auto itStop = x.cend();
             for (auto it = x.cbegin(); it != itStop; ++it) {
-//                os << "[" << it.currentNode << "]    "
-//                   << "[Key: " << std::setw(4) << it->first << ", Value: " << std::setw(4) << it->second << "]" << std::endl;
+            //    os << "[" << it.currentNode << "]    "
+            //       << "[Key: " << std::setw(4) << it->first << ", Value: " << std::setw(4) << it->second << "]" << std::endl;
                 it.printNode(os, true);
             }
-
             return os;
         }
 
         /**
          * @brief Prints the tree in an easy way.
+         *
          * @param ss The string stream.
+         *
+         * This function is mainly used for tests only, as it prints the tree
+         * in a format that is easier to check in automatic tests.
+         *
+         * E.g., if a tree contains `Key:Value` pairs `1:1`, `2:2`, `3:3`, etc.,
+         * `tree.printRawTree(ss)` will fill `ss` with a string that looks like
+         *
+         *     1 : 1
+         *     2 : 2
+         *     3 : 3
+         *     ...
+         *
          */
         void printRawTree(std::stringstream& ss) {
             for (const auto& it : *this) {
@@ -621,8 +651,11 @@ namespace APbst {
         }
 
         /**
-         * @brief Removes the element (if one exists) with the `Key` equivalent to @ref x.
+         * @brief Removes the element (if it exists) with `Key` @ref x.
+         *
          * @param x The `Key` to be removed.
+         *
+         * If the `Key` does not exist in the tree, this function does nothing.
          */
         void erase(const key_type& x) noexcept {
             auto __nodeToDeleteIt = find(x);
