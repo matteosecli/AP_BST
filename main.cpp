@@ -141,7 +141,7 @@ int main() {
 
     std::cout << std::endl;
     
-    /* C++-14 loop.
+    /* C++-11 loop.
      * Use the following:
      *   - 'const auto& it' to observe the elements by const reference.
      *   - 'auto it'        to observe the elements by copying them (if copy is cheap).

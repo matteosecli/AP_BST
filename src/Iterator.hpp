@@ -35,7 +35,7 @@ namespace APutils {
          */
         explicit __iterator(nodeT* n) noexcept : currentNode{n} {}
 
-        /**
+        /*
          * @brief Operator of re-cast.
          *
          * For the cast at const_iterator.

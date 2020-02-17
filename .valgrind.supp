@@ -10,6 +10,6 @@
     Memcheck:Leak
     match-leak-kinds: reachable
     obj:*/libstdc++.so.*
-    obj:*/ld-2.23.so
+    obj:*/ld-2.23.so.*
 }
 

@@ -1,12 +1,16 @@
-EXE = AP_BST.x
-CXX = c++
+EXE  = AP_BST
+CXX  = c++
 CXXFLAGS = -g -O3 -std=c++14 -Wall -Wextra -fPIC
-SRC = main.cpp
-OBJ = $(SRC:.cpp=.o)
-INC = BST.hpp Iterator.hpp Node.hpp
+SRC  = main.cpp
+OBJ  = $(SRC:.cpp=.o)
+INC  = src
 DIST = README.md \
        Makefile \
        LICENSE
+
+TESTSRC = test/000-CatchMain.cpp test/010-NodeTest.cpp test/020-IteratorTest.cpp test/030-TreeTest.cpp
+TESTOBJ  = $(TESTSRC:.cpp=.o)
+TESTEXE = test/test
 
 # eliminate default suffixes
 .SUFFIXES:
@@ -19,16 +23,20 @@ all: $(EXE)
 
 .PHONY: all
 
+$(EXE): $(SRC)
+	$(CXX) $^ -o $@ -I $(INC) $(FLAGS)
+
+test: $(TESTEXE)
+
+.PHONY: test
+
+$(TESTEXE): $(TESTSRC)
+	$(CXX) $^ -o $@ -I ./$(INC) $(FLAGS)
+
 clean:
-	rm -rf $(OBJ) $(EXE) *~ doc/_build
+	rm -rf $(OBJ) $(EXE) $(TESTOBJ) $(TESTEXE) *~ doc/_build
 
 .PHONY: clean
-
-%.o: %.cc ap_error.h
-	$(CXX) -c $< -o $@ $(CXXFLAGS)
-
-$(EXE): $(OBJ)
-	$(CXX) $^ -o $(EXE)
 
 doc: Doxyfile
 	doxygen $^
