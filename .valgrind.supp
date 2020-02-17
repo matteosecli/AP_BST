@@ -1,11 +1,15 @@
 {
     ignore_unversioned_libs
     Memcheck:Leak
+    match-leak-kinds: reachable
     obj:*/libstdc++.so
+    obj:*/ld-2.23.so
 }
 {
     ignore_versioned_libs
     Memcheck:Leak
-    obj:*/libstdc++.so.* 
+    match-leak-kinds: reachable
+    obj:*/libstdc++.so.*
+    obj:*/ld-2.23.so
 }
 
