@@ -50,13 +50,6 @@ int main() {
     std::pair<const int, int> leftPair(0,0);
     const std::pair<const int, int> rightPair(2,2);
     APutils::Node<std::pair<int, int>> nodeRoot(rootPair, nullptr);
-//    APutils::Node<std::pair<int, int>> nodeLeft(leftPair, &nodeRoot);
-//    APutils::Node<std::pair<int, int>> nodeRight(rightPair,&nodeRoot);
-    //nodeRoot.left  = std::unique_ptr<APutils::Node<std::pair<int, int>>>(&nodeLeft);  // <- WRONG!!!
-    //nodeRoot.right = std::unique_ptr<APutils::Node<std::pair<int, int>>>(&nodeRight); // <- WRONG!!!
-//    nodeRoot.left.reset(&nodeLeft);  // EROOR: double free!!!!!!!!!!!! WHY?!?!?!?!?!?!?!?!?
-//    nodeRoot.right.reset(&nodeRight);
-//    OR:
     nodeRoot.left  = std::unique_ptr<APutils::Node<std::pair<int, int>>>(new APutils::Node<std::pair<int, int>>(leftPair, &nodeRoot));
     nodeRoot.right = std::unique_ptr<APutils::Node<std::pair<int, int>>>(new APutils::Node<std::pair<int, int>>(rightPair, &nodeRoot));
 
@@ -204,12 +197,9 @@ int main() {
     tree.find(5)->second = 78;
     std::cout << tree[5] << std::endl;
 
-    // const APbst::bst<int,int> const_tree{};
-    // const_tree.insert(rootPair);
-    // const_tree.insert(leftPair);
-    // const_tree.insert(rightPair);
-    // auto it_const_1 = const_tree.find(1);
-    // std::cout << ((it_const_1 == const_tree.end()) ? "Key NOT found" : "Key found") << std::endl;
+    const APbst::bst<int,int> const_tree{tree};
+    auto it_const_1 = const_tree.find(1);  /* Calling the const version of find! */
+    std::cout << ((it_const_1 == const_tree.end()) ? "Key NOT found" : "Key found") << std::endl;
 
 
     std::cout << std::endl << "ERASE TESTS" << std::endl;
@@ -312,8 +302,6 @@ int main() {
     playerStats.emplace("Michael Jackson",std::vector<double>{210,90,50});
     playerStats.emplace("Arnold Schwarznegger",std::vector<double>{190,80,60});
     std::cout << playerStats << std::endl;
-
-
 
 
     return 0;

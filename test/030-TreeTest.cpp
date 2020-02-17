@@ -209,29 +209,25 @@ TEST_CASE("Find", "[find]") {
 
     SECTION("Find") {
 
-    /* Show that we can recast the tree as a const tree and then store the
-     * iterator in a const_iterator type.
-     */
-    APbst::bst<int,int>::const_iterator it_1 = ((const APbst::bst<int,int>)tree).find(5);
-//     //it_1->second = 78;  // NOT allowed
-//     std::cout << ((it_1 == tree.cend()) ? "Key NOT found" : "Key found") << std::endl;
+        /* Show that we can recast the tree as a const tree and then store the iterator in a const_iterator type. */
+        APbst::bst<int,int>::const_iterator it_1 = ((const APbst::bst<int,int>)tree).find(5);
+        //it_1->second = 78;  // NOT allowed
+        REQUIRE(it_1 == tree.cend());
 
-//     auto it_2 = tree.find(6);
-//     it_2->second = 78;  // ALLOWED
-//     std::cout << ((it_2 == tree.end()) ? "Key NOT found" : "Key found") << std::endl;
+        auto it_2 = tree.find(6);
+        it_2->second = 78;  // ALLOWED
+        REQUIRE(it_2 == tree.end());
 
-//     auto it_3 = tree.find(55);
-//     std::cout << ((it_3 == tree.end()) ? "Key NOT found" : "Key found") << std::endl;
+        auto it_3 = tree.find(55);
+        REQUIRE(it_3 == tree.end());
 
-//     tree.find(5)->second = 78;
-//     std::cout << tree[5] << std::endl;
+        tree.find(5)->second = 78;
+        std::cout << tree[5] << std::endl;
 
-//     // const APbst::bst<int,int> const_tree{};
-//     // const_tree.insert(rootPair);
-//     // const_tree.insert(leftPair);
-//     // const_tree.insert(rightPair);
-//     // auto it_const_1 = const_tree.find(1);
-//     // std::cout << ((it_const_1 == const_tree.end()) ? "Key NOT found" : "Key found") << std::endl;
+        const APbst::bst<int,int> const_tree{tree};
+        auto it_const_1 = const_tree.find(1);
+        REQUIRE(it_const_1 == const_tree.end());
+
     }
 
 }
@@ -276,8 +272,6 @@ TEST_CASE("Erase", "[erase]") {
         treeAP.printRawTree(ssAP);
         std::stringstream ssAP_exp{};
         ssAP_exp << "1 : 1\n3 : 3\n4 : 4\n5 : 5\n6 : 6\n7 : 7\n9 : 9\n10 : 10\n13 : 13\n14 : 14\n";
-    //    std::cout << ssAP.str() << std::endl;
-    //    std::cout << ssAP_exp.str() << std::endl;
         REQUIRE( ssAP.str() == ssAP_exp.str() );
 
     }
@@ -293,8 +287,6 @@ TEST_CASE("Erase", "[erase]") {
         treeAP.printRawTree(ssAP);
         std::stringstream ssAP_exp{};
         ssAP_exp << "1 : 1\n3 : 3\n4 : 4\n5 : 5\n6 : 6\n7 : 7\n9 : 9\n10 : 10\n13 : 13\n14 : 14\n";
-    //    std::cout << ssAP.str() << std::endl;
-    //    std::cout << ssAP_exp.str() << std::endl;
         REQUIRE( ssAP.str() == ssAP_exp.str() );
 
     }
@@ -312,35 +304,52 @@ TEST_CASE("Erase", "[erase]") {
         treeAP.printRawTree(ssAP);
         std::stringstream ssAP_exp{};
         ssAP_exp << "1 : 1\n3 : 3\n4 : 4\n5 : 5\n6 : 6\n7 : 7\n9 : 9\n10 : 10\n13 : 13\n14 : 14\n";
-    //    std::cout << ssAP.str() << std::endl;
-    //    std::cout << ssAP_exp.str() << std::endl;
         REQUIRE( ssAP.str() == ssAP_exp.str() );
 
     }
 
 }
 
-//     std::cout << std::endl << "BALANCE TEST" << std::endl;
+TEST_CASE("Balance, copy assignment & clear", "[funcs]") {
 
-//     treeAP3.balance();
-//     std::cout << treeAP3 << std::endl;
+    APbst::bst<int, int> tree{};
+    tree.emplace(8,8);
+    tree.emplace(3,3);
+    tree.emplace(10,10);
+    tree.emplace(1,1);
+    tree.emplace(4,4);
+    tree.emplace(7,7);
+    tree.emplace(14,14);
+    tree.emplace(13,13);
 
+    SECTION("Balance the tree") {
 
-//     std::cout << std::endl << "COPY TEST" << std::endl;
-//     APbst::bst<int, int> treeAP4{};
-//     treeAP4 = treeAP3;
-//     std::cout << treeAP4 << std::endl;
+        tree.balance();
+        std::cout << tree << std::endl;
 
-//     APbst::bst<int, int> treeAP5{treeAP3};
-//     std::cout << treeAP5 << std::endl;
+    }
 
+    SECTION("Copy the tree") {
 
-//     std::cout << std::endl << "CLEAR TEST" << std::endl;
+        APbst::bst<int, int> tree2{};
+        tree2 = tree;
+        std::cout << tree2 << std::endl;
 
-//     tree.clear();
+        APbst::bst<int, int> tree3{tree};
+        std::cout << tree3 << std::endl;
 
-//     for (const auto& it : tree) {
-//         std::cout << "[" << &(it) << "]    ";
-//         std::cout << "Key: " << it.first << std::endl;
-//     }
-//     std::cout << "Finished printing" << std::endl;
+    }
+
+    SECTION("Clear the tree") {
+
+        tree.clear();
+        
+        std::stringstream ss{};
+        tree.printRawTree(ss);
+        std::stringstream ss_exp{};
+        ss_exp << "";
+        REQUIRE( ss.str() == ss_exp.str() );
+
+    }
+
+}
