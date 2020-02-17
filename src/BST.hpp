@@ -27,7 +27,7 @@
  * __Notes:__
  *
  * - You can print some debug info by using one of the following:
- *   - `make CXXFLAGS=-D__DEBUG_AP_BST`
+ *   - `make EXTRA_CXXFLAGS=-D__DEBUG_AP_BST`
  *   - `qmake CONFIG+=debug && make`
  * - You might need to tweak a little bit the `qmake` step, depending on your system configuration. Examples:
  *   - On Linux. Use `qmake -spec linux-g++` if you want to compile with GNU G++, while use `qmake -spec linux-icc` if you want to use Intel's IC(P)C.

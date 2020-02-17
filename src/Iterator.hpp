@@ -52,7 +52,7 @@ namespace APutils {
         /**
          * @brief Dereference operator.
          *
-         * Derefrences an @ref __iterator by returning the data stored by the
+         * Dereferences an @ref __iterator by returning the data stored by the
          * @ref Node it refers to.
          *
          * __iterator::operator->
@@ -130,7 +130,7 @@ namespace APutils {
         /**
          * @brief Inequality operator.
          *
-         * The logical negation of @ref __iterator::operator==
+         * The logical negation of @ref __iterator::operator==.
          *
          * @see __iterator::operator==
          */
