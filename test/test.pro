@@ -7,7 +7,7 @@ CONFIG += c++14
 
 TEMPLATE = app
 
-PROJECT_DIR = $$PWD/../
+PROJECT_DIR = $$PWD/../src/
 INCLUDEPATH += $$PROJECT_DIR
 
 SOURCES +=  \
