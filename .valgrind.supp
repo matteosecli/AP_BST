@@ -1,0 +1,11 @@
+{
+    ignore_unversioned_libs
+    Memcheck:Leak
+    obj:*/libstdc++.so
+}
+{
+    ignore_versioned_libs
+    Memcheck:Leak
+    obj:*/libstdc++.so.* 
+}
+
