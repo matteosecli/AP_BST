@@ -79,6 +79,8 @@ CMakeLists.txt.user*
 # Build files
 build/
 doc/_build/
+AP_BST
+test/test
 
 # MacOS junk files
 .DS_Store

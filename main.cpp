@@ -22,7 +22,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
 
 int main() {
 
-    std::cout << "NODE CREATION TEST" << std::endl << std::endl;
+    std::cout << "NODE CREATION TESTS" << std::endl << std::endl;
 
     std::cout << "Create empty Node with default constructor via `Node c`" << std::endl;
     APutils::Node<std::pair<int, int>> c;
@@ -122,7 +122,14 @@ int main() {
 
     std::cout << std::endl << "EMPLACE TESTS" << std::endl;
 
-    tree.emplace(7, 7);
+    auto empl7 = tree.emplace(7, 7);
+    std::cout << "Emplacing 7: " << (empl7.second ? "OK" : "FAILED") << std::endl;
+
+    auto empl11 = tree.emplace(11, 11);
+    std::cout << "Emplacing 11: " << (empl11.second ? "OK" : "FAILED") << std::endl;
+
+    auto empl11_2 = tree.emplace(11, 11);
+    std::cout << "Emplacing 11: " << (empl11_2.second ? "OK" : "FAILED") << std::endl;
 
 
     std::cout << std::endl << "ITERATION TESTS" << std::endl;
@@ -157,7 +164,7 @@ int main() {
         std::cout << "Key: " << it.first << std::endl;
     }
 
-    std::cout << std::endl << "[] TEST" << std::endl;
+    std::cout << std::endl << "SUBSCRIPTING OPERATOR [] TESTS" << std::endl;
 
     // move:
     tree[1] = 11;  // update an existing value: calls the MOVE_INSERT since it creates a new pair using (1, 11) with the pair move constructor
@@ -178,7 +185,7 @@ int main() {
     std::cout << tree << std::endl;
 
 
-    std::cout << std::endl << "FIND TEST" << std::endl;
+    std::cout << std::endl << "FIND TESTS" << std::endl;
 
     /* Show that we can recast the tree as a const tree and then store the
      * iterator in a const_iterator type.
@@ -205,7 +212,7 @@ int main() {
     // std::cout << ((it_const_1 == const_tree.end()) ? "Key NOT found" : "Key found") << std::endl;
 
 
-    std::cout << std::endl << "ERASE TEST" << std::endl;
+    std::cout << std::endl << "ERASE TESTS" << std::endl;
 
     APbst::bst<int, int> treeAP{};
     treeAP.emplace(8,8);
@@ -259,7 +266,7 @@ int main() {
     std::cout << treeAP3 << std::endl;
 
 
-    std::cout << std::endl << "MATCHING TEST" << std::endl;
+    std::cout << std::endl << "MATCHING TESTS" << std::endl;
 
     std::stringstream ssAP3{};
     treeAP3.printRawTree(ssAP3);
@@ -276,7 +283,7 @@ int main() {
     std::cout << treeAP3 << std::endl;
 
 
-    std::cout << std::endl << "COPY TEST" << std::endl;
+    std::cout << std::endl << "COPY TESTS" << std::endl;
     APbst::bst<int, int> treeAP4{};
     treeAP4 = treeAP3;
     std::cout << treeAP4 << std::endl;
@@ -297,7 +304,7 @@ int main() {
 
 
 
-    std::cout << std::endl << "PLAYER STATS BST TEST" << std::endl;
+    std::cout << std::endl << "PLAYER STATS BST TESTS" << std::endl;
     APbst::bst<std::string, std::vector<double>> playerStats{};
     //playerStats.insert(std::pair<const std::string,std::vector<double>>("Bruce Lee",std::vector<double>{170,70,47}));
     //playerStats.insert({"Bruce Lee",std::vector<double>{170,70,47}});
