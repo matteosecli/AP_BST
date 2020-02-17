@@ -1,6 +1,82 @@
 #ifndef BST_HPP
 #define BST_HPP
 
+
+/** @mainpage
+ *
+ * @section sec_description Description
+ * A simple Binary Search Tree implementation for the Advanced Programming 2019-2020 course @ SISSA.
+ *
+ * @section sec_compile How to compile
+ * @subsection sec_compilation Compilation
+ * We include a standard `Makefile` for convenience, so you can run the usual
+ * `make` commands; out-of-source build are not supported.
+ *
+ * It is suggested to generate the `Makefile` via `qmake` by opening a terminal
+ * in the source code folder and running
+ *
+ *     mkdir build
+ *     cd build && qmake ..
+ *     make
+ *
+ * In both cases, if everything goes as it should, you now have an executable
+ * `AP_BST` in your folder. You can run it via
+ *
+ *     ./AP_BST
+ *
+ * __Notes:__
+ *
+ * - You can print some debug info by using one of the following:
+ *   - `make CXXFLAGS=-D__DEBUG_AP_BST`
+ *   - `qmake CONFIG+=debug && make`
+ * - You might need to tweak a little bit the `qmake` step, depending on your system configuration. Examples:
+ *   - On Linux. Use `qmake -spec linux-g++` if you want to compile with GNU G++, while use `qmake -spec linux-icc` if you want to use Intel's IC(P)C.
+ *   - On MacOS. Use `qmake -spec macx-g++ QMAKE_CXX=/path/to/g++ QMAKE_LINK=/path/to/g++` if you want to compile with GNU G++, while use `qmake -spec macx-icc` if you want to use Intel's IC(P)C. Notice that, if you want to compile with GNU G++, you also have to manually specify the two extra variables `QMAKE_CXX` and `QMAKE_LINK`; while in the other cases it's not necessary, in this case it is because otherwise MacOS will pick Apple's LLVM G++ by default (which is basically Clang).
+ *   - As said before, you can manually specify `QMAKE_CXX` and `QMAKE_LINK` (e.g. if you want to select a version of G++ different from the default one or in a non-standard location). You can also do this step in the `make` step, but you have to specify the extra variables without the "QMAKE" (e.g. `make CXX=/path/to/g++ LINK=/path/to/g++`).
+ *
+ * @subsection sec_builddoc Build the documentation
+ * You can build the documentation by running
+ *
+ *     make doc
+ *
+ * The documentation is built into the folder `$SRC/doc/_build/`, where `$SRC` is the folder that
+ * contains the sources.
+ *
+ * @subsection sec_runtests Build and running the unit tests
+ * You can build the unit tests (written in Catch2) via
+ *
+ *     make test
+ *
+ * in the `$SRC` directory or via
+ *
+ *     qmake && make
+ *
+ * in the `$SRC/test` directory. A binary `test` is generated in the `$SRC/test` directory,
+ * and you can run it with
+ *
+ *     ./test
+ *
+ * Refer to `./test --help` for a list of all the possible options for the test
+ * executable. E.g. the `-s` option lists even the successful tests.
+ *
+ * @section sec_howtorun How to run the code
+ * @subsection sec_running Running
+ * The sample program, that shows how to use the library, can be run in the following way:
+ *
+ *     ./AP_BST
+ *
+ * The tests, if compiled, can be run via
+ *
+ *     cd test
+ *     ./test
+ *
+ * @section sec_author Authors
+ * - Angela Carraro <[angela_carraro@hotmail.it](email:angela_carraro@hotmail.it)>
+ * - Matteo Seclì <[secli.matteo@gmail.com](email:secli.matteo@gmail.com)>
+ *
+ */
+
+
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -9,10 +85,6 @@
 #include <vector>
 #include "Node.hpp"
 #include "Iterator.hpp"
-
-//#ifndef DEBUG
-//#define DEBUG false    /**< @brief Whether we are in DEBUG mode or not; DEBUG mode prints much more info (which, though, slows the program down). */
-//#endif
 
 
 /** 
