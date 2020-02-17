@@ -404,9 +404,10 @@ namespace APbst {
          *     template <typename T>
          *     std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
          *         os << "[";
-         *         for (auto it = v.cbegin(); it != v.cend(); ++it) {
+         *         auto itStop = v.cend();
+         *         for (auto it = v.cbegin(); it != itStop; ++it) {
          *             os << *it;
-         *             if (it != v.cend() - 1) os << ", ";
+         *             if (it != itStop - 1) os << ", ";
          *         }
          *         os << "]";
          *         return os;
@@ -417,7 +418,8 @@ namespace APbst {
 //            for (const auto& it : x) {
 //               os << "[Key: " << std::setw(4) << it.first << ", Value: " << std::setw(4) << it.second << "]" << std::endl;
 //            }
-            for (auto it = x.cbegin(); it != x.cend(); ++it) {
+            auto itStop = x.cend();
+            for (auto it = x.cbegin(); it != itStop; ++it) {
 //                os << "[" << it.currentNode << "]    "
 //                   << "[Key: " << std::setw(4) << it->first << ", Value: " << std::setw(4) << it->second << "]" << std::endl;
                 it.printNode(os, true);

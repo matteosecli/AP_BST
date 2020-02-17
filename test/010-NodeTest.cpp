@@ -107,10 +107,10 @@ TEST_CASE( "Link Nodes", "[node_link]" ) {
         REQUIRE( nodeRoot.parent == nullptr );
         REQUIRE( nodeRoot.left .get()->parent == &nodeRoot );
         REQUIRE( nodeRoot.right.get()->parent == &nodeRoot );
-        REQUIRE( nodeRoot.left .get()->left  == nullptr );
-        REQUIRE( nodeRoot.left .get()->right == nullptr );
-        REQUIRE( nodeRoot.right.get()->left  == nullptr );
-        REQUIRE( nodeRoot.right.get()->right == nullptr );
+        REQUIRE( nodeRoot.left .get()->left .get() == nullptr );
+        REQUIRE( nodeRoot.left .get()->right.get() == nullptr );
+        REQUIRE( nodeRoot.right.get()->left .get() == nullptr );
+        REQUIRE( nodeRoot.right.get()->right.get() == nullptr );
 
         nodeRoot.printNode();
         nodeRoot.left->printNode();

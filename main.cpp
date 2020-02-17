@@ -7,9 +7,10 @@
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
     os << "[";
-    for (auto it = v.cbegin(); it != v.cend(); ++it) {
+    auto itStop = v.cend();
+    for (auto it = v.cbegin(); it != itStop; ++it) {
         os << *it;
-        if (it != v.cend() - 1) os << ", ";
+        if (it != itStop - 1) os << ", ";
     }
     os << "]";
     return os;
@@ -133,7 +134,7 @@ int main() {
 
     std::cout << std::endl;
 
-    for (APbst::bst<int,int>::const_iterator it = tree.begin(); it != tree.end(); ++it) {
+    for (APbst::bst<int,int>::const_iterator it = tree.cbegin(); it != tree.cend(); ++it) {
         std::cout << "[" << &(*it) << "]    ";
         std::cout << "Key: " << it->first << std::endl;
     }
@@ -179,9 +180,12 @@ int main() {
 
     std::cout << std::endl << "FIND TEST" << std::endl;
 
-    APbst::bst<int,int>::const_iterator it_1 = tree.find(5);
+    /* Show that we can recast the tree as a const tree and then store the
+     * iterator in a const_iterator type.
+     */
+    APbst::bst<int,int>::const_iterator it_1 = ((const APbst::bst<int,int>)tree).find(5);
     //it_1->second = 78;  // NOT allowed
-    std::cout << ((it_1 == tree.end()) ? "Key NOT found" : "Key found") << std::endl;
+    std::cout << ((it_1 == tree.cend()) ? "Key NOT found" : "Key found") << std::endl;
 
     auto it_2 = tree.find(6);
     it_2->second = 78;  // ALLOWED

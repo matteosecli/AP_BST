@@ -40,7 +40,7 @@ namespace APutils {
          *
          * For the cast at const_iterator.
          */
-        operator __iterator<nodeT, const T>() { return __iterator<nodeT, const T>{currentNode}; }
+        //operator __iterator<nodeT, const T>() { return __iterator<nodeT, const T>{currentNode}; }
 
         /**
          * @brief Operator of de-reference.
