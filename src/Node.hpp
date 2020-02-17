@@ -7,26 +7,28 @@
 #include <utility>  /* For std::pair */
 
 
-
 /** 
- * @brief Another namespace
+ * @brief Namespace that stands for "Advanced Programming Utils"
  * 
- * Namespace to hide Node and Iterator from the user
+ * Namespace to hide Node and Iterator from the user, and to possibly put
+ * some other useful classes.
  */
 namespace APutils {
 
     /**
      * @brief Class that implements a node of a tree.
      *
-     * General class that can be used in any tree, for example it could be used in the class bt that implements a
-     * Binary Tree (our class @ref bst should in fact inherit from bt).
+     * General class that can be used in any tree, for example it could be used
+     * in a class `bt` that implements a Binary Tree ( and then @ref APbst::bst
+     * could inherit from `bt`).
      */
-    template <typename T>   // T must be an std::pair
+    template <typename T>
     struct Node {
         /**
          * @brief Data stored in this @ref Node.
          *
-         * Contains an std::pair<const Key,Val>, where Key is the key of this Node and Val is the value stored in this @ref Node.
+         * E.g. for a APbst::bst `std::pair<const Key,Value>`, where `Key` is the
+         * key of this @ref Node and `Value` is the value stored in this @ref Node.
          */
         T data;
         /** @brief Left child of this @ref Node. */
@@ -39,7 +41,7 @@ namespace APutils {
         /**
          * @brief Void constructor.
          *  
-         * Used only to create a void root when an object @ref bst is instantiated.
+         * Used only to create a void `root` @ref Node when an object @ref APbst::bst is instantiated.
          */
         Node() noexcept :
             data{},
@@ -48,11 +50,12 @@ namespace APutils {
             parent{nullptr} {}
 
         /**
-         * @brief Data copy constructor.
-         * @param data the values to be store in the @ref Node.
-         * @param parent the @ref Node parent of this @ref Node.
+         * @brief Copy constructor with data.
+         *
+         * @param data The values to be stored in the @ref Node.
+         * @param parent Raw pointer to the parent @ref Node of this @ref Node.
          *  
-         * To create a @ref Node with given @ref data and @ref parent, and @ref left and @ref right initializated to `nullptr`.
+         * To create a @ref Node with given @ref data and @ref parent, and @ref left and @ref right initialized to `nullptr`.
          */
         Node(const T& data, Node<T>* parent) noexcept :
             data{data},
@@ -61,11 +64,12 @@ namespace APutils {
             parent{parent} {}
 
         /**
-         * @brief Data move constructor.
-         * @param data the values to be store in the @ref Node.
-         * @param parent the @ref Node parent of this @ref Node.
+         * @brief Move constructor with data.
          *
-         * To create a @ref Node with given @ref data and @ref parent, and @ref left and @ref right initializated to `nullptr`.
+         * @param data The values to be stored in the @ref Node.
+         * @param parent Raw pointer to the parent @ref Node of this @ref Node.
+         *
+         * To create a @ref Node with given @ref data and @ref parent, and @ref left and @ref right initialized to `nullptr`.
          */
         Node(T&& data, Node<T>* parent) noexcept :
             data{std::move(data)},
@@ -74,7 +78,10 @@ namespace APutils {
             parent{parent} {}
 
         /**
-         * @brief Debug function to print a @ref Node.
+         * @brief Utility function that prints a @ref Node.
+         *
+         * @param os The stream to which you'd like to print the @ref Node.
+         * @param printChildren Whether to print the children of each node as well.
          *  
          * Prints the content of the @ref Node: the @ref data, the @ref left child and the @ref right child.
          */
@@ -97,6 +104,12 @@ namespace APutils {
                 }
             }
         }
+        /**
+         * @brief Utility function that prints a @ref Node.
+         *
+         * Overloaded @ref printNode() that prints, without arguments, each node
+         * and their children to `std::cout`.
+         */
         void printNode() {
             printNode(std::cout, true);
         }
