@@ -125,3 +125,31 @@ We **randomly** looked for **existing** keys in each of the containers, for diff
 We stress that this is just *one* way of measuring the execution times; different methods yield of course different results, so performance comparisons can only be done by using the same methodology.
 
 We run our benchmarks on a desktop workstation equipped with an Intel i7-3770, 16 GB of memory and RHEL 7 with GNU GCC 8.3.0.
+
+The results are pictured below (lower is better).
+
+![benchmark_RHEL](benchmark_RHEL.png)
+
+As expected, the balanced tree has better lookup times than the unbalanced one; what\'s surprising, though, is that our balanced tree does better than the standard map and that all the three lines have an "elbow" at roughly `n = 20000`, after which there seems to be a monotonic growth of lookup times for each container.
+
+Another surprising feature is that we don\'t see a O(log N) behavior of the lookup times, as we instead expect. There is actually what could be a small logarithmic tail on the left, but for large `n` the lookup times just increase linearly.
+
+### Extra: Benchmarks on Our Portable Machines
+
+On our portable Ubuntu machine, with an Intel i5-3317U, 4GB of memory, GNU GCC 7.3.0 and Ubuntu 18.04, we get some different results.
+
+![benchmark_Ubuntu](benchmark_Ubuntu.png)
+
+The lookup times increase linearly with `n` but we don\'t see anymore the strange "elbow" seen on the previous machine. Again, we don\'t see a clear O(log N) behavior; but indeed, as hinted before, if we look at lower `n`\'s we see what it seems to be a logarithmic scaling (picture below, data points and errorbars omitted for clarity).
+
+![benchmark_Ubuntu_low](benchmark_Ubuntu_low.png)
+
+On our portable MacOS machine, with an Intel i7-7820HQ, 16GB of memory, Apple\'s Clang 10.0.1 and MacOS 10.14.6, the benchmarks look quite different.
+
+![benchmark_Mac](benchmark_Mac.png)
+
+First of all, they\'re extremely noisy; the balanced tree is still performing better than the unbalanced one, but the fluctuations are quite large (as you can see both in the oscillating behavior and in the large error bars). The `std::map`, instead, performs *extremely* better; the lookup times are O(1). We think that\'s because the `std::map` provided by Apple\'s system libraries doesn\'t use a tree-like implementation (though we\'ve not looked into that).
+
+#### TL;DR
+
+We got benchmark results that strongly depend on operating system, compiler and vendor of the STL libraries.
