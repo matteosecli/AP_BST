@@ -67,6 +67,9 @@ int main( int argc, char* argv[] ) {
         std::map<int,int> stdMap{};
         for ( const auto& i : v ) { stdMap.emplace(i,i); }
 
+        /* Reshuffle again to avoid correlations */
+        std::random_shuffle( v.begin(), v.end() );   // Reshuffle with builtin random generator.
+
 
         /* Measure our search times of nSampl elements in the tree/map */
         for ( int m = 1; m <= nCurrent/nSampl; ++m ) {
