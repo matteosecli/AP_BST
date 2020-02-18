@@ -1,6 +1,6 @@
 # Advanced Programming - Binary Search Tree
 
-[![Build Status](https://travis-ci.org/matteosecli/AP_BST.svg?branch=master)](https://travis-ci.org/matteosecli/AP_BST) [![Documentation Status](https://readthedocs.org/projects/ap-bst/badge/?version=latest)](https://ap-bst.readthedocs.io/en/latest/?badge=latest) [![GitHub issues](res/AP_BST.svg)](https://github.com/matteosecli/AP_BST/issues) [![GitHub forks](https://img.shields.io/github/forks/matteosecli/AP_BST.svg)](https://github.com/matteosecli/AP_BST/network) [![GitHub stars](https://img.shields.io/github/stars/matteosecli/AP_BST.svg)](https://github.com/matteosecli/QMC/stargazers) [![GitHub license](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://github.com/matteosecli/AP_BST/blob/master/LICENSE) 
+[![Build Status](https://travis-ci.org/matteosecli/AP_BST.svg?branch=master)](https://travis-ci.org/matteosecli/AP_BST) [![Documentation Status](https://readthedocs.org/projects/ap-bst/badge/?version=latest)](https://ap-bst.readthedocs.io/en/latest/?badge=latest) [![GitHub issues](https://img.shields.io/github/issues/matteosecli/AP_BST.svg)](https://github.com/matteosecli/AP_BST/issues) [![GitHub forks](https://img.shields.io/github/forks/matteosecli/AP_BST.svg)](https://github.com/matteosecli/AP_BST/network) [![GitHub stars](https://img.shields.io/github/stars/matteosecli/AP_BST.svg)](https://github.com/matteosecli/QMC/stargazers) [![GitHub license](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://github.com/matteosecli/AP_BST/blob/master/LICENSE) 
 
 A simple Binary Search Tree implementation for the Advanced Programming 2019-2020 course @ SISSA.
 
@@ -120,8 +120,8 @@ A further continuous integration mechanism, this time just for the documentation
 
 We benchmarked our binary search tree, both balanced and unbalanced, against the STL map `std::map` (which is the closest relative to our `bst` class). In all cases, we used an `int` key (and an `int` value).
 
-We **randomly** looked for **existing** keys in each of the containers, for different tree sizes ranging from `nStart` to `nEnd` in steps of `nIncr`. As measuring the lookup time of a single key is dominated by systematic errors out of our control, we opted to measure `nSampl` at a time until exhausting all the available keys in the container, and then we just divided the result by `nSampl`.
+We **randomly** looked for **existing** keys in each of the containers, for different tree sizes ranging from `nStart` to `nEnd` in steps of `nIncr`. As measuring the lookup time of a single key is dominated by systematic errors out of our control, we opted to measure `nSampl` at a time until exhausting all the available keys in the container, and then we just divided the result by `nSampl` (though this method tends to underestimate the error bars). For high enough `nSampl`, different values of `nSampl` itself should yield compatible values of the lookup times per key; we\'ve found that `nSampl = 50` is a good tradeoff value and we used it thoughout all of our plots.
 
-This is just *one* way of measuring the execution times; different methods yield different results,
+We stress that this is just *one* way of measuring the execution times; different methods yield of course different results, so performance comparisons can only be done by using the same methodology.
 
 We run our benchmarks on a desktop workstation equipped with an Intel i7-3770, 16 GB of memory and RHEL 7 with GNU GCC 8.3.0.
