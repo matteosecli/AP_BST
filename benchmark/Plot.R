@@ -74,7 +74,7 @@ lines(nrange, meanData[2, ], col = 4)
 errbar(nrange, meanData[3, ], meanData[3,]+sdData[3,]/2, meanData[3,]-sdData[3,]/2, add = TRUE, pch = 21, col = 2, bg = 2)
 lines(nrange, meanData[3, ], col = 2)
 title("Benchmark on `find()`", adj = 0.5, line = 0.5, cex.main = 1.2)
-legend(x = nStart, y = 50, legend=c("APbst", "Balanced APbst", "std::map"), col = c(3, 4, 2), lty=1, cex=0.85)
+legend(x = nStart, y = 60, legend=c("APbst::bst", "Balanced APbst::bst", "std::map"), col = c(3, 4, 2), lty=1, cex=0.85)
 dev.off()
 
 # png(width=1366, height=810, pointsize=25, file=paste0(path_plots,"benchmark2.png"))
