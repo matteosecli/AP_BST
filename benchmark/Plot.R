@@ -2,7 +2,7 @@
 
 setwd("/home/angela/Documenti/Advanced Programming/AP_BST/benchmark")
 
-folder <- "Sissa-nSampl=50"
+folder <- "Ubuntu-nEnd=10000"
 path_plots <- paste0("./Data/",folder,"/")
 path_outputs <- paste0("./Data/",folder,"/")
 
@@ -25,13 +25,14 @@ for (k in 1:leng) {
   nIncr <- p[2]
   nEnd <- p[3]
   nSampl <- p[4]
+  long <- (nEnd - nStart)/nIncr+1
   if (k == 1) {
-    meanData <- matrix(0, nrow = leng, ncol = nEnd/nIncr)
-    sdData <- matrix(0, nrow = leng, ncol = nEnd/nIncr)
+    meanData <- matrix(0, nrow = leng, ncol = long)
+    sdData <- matrix(0, nrow = leng, ncol = long)
   }
   incr <- 4
   nrange <- seq(from=nStart, to=nEnd, by=nIncr)
-  for (m in nrange) {
+  for (m in 1:long) {
     incr <- incr + 1
     #  print(incr)
     nCurrent <- p[incr]
@@ -43,8 +44,8 @@ for (k in 1:leng) {
       v[j] <- p[incr + j]
     }
     #  print(v)
-    meanData[k, m/nStart] <- mean(v)
-#    sdData[k, m/nStart] <- sd(v)
+    meanData[k, m] <- mean(v)
+#    sdData[k, m] <- sd(v)
     
     # binning technique
     lbin <- size/nbin
@@ -54,8 +55,8 @@ for (k in 1:leng) {
       temp[b] <- mean(v[(1+(b-1)*lbin):(b*lbin)])
       temp2[b] <- sd(v[(1+(b-1)*lbin):(b*lbin)])
     }
-    sdData[k, m/nStart] <- mean(temp2)/sqrt(nbin)
-#    sdData[k, m/nStart] <- sd(temp)/sqrt(nbin)
+    sdData[k, m] <- mean(temp2)/sqrt(nbin)
+#    sdData[k, m] <- sd(temp)/sqrt(nbin)
     
     incr <- incr + size
   }
@@ -74,7 +75,17 @@ lines(nrange, meanData[2, ], col = 4)
 errbar(nrange, meanData[3, ], meanData[3,]+sdData[3,]/2, meanData[3,]-sdData[3,]/2, add = TRUE, pch = 21, col = 2, bg = 2)
 lines(nrange, meanData[3, ], col = 2)
 title("Benchmark on `find()`", adj = 0.5, line = 0.5, cex.main = 1.2)
-legend(x = nStart, y = 60, legend=c("APbst::bst", "Balanced APbst::bst", "std::map"), col = c(3, 4, 2), lty=1, cex=0.85)
+legend(x = nStart, y = 50, legend=c("APbst::bst", "Balanced APbst::bst", "std::map"), col = c(3, 4, 2), lty=1, cex=0.85)
+dev.off()
+
+maxylim <- max(as.numeric(meanData)) + 20
+png(width=14, height=8, units = "cm", res = 300, pointsize = 8, file=paste0(path_plots, "benchmark_Ubuntu_low.png"))
+par(mar=c(3,3,2,1), mgp=c(2, 0.5, 0)) # mar=c(bottom, left, top, right), c(axis title, axis labels, axis line). default: mar=c(5, 4, 4, 2) + 0.1, mgp=c(3, 1, 0)
+plot(nrange, meanData[1, ], type="l", col = 3, ylim = c(0, maxylim), xlab = "Number of Nodes in the tree", ylab = "Time [ns]", cex.axis=1, cex.lab=1)
+lines(nrange, meanData[2, ], col = 4)
+lines(nrange, meanData[3, ], col = 2)
+title("Benchmark on `find()`", adj = 0.5, line = 0.5, cex.main = 1.2)
+legend(x = nStart, y = 50, legend=c("APbst::bst", "Balanced APbst::bst", "std::map"), col = c(3, 4, 2), lty=1, cex=0.85)
 dev.off()
 
 # png(width=1366, height=810, pointsize=25, file=paste0(path_plots,"benchmark2.png"))
