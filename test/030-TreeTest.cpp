@@ -26,11 +26,11 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
 #include "BST.hpp"
 
 
-TEST_CASE( "Inserting Nodes", "[insert]" ) {
+TEST_CASE( "Inserting Nodes in a Tree", "[insert]" ) {
 
     APbst::bst<int, int, std::less<int>> tree{};
 
-    SECTION( "Inserting Nodes in a tree" ) {
+    SECTION( "Using `insert()`" ) {
     
         std::pair<int, int> APair(1,1);
         auto ins1 = tree.insert(APair);
@@ -54,32 +54,6 @@ TEST_CASE( "Inserting Nodes", "[insert]" ) {
 
     }
 
-    SECTION("Tree of <string, vector>") {
-
-        APbst::bst<std::string, std::vector<double>> playerStats{};
-        //playerStats.insert(std::pair<const std::string,std::vector<double>>("Bruce Lee",std::vector<double>{170,70,47}));
-        //playerStats.insert({"Bruce Lee",std::vector<double>{170,70,47}});
-        playerStats.emplace("Bruce Lee",std::vector<double>{170,70,47});
-        REQUIRE(playerStats.find("Bruce Lee") != playerStats.end());
-        REQUIRE(playerStats["Bruce Lee"][0] == 170);
-        REQUIRE(playerStats["Bruce Lee"][1] == 70);
-        REQUIRE(playerStats["Bruce Lee"][2] == 47);
-
-        playerStats.emplace("Michael Jackson",std::vector<double>{210,90,50});
-        REQUIRE(playerStats.find("Michael Jackson") != playerStats.end());
-        REQUIRE(playerStats["Bruce Lee"][0] == 210);
-        REQUIRE(playerStats["Bruce Lee"][1] == 90);
-        REQUIRE(playerStats["Bruce Lee"][2] == 50);
-
-        playerStats.emplace("Arnold Schwarznegger",std::vector<double>{190,80,60});
-        REQUIRE(playerStats.find("Arnold Schwarznegger") != playerStats.end());
-        REQUIRE(playerStats["Bruce Lee"][0] == 179);
-        REQUIRE(playerStats["Bruce Lee"][1] == 80);
-        REQUIRE(playerStats["Bruce Lee"][2] == 60);
-
-        std::cout << playerStats << std::endl;
-    }
-
     SECTION( "Using `emplace()`") {
 
         auto empl7 = tree.emplace(7, 7);
@@ -93,7 +67,35 @@ TEST_CASE( "Inserting Nodes", "[insert]" ) {
 
     }
 
+    SECTION("Tree of <string, vector>") {
+
+        APbst::bst<std::string, std::vector<double>> playerStats{};
+        //playerStats.insert(std::pair<const std::string,std::vector<double>>("Bruce Lee",std::vector<double>{170,70,47}));
+        //playerStats.insert({"Bruce Lee",std::vector<double>{170,70,47}});
+        playerStats.emplace("Bruce Lee",std::vector<double>{170,70,47});
+        REQUIRE(playerStats.find("Bruce Lee") != playerStats.end());
+        REQUIRE(playerStats["Bruce Lee"][0] == 170);
+        REQUIRE(playerStats["Bruce Lee"][1] == 70);
+        REQUIRE(playerStats["Bruce Lee"][2] == 47);
+
+        playerStats.emplace("Michael Jackson",std::vector<double>{210,90,50});
+        REQUIRE(playerStats.find("Michael Jackson") != playerStats.end());
+        REQUIRE(playerStats["Michael Jackson"][0] == 210);
+        REQUIRE(playerStats["Michael Jackson"][1] == 90);
+        REQUIRE(playerStats["Michael Jackson"][2] == 50);
+
+        playerStats.emplace("Arnold Schwarznegger",std::vector<double>{190,80,60});
+        REQUIRE(playerStats.find("Arnold Schwarznegger") != playerStats.end());
+        REQUIRE(playerStats["Arnold Schwarznegger"][0] == 190);
+        REQUIRE(playerStats["Arnold Schwarznegger"][1] == 80);
+        REQUIRE(playerStats["Arnold Schwarznegger"][2] == 60);
+
+        std::cout << playerStats << std::endl;
+
+    }
+
 }
+
 
 TEST_CASE( "Iterating on the Nodes in a for loop", "[forloop]" ) {
 
@@ -145,7 +147,8 @@ TEST_CASE( "Iterating on the Nodes in a for loop", "[forloop]" ) {
 
 }
 
-TEST_CASE("Subscripting operator", "[subscrptingop]") {
+
+TEST_CASE("Subscripting operator", "[subscrpting_op]") {
 
     APbst::bst<int, int> tree{};
     tree.insert(std::pair<const int, int>(8,8));
@@ -158,7 +161,7 @@ TEST_CASE("Subscripting operator", "[subscrptingop]") {
     tree.insert(std::pair<const int, int>(7,7));
     tree.insert(std::pair<const int, int>(13,13));
 
-    SECTION("move") {
+    SECTION("[] move assignment") {
 
         tree[1] = 11;  // update an existing value: calls the MOVE_INSERT since it creates a new pair using (1, 11) with the pair move constructor
         REQUIRE(tree[1] == 11);
@@ -171,7 +174,7 @@ TEST_CASE("Subscripting operator", "[subscrptingop]") {
 
     }
     
-    SECTION("copy") {
+    SECTION("[] copy assignment") {
 
         const int i = 2;
         tree[i] = 22;  // update an existing value: calls the MOVE_INSERT since it creates a new pair using (i, 22) with the pair copy constructor
@@ -188,7 +191,8 @@ TEST_CASE("Subscripting operator", "[subscrptingop]") {
 
 }
 
-TEST_CASE("Find", "[find]") {
+
+TEST_CASE("Finding Nodes in a Tree", "[find]") {
 
     APbst::bst<int, int> tree{};
     tree.insert(std::pair<const int, int>(8,8));
@@ -200,8 +204,9 @@ TEST_CASE("Find", "[find]") {
     tree.insert(std::pair<const int, int>(4,4));
     tree.insert(std::pair<const int, int>(7,7));
     tree.insert(std::pair<const int, int>(13,13));
+    tree.insert(std::pair<const int, int>(5,5));
 
-    SECTION("Print using the put-to operator []") {
+    SECTION("Print using the put-to operator `<<`") {
 
         std::cout << tree << std::endl;
 
@@ -212,11 +217,11 @@ TEST_CASE("Find", "[find]") {
         /* Show that we can recast the tree as a const tree and then store the iterator in a const_iterator type. */
         APbst::bst<int,int>::const_iterator it_1 = ((const APbst::bst<int,int>)tree).find(5);
         //it_1->second = 78;  // NOT allowed
-        REQUIRE(it_1 == tree.cend());
+        REQUIRE(it_1 != tree.cend());
 
         auto it_2 = tree.find(6);
         it_2->second = 78;  // ALLOWED
-        REQUIRE(it_2 == tree.end());
+        REQUIRE(it_2 != tree.end());
 
         auto it_3 = tree.find(55);
         REQUIRE(it_3 == tree.end());
@@ -226,11 +231,12 @@ TEST_CASE("Find", "[find]") {
 
         const APbst::bst<int,int> const_tree{tree};
         auto it_const_1 = const_tree.find(1);
-        REQUIRE(it_const_1 == const_tree.end());
+        REQUIRE(it_const_1 != const_tree.end());
 
     }
 
 }
+
 
 TEST_CASE("Erase", "[erase]") {
 
@@ -256,7 +262,7 @@ TEST_CASE("Erase", "[erase]") {
         std::stringstream ssAP{};
         treeAP.printRawTree(ssAP);
         std::stringstream ssAP_exp{};
-        ssAP_exp << "1 : 1\n3 : 3\n4 : 4\n5 : 5\n6 : 6\n7 : 7\n9 : 9\n10 : 10\n13 : 13\n14 : 14\n";
+        ssAP_exp << "1 : 1\n3 : 3\n6 : 6\n7 : 7\n8 : 8\n10 : 10\n13 : 13\n14 : 14\n";
     //    std::cout << ssAP.str() << std::endl;
     //    std::cout << ssAP_exp.str() << std::endl;
         REQUIRE( ssAP.str() == ssAP_exp.str() );
@@ -271,13 +277,14 @@ TEST_CASE("Erase", "[erase]") {
         std::stringstream ssAP{};
         treeAP.printRawTree(ssAP);
         std::stringstream ssAP_exp{};
-        ssAP_exp << "1 : 1\n3 : 3\n4 : 4\n5 : 5\n6 : 6\n7 : 7\n9 : 9\n10 : 10\n13 : 13\n14 : 14\n";
+        ssAP_exp << "1 : 1\n3 : 3\n4 : 4\n7 : 7\n8 : 8\n13 : 13\n14 : 14\n";
         REQUIRE( ssAP.str() == ssAP_exp.str() );
 
     }
 
-    SECTION("Erase") {
+    SECTION("Erase a node with a full subtree") {
 
+        treeAP.emplace(6,6);
         treeAP.emplace(5,5);
         treeAP.erase(3);
         std::cout << "After erasing 3 (has a full subtree): " << std::endl;
@@ -286,7 +293,7 @@ TEST_CASE("Erase", "[erase]") {
         std::stringstream ssAP{};
         treeAP.printRawTree(ssAP);
         std::stringstream ssAP_exp{};
-        ssAP_exp << "1 : 1\n3 : 3\n4 : 4\n5 : 5\n6 : 6\n7 : 7\n9 : 9\n10 : 10\n13 : 13\n14 : 14\n";
+        ssAP_exp << "1 : 1\n4 : 4\n5 : 5\n6 : 6\n7 : 7\n8 : 8\n10 : 10\n13 : 13\n14 : 14\n";
         REQUIRE( ssAP.str() == ssAP_exp.str() );
 
     }
@@ -310,7 +317,8 @@ TEST_CASE("Erase", "[erase]") {
 
 }
 
-TEST_CASE("Balance, copy assignment & clear", "[funcs]") {
+
+TEST_CASE("Testing `balance()`, Copy Assignment & `clear()`", "[funcs]") {
 
     APbst::bst<int, int> tree{};
     tree.emplace(8,8);

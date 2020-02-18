@@ -256,6 +256,19 @@ int main() {
     std::cout << treeAP3 << std::endl;
 
 
+    APbst::bst<int, int> treeAPS{};
+    treeAPS.emplace(8,8);
+    treeAPS.emplace(3,3);
+    treeAPS.emplace(1,1);
+    treeAPS.emplace(6,6);
+    treeAPS.emplace(4,4);
+    treeAPS.emplace(5,5);
+    std::cout << treeAPS << std::endl;
+    treeAPS.erase(3);
+    std::cout << "After erasing 3: " << std::endl;
+    std::cout << treeAPS << std::endl;
+
+
     std::cout << std::endl << "MATCHING TESTS" << std::endl;
 
     std::stringstream ssAP3{};

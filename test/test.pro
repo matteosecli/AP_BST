@@ -13,7 +13,8 @@ INCLUDEPATH += $$PROJECT_DIR
 SOURCES +=  \
     000-CatchMain.cpp \
     010-NodeTest.cpp \
-    020-IteratorTest.cpp
+    020-IteratorTest.cpp \
+    030-TreeTest.cpp
 
 HEADERS += \
     catch.hpp
