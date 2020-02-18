@@ -2,7 +2,7 @@
 
 setwd("/home/angela/Documenti/Advanced Programming/AP_BST/benchmark")
 
-folder <- "Sissa-nSampl=100"
+folder <- "Sissa-nSampl=50"
 path_plots <- paste0("./Data/",folder,"/")
 path_outputs <- paste0("./Data/",folder,"/")
 
@@ -64,17 +64,17 @@ for (k in 1:leng) {
 meanData <- meanData/nSampl
 sdData <- sdData/nSampl
 
-maxylim <- max(as.numeric(meanData)) + 50
+maxylim <- max(as.numeric(meanData)) + 20
 png(width=14, height=8, units = "cm", res = 300, pointsize = 8, file=paste0(path_plots, "benchmark.png"))
 par(mar=c(3,3,2,1), mgp=c(2, 0.5, 0)) # mar=c(bottom, left, top, right), c(axis title, axis labels, axis line). default: mar=c(5, 4, 4, 2) + 0.1, mgp=c(3, 1, 0)
-errbar(nrange, meanData[1, ], meanData[1,]+sdData[1,]/2, meanData[1,]-sdData[1,]/2, type="p", pch = 21, col = 3, bg = 3, ylim = c(0, maxylim), xlab = "Number of Nodes in the tree", ylab = "Time [ns]", cex.axis=.75, cex.lab=.75)
+errbar(nrange, meanData[1, ], meanData[1,]+sdData[1,]/2, meanData[1,]-sdData[1,]/2, type="p", pch = 21, col = 3, bg = 3, ylim = c(0, maxylim), xlab = "Number of Nodes in the tree", ylab = "Time [ns]", cex.axis=1, cex.lab=1)
 lines(nrange, meanData[1, ], col = 3)
 errbar(nrange, meanData[2, ], meanData[2,]+sdData[2,]/2, meanData[2,]-sdData[2,]/2, add = TRUE, pch = 21, col = 4, bg = 4)
 lines(nrange, meanData[2, ], col = 4)
 errbar(nrange, meanData[3, ], meanData[3,]+sdData[3,]/2, meanData[3,]-sdData[3,]/2, add = TRUE, pch = 21, col = 2, bg = 2)
 lines(nrange, meanData[3, ], col = 2)
-title("Benchmark on `find()`", adj = 0.5, line = 0.5, cex.main = 1)
-legend(x = nEnd - 10*nStart, y = maxylim, legend=c("APbst", "Balanced APbst", "std::map"), col = c(3, 4, 2), lty=1, cex=0.85)
+title("Benchmark on `find()`", adj = 0.5, line = 0.5, cex.main = 1.2)
+legend(x = nStart, y = 50, legend=c("APbst", "Balanced APbst", "std::map"), col = c(3, 4, 2), lty=1, cex=0.85)
 dev.off()
 
 # png(width=1366, height=810, pointsize=25, file=paste0(path_plots,"benchmark2.png"))
@@ -90,7 +90,7 @@ dev.off()
 # dev.off()
 
 
-meanData <- data.frame(meanData)
-ggplot(meanData, aes(x = nrange, y = meanData[1, ])) + 
-  geom_line(color = 3) +
-  geom_errorbar(aes(x=nrange, ymin=meanData[1,]-sdData[1,]/2, ymax=meanData[1,]+sdData[1,]/2), width=0.4, colour=3, size=1.3)
+# meanData <- data.frame(meanData)
+# ggplot(meanData, aes(x = nrange, y = meanData[1, ])) + 
+#   geom_line(color = 3) +
+#   geom_errorbar(aes(x=nrange, ymin=meanData[1,]-sdData[1,]/2, ymax=meanData[1,]+sdData[1,]/2), width=0.4, colour=3, size=1.3)
