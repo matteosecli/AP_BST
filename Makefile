@@ -15,6 +15,10 @@ TESTSRC = test/000-CatchMain.cpp     \
 TESTOBJ  = $(TESTSRC:.cpp=.o)
 TESTEXE = test/test
 
+BENCHSRC = benchmark/benchmark.cpp
+BENCHOBJ  = $(BENCHSRC:.cpp=.o)
+BENCHEXE = benchmark/benchmark
+
 # eliminate default suffixes
 .SUFFIXES:
 SUFFIXES =
@@ -38,6 +42,13 @@ test: $(TESTEXE)
 
 $(TESTEXE): $(TESTOBJ)
 	$(CXX) $^ -o $(TESTEXE)
+
+benchmark: $(BENCHEXE)
+
+.PHONY: benchmark
+
+$(BENCHEXE): $(BENCHOBJ)
+	$(CXX) $^ -o $(BENCHEXE)
 
 clean:
 	rm -rf $(OBJ) $(EXE) $(TESTOBJ) $(TESTEXE) *~ doc/_build

@@ -81,7 +81,8 @@ build/
 doc/_build/
 AP_BST
 test/test
-benchmark/OLD_plots
+benchmark/benchmark
+benchmark/Data
 
 # MacOS junk files
 .DS_Store
