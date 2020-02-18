@@ -23,7 +23,7 @@ int main( int argc, char* argv[] ) {
     int nStart = 1000 ;   // Starting value of range of elements in the tree
     int nIncr  = 1000 ;   // Increment of range of elements in the tree
     int nEnd   = 50000;   // Ending value of range of elements in the tree
-    int nSampl = 10   ;   // Number of samples in each measurement
+    int nSampl = 50   ;   // Number of samples in each measurement
     if ( argc > 1 ) {
         nStart = strtol(argv[ 1], NULL, 10);
         nIncr  = strtol(argv[ 2], NULL, 10);
@@ -75,8 +75,8 @@ int main( int argc, char* argv[] ) {
             /* Standard BST */
             auto tStart = Clock::now();
             /* Find elements */
-            for ( int i = 1+(m-1)*nSampl; i<=m*nSampl; ++i ) {
-                tree.find(i);
+            for ( int i = (m-1)*nSampl; i<m*nSampl; ++i ) {
+                tree.find(v[i]);
             }
             /* Store the time and reset the clock */
             auto tEnd = Clock::now();
