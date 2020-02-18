@@ -2,7 +2,7 @@
 
 setwd("/home/angela/Documenti/Advanced Programming/AP_BST/benchmark")
 
-folder <- "Sissa-nSampl=20"
+folder <- "Sissa-nSampl=100"
 path_plots <- paste0("./Data/",folder,"/")
 path_outputs <- paste0("./Data/",folder,"/")
 
@@ -17,7 +17,7 @@ library(Hmisc)
 s <- c("benchmark_times_tree.txt", "benchmark_times_btree.txt", "benchmark_times_map.txt")
 leng <- length(s)
 
-nbin = 10
+nbin = 1
 
 for (k in 1:leng) {
   p <- as.matrix(read.table(paste0(path_outputs, s[k]), header = TRUE))
