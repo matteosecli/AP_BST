@@ -203,7 +203,9 @@ namespace APbst {
                 return;
             }
             long long int mid{(b + a)/2};
-            std::cout << "Inserting " << v[mid].first << " in palce " << mid << std::endl;
+            #ifdef __DEBUG_AP_BST
+            std::cout << "Inserting " << v[mid].first << " in place " << mid << std::endl;
+            #endif
             this->emplace(v[mid]);
             __balance(v, a, mid-1);
             __balance(v, mid+1, b);
@@ -544,14 +546,14 @@ namespace APbst {
          */
         void balance() {
             std::vector<pair_type> v{};
-            std::cout << "Vector:" << std::endl;
             for (const auto& it : *this) {
                 v.push_back(it);
-                std::cout << " " << it.first << std::endl;
             }
             this->clear();
             long long int mid{(static_cast<long long int> (v.size()))/2};
+            #ifdef __DEBUG_AP_BST
             std::cout << "Inserting " << v[mid].first << " in palce " << mid << std::endl;
+            #endif
             this->emplace(v[mid]);
             __balance(v, 0, mid-1);
             __balance(v, mid+1, v.size()-1);
