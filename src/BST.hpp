@@ -12,7 +12,7 @@
  * We include a standard `Makefile` for convenience, so you can run the usual
  * `make` commands; out-of-source build are not supported.
  *
- * It is suggested to generate the `Makefile` via `qmake` by opening a terminal
+ * It is also possible to generate the `Makefile` via `qmake` by opening a terminal
  * in the source code folder and running
  *
  *     mkdir build && cd build    # If you'd like to, not compulsory
@@ -79,13 +79,13 @@
 
 
 #include <iostream>
-#include <sstream>
 #include <iomanip>
 #include <memory>
+#include <sstream>
 #include <utility>
 #include <vector>
-#include "Node.hpp"
 #include "Iterator.hpp"
+#include "Node.hpp"
 
 
 /** 
@@ -214,11 +214,11 @@ namespace APbst {
 
       public:
         /**
-         * @brief The `Key` type of the tree.
+         * @brief The `Key` type of the Node of the tree.
          */
         using key_type = KT;
         /**
-         * @brief The `Value` type of the tree.
+         * @brief The `Value` type of the Node of the tree.
          */
         using mapped_type = VT;
         /**
@@ -254,7 +254,7 @@ namespace APbst {
          * It creates an empty tree with no Nodes and with the specified "less than"
          * operation.
          */
-        bst(cmp x) noexcept : op{x}, root{nullptr} {}
+        explicit bst(cmp x) noexcept : op{x}, root{nullptr} {}
 
         /**
          * @brief Copy constructor.
@@ -265,7 +265,7 @@ namespace APbst {
          *
          * @see bst::operator=
          */
-        bst(const bst& t) : op{t.op}, root{std::unique_ptr<node_type>(new node_type(t.root.get()->data, nullptr))} {
+        explicit bst(const bst& t) : op{t.op}, root{std::unique_ptr<node_type>(new node_type(t.root.get()->data, nullptr))} {
             if (t.root.get()->left) {
                 __copy(t, t.root.get()->left);
             }
@@ -659,7 +659,7 @@ namespace APbst {
          *
          * If the `Key` does not exist in the tree, this function does nothing.
          */
-        void erase(const key_type& x) noexcept {
+        void erase(const key_type& x) {
             auto __nodeToDeleteIt = find(x);
 
             auto __nodeToDelete = __nodeToDeleteIt.currentNode;

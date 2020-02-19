@@ -55,9 +55,10 @@ namespace APutils {
          * Dereferences an @ref __iterator by returning the data stored by the
          * @ref Node it refers to.
          *
-         * __iterator::operator->
+         * @see __iterator::operator->
          */
         reference operator*() const noexcept { return currentNode->data; }
+        
         /**
          * @brief Arrow operator.
          *
@@ -116,7 +117,7 @@ namespace APutils {
             __iterator tmpIterator{currentNode};
             ++(*this);
             return tmpIterator;
-        }
+        } // end it++
 
         /**
          * @brief Equality operator.
@@ -138,7 +139,7 @@ namespace APutils {
 
         /**
          * The class @ref APbst::bst is declared to be `friend` in order to make
-         * it able to access our private member (@ref currentNode).
+         * it able to access our private member ( @ref currentNode).
          */
         template<typename KT, typename VT, typename cmp>
         friend class APbst::bst;
@@ -146,7 +147,7 @@ namespace APutils {
         /**
          * @brief Prints a tree @ref Node.
          *
-         * Forwards to @ref Node.printNode.
+         * Forwards to @ref Node.printNode().
          */
         template<class... Types>
         void printNode(Types&&... args) {

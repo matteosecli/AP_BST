@@ -19,7 +19,7 @@ namespace APutils {
      * @brief Class that implements a node of a tree.
      *
      * General class that can be used in any tree, for example it could be used
-     * in a class `bt` that implements a Binary Tree ( and then @ref APbst::bst
+     * in a class `bt` that implements a Binary Tree (and then @ref APbst::bst
      * could inherit from `bt`).
      */
     template <typename T>
